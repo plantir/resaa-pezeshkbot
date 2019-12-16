@@ -3,15 +3,28 @@ require('./state/refer');
 require('./state/register_doctor');
 require('./state/specialities');
 require('./state/ask_question');
-// require('./state/contactus');
-// require('./state/my_doctor');
-// require('./state/search_doctor_with_name');
-// require('./state/search_doctor_with_code');
-// require('./state/doctor_detail');
-// require('./state/call_doctor');
-// require('./state/register');
-// require('./state/charge');
+require('./state/quiz');
 // require('./state/back');
-// require('./state/payment_return');
-// require('./state/test_answer');
-// require('./state/prevent_replay');
+// require('./state/contactus');
+
+// bot.sendMessage('@test_resaa', 'hi betch', {
+//   reply_markup: {
+//     inline_keyboard: [
+//       [
+//         {
+//           text: 'پرتقال',
+//           callback_data: 'پرتقال'
+//         },
+//         {
+//           text: 'سیب',
+//           callback_data: 'سیب'
+//         }
+//       ]
+//     ]
+//   }
+// });
+// bot.on('callback_query', callback => {
+//   bot.sendMessage(callback.from.id, `جواب شما ${callback.data}`);
+
+//   console.log(callback);
+// });
