@@ -4,11 +4,6 @@ const bot = use('Bot');
 /** @type {import ('@adonisjs/lucid/src/Lucid/Model')} */
 const User = use('App/Models/User');
 
-/** @type {import ('@adonisjs/lucid/src/Lucid/Model')} */
-const Speciality = use('App/Models/Speciality');
-
-const _enum = require('../config/enum');
-
 /** @type {import('lodash')} */
 const _ = use('lodash');
 
@@ -16,7 +11,6 @@ const _ = use('lodash');
 const Env = use('Env');
 
 const CHANNEL_ID = Env.getOrFail('CHANNEL_ID');
-const CHANNEL_URL = Env.getOrFail('CHANNEL_URL');
 
 bot.sendMessage(CHANNEL_ID, 'کویز شماره ۱', {
   reply_markup: {
