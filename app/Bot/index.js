@@ -1,11 +1,12 @@
 require('./state/start');
+require('./state/refer');
 require('./state/register_doctor');
+require('./state/specialities');
+require('./state/ask_question');
 // require('./state/contactus');
 // require('./state/my_doctor');
-// require('./state/medical_question');
 // require('./state/search_doctor_with_name');
 // require('./state/search_doctor_with_code');
-// require('./state/doctor_list_with_speciality');
 // require('./state/doctor_detail');
 // require('./state/call_doctor');
 // require('./state/register');
