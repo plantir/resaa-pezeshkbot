@@ -7,6 +7,9 @@ const User = use('App/Models/User');
 /** @type {import ('@adonisjs/lucid/src/Lucid/Model')} */
 const Speciality = use('App/Models/Speciality');
 
+/** @type {import ('@adonisjs/lucid/src/Lucid/Model')} */
+const Question = use('App/Models/Question');
+
 const _enum = require('../config/enum');
 
 /** @type {import('@adonisjs/framework/src/Env')} */
@@ -38,14 +41,24 @@ bot.on('message', async msg => {
       }
     );
   }
+  let original_user = await User.find(user.id);
+  if (original_user.question_count < 1) {
+    return bot.sendMessage(
+      msg.chat.id,
+      `کاربر عزیز، سوال رایگان شما تمام شده،  می تونید از طریق دعوت از دوست و یا جواب دادن به سوالات کانال سوال رایگان دریافت کنید\n\n ${CHANNEL_URL}`,
+      {
+        reply_markup: {
+          keyboard: [[{ text: 'دعوت از دوست' }], [{ text: 'بازگشت به خانه' }]],
+          resize_keyboard: true
+        }
+      }
+    );
+  }
   user.state = _enum.state.ask_question;
   user.question = {
     speciality: speciality.toJSON()
   };
   await User.update_redis(user);
-
-  // doctors = _.orderBy(doctors, 'currentlyAvailable', 'desc')
-  let original_user = await User.find(user.id);
   let message = `شما تخصص ${
     speciality.title
   } را انتخاب کردید \n شما می توانید ${original_user.question_count ||
@@ -93,9 +106,25 @@ bot.on('message', async msg => {
 
 bot.on('callback_query', async callback => {
   if (callback.data == 'send_question') {
+    let user = await User.get({ chat: callback.from });
+    let question = await Question.query()
+      .where({ text: user.question.text })
+      .where({ user_id: user.id })
+      .first();
+    if (question) {
+      return bot.sendMessage(
+        callback.from.id,
+        'پرسش شما در صف قرار گرفته است و برای پزشکان تخصص مرتبط ارسال میشود این کار ممکن است تا ۷۲ ساعت زمان ببرد'
+      );
+    }
+    await Question.create({
+      text: user.question.text,
+      speciality_id: user.question.speciality.id,
+      user_id: user.id
+    });
     bot.sendMessage(
       callback.from.id,
-      'پرسش شما با موفقیت در صف قرار گرفت و برای پزشکان تخصص مرتبط ارسال میشود'
+      'پرسش شما با موفقیت ثبت و در صف قرار گرفت و برای پزشکان تخصص مرتبط ارسال میشود این کار ممکن است تا ۷۲ ساعت زمان ببرد'
     );
   } else if (callback.data == 'change_text') {
     bot.sendMessage(callback.from.id, `پرسش خود را بنویسید و ارسال کنید`);

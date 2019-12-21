@@ -15,3 +15,4 @@
 
 require('../app/Routes/upload');
 require('../app/Routes/admin');
+require('../app/Routes/auth');

@@ -14,6 +14,7 @@ class UserSchema extends Schema {
         .references('id')
         .inTable('users');
       table.integer('question_count');
+      table.boolean('is_deleted').defaultTo(false);
       table.timestamps();
     });
   }

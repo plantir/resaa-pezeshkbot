@@ -9,6 +9,7 @@ const Doctor = use('App/Models/Doctor');
 bot.onText(_enum.regex_state.register_doctor, async msg => {
   bot.sendMessage(msg.chat.id, 'کد ۴ رقمی رسا پزشک را وارد نمایید');
 });
+
 bot.onText(/^\d{4}$/, async msg => {
   try {
     let doctor = await Doctor.get(msg.text);
@@ -43,6 +44,7 @@ bot.on('callback_query', async ({ data, from }) => {
   }
   bot.sendMessage(from.id, 'کد ۴ رقمی رسا پزشک را وارد نمایید');
 });
+
 bot.on('callback_query', async ({ data, from }) => {
   try {
     if (!data.startsWith('add_doctor')) {

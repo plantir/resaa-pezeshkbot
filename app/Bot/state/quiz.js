@@ -12,28 +12,31 @@ const Env = use('Env');
 
 const CHANNEL_ID = Env.getOrFail('CHANNEL_ID');
 
-bot.sendMessage(CHANNEL_ID, 'کویز شماره ۱', {
-  reply_markup: {
-    inline_keyboard: [
-      [
-        {
-          text: 'پرتقال',
-          callback_data: 'پرتقال'
-        },
-        {
-          text: 'سیب',
-          callback_data: 'سیب'
-        }
-      ]
-    ]
-  }
-});
+// bot.sendMessage(CHANNEL_ID, 'کویز شماره ۱', {
+//   reply_markup: {
+//     inline_keyboard: [
+//       [
+//         {
+//           text: 'پرتقال',
+//           callback_data: 'quiz_true'
+//         },
+//         {
+//           text: 'سیب',
+//           callback_data: 'quiz_false'
+//         }
+//       ]
+//     ]
+//   }
+// });
 
 bot.on('callback_query', callback => {
+  if (!callback.data.includes('quiz')) {
+    return;
+  }
   bot.sendMessage(
     callback.from.id,
-    ` جواب شما به کویز شماره ۱ ${callback.data} بود و ${
-      callback.data == 'سیب' ? 'درست' : 'غلط'
-    } میباشد`
+    ` جواب شما به کویز شماره ۱ ${
+      callback.data.includes('true') ? 'درست' : 'غلط'
+    } بود  `
   );
 });
