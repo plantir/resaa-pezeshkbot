@@ -7,6 +7,9 @@ class DoctorAnswer extends Model {
   question() {
     return this.belongsTo('App/Models/Question');
   }
+  doctor() {
+    return this.belongsTo('App/Models/Doctor');
+  }
 }
 
 module.exports = DoctorAnswer;

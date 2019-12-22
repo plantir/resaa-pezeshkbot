@@ -21,17 +21,24 @@ const _ = use('lodash');
 
 class SendQuestion extends Task {
   static get schedule() {
-    return '10 * * * * *';
+    return '* * * * 0 *';
   }
 
   async handle() {
     try {
       let questions = await Question.query()
         .whereDoesntHave('answer', builder =>
-          builder.where({ is_expired: 0 }).whereNotNull('answer')
+          builder
+            .where(builder =>
+              builder.where({ is_expired: 0 }).whereNull('answer')
+            )
+            .orWhereNotNull('answer')
         )
         .fetch();
-
+      let da = await DoctorAnswer.query()
+        .where(builder => builder.where({ is_expired: 0 }).whereNull('answer'))
+        .orWhereNotNull('answer')
+        .fetch();
       // questions = _.groupBy(questions.toJSON(), 'speciality_id');
       let doctors = await Doctor.query()
         // .where({ is_deleted: false })

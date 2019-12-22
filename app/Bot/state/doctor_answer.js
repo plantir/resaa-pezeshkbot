@@ -83,7 +83,11 @@ bot.on('callback_query', async callback => {
     let question = await Question.query()
       .where({ speciality_id: doctor.speciality_id })
       .whereDoesntHave('answer', builder => {
-        builder.where('is_expired', 0);
+        builder
+          .where(builder =>
+            builder.where({ is_expired: 0 }).whereNull('answer')
+          )
+          .orWhereNotNull('answer');
       })
       .first();
     if (!question) {
@@ -92,7 +96,10 @@ bot.on('callback_query', async callback => {
         'سوالات مربوط به تخصص شما تمام شده است'
       );
     }
-    let message = await bot.sendMessage(doctor.chat_id, question.text);
+    let message = await bot.sendMessage(
+      doctor.chat_id,
+      `${question.text}\n\n ℹ️ℹ️ برای پاسخ به این پرسش کافیست بر روی آن ریپلای کنید ℹ️ℹ️`
+    );
     await DoctorAnswer.create({
       question_id: question.id,
       doctor_id: doctor.id,
