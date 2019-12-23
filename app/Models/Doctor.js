@@ -1,7 +1,7 @@
 'use strict';
 
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
-const Model = use('Model');
+const Model = use('BaseModel');
 /** @type { import('@adonisjs/framework/src/Env')} */
 const Env = use('Env');
 const BASE_API = Env.getOrFail('RESAA_API');
@@ -19,6 +19,15 @@ class Doctor extends Model {
         reject(error);
       }
     });
+  }
+
+  static listOption(qs) {
+    qs.withArray = ['speciality'].concat(qs.withArray || []);
+    return super.listOption(qs);
+  }
+
+  speciality() {
+    return this.belongsTo('App/Models/Speciality');
   }
 }
 

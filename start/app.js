@@ -68,5 +68,5 @@ const aliases = {
 const commands = [
   // 'vrwebdesign-adonis/Providers/kue/providers/CommandsProvider'
 ];
-const jobs = ['vrwebdesign-adonis/Jobs/Sms'];
+const jobs = ['App/Jobs/Message'];
 module.exports = { providers, aceProviders, aliases, commands, jobs };

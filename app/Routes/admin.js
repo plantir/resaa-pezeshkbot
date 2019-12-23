@@ -4,9 +4,26 @@ Route.get('', ({ view }) => {
   return 'Success';
 });
 
+// route for question
 Route.group(() => {
   Route.get('', 'QuestionController.index');
 })
   .namespace('Admin')
   .prefix('admin/questions')
+  .middleware('auth');
+
+// route for doctors
+Route.group(() => {
+  Route.get('', 'DoctorController.index');
+})
+  .namespace('Admin')
+  .prefix('admin/doctors')
+  .middleware('auth');
+
+// route for doctors
+Route.group(() => {
+  Route.resource('', 'ScheduleMessageController');
+})
+  .namespace('Admin')
+  .prefix('admin/schedule_messages')
   .middleware('auth');

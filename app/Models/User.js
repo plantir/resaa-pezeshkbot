@@ -6,6 +6,9 @@ const Model = use('Model');
 /** @type {typeof import('@adonisjs/redis/src/Redis')} */
 const Redis = use('Redis');
 
+const kue = use('Kue');
+const Message_JOB = use('App/Jobs/Message');
+
 class User extends Model {
   static boot() {
     super.boot();
@@ -47,6 +50,23 @@ class User extends Model {
   }
   static update_redis(user) {
     return Redis.set(`user_${user.chat_id}`, JSON.stringify(user));
+  }
+  static async sendToAll(schedule) {
+    let users = await this.query()
+      .where({ is_deleted: 0 })
+      .fetch();
+    for (let user of users.toJSON()) {
+      kue.dispatch(
+        Message_JOB.key,
+        {
+          user,
+          schedule
+        },
+        {
+          priority: 'high'
+        }
+      );
+    }
   }
 }
 
