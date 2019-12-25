@@ -8,7 +8,7 @@ const Redis = use('Redis');
 
 const kue = use('Kue');
 const Message_JOB = use('App/Jobs/Message');
-
+const ScheduleMessage = use('App/Models/ScheduleMessage');
 class User extends Model {
   static boot() {
     super.boot();
@@ -67,6 +67,18 @@ class User extends Model {
         }
       );
     }
+    setTimeout(async () => {
+      let success_count = await Redis.get(`schedule_${schedule.id}_success`);
+      let fail_count = await Redis.get(`schedule_${schedule.id}_error`);
+      await ScheduleMessage.query()
+        .where({ id: schedule.id })
+        .update({
+          success_count,
+          fail_count
+        });
+      await Redis.del(`schedule_${schedule.id}_success`);
+      await Redis.del(`schedule_${schedule.id}_error`);
+    }, 300000);
   }
 }
 

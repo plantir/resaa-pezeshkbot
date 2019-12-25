@@ -22,7 +22,8 @@ Route.group(() => {
 
 // route for doctors
 Route.group(() => {
-  Route.resource('', 'ScheduleMessageController');
+  Route.customResource('', 'ScheduleMessageController');
+  Route.post(':id/send_test', 'ScheduleMessageController.send_test');
 })
   .namespace('Admin')
   .prefix('admin/schedule_messages')

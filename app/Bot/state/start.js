@@ -25,7 +25,9 @@ const User = use('App/Models/User');
 
 //   console.log(callback);
 // });
-
+bot.onText(/mychatid/, async msg => {
+  bot.sendMessage(msg.chat.id, msg.chat.id);
+});
 bot.onText(/شروع|بازگشت به خانه|start/i, async msg => {
   // let user = new User(msg.chat.id)
   // user.reset_state_history()
