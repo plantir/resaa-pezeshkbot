@@ -20,11 +20,20 @@ Route.group(() => {
   .prefix('admin/doctors')
   .middleware('auth');
 
-// route for doctors
+// route for ScheduleMessage
 Route.group(() => {
   Route.customResource('', 'ScheduleMessageController');
   Route.post(':id/send_test', 'ScheduleMessageController.send_test');
 })
   .namespace('Admin')
   .prefix('admin/schedule_messages')
+  .middleware('auth');
+
+// route for quiz
+Route.group(() => {
+  Route.customResource('', 'QuizController');
+  Route.post(':id/send_test', 'QuizController.send_test');
+})
+  .namespace('Admin')
+  .prefix('admin/quiz')
   .middleware('auth');
