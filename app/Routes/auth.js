@@ -5,5 +5,5 @@ Route.group(() => {
   Route.post('reset_password', 'AuthController.reset_password');
   Route.post('forget_password', 'AuthController.forget_password');
 })
-  .middleware(['recaptcha'])
+  // .middleware(['recaptcha'])
   .prefix('auth');
