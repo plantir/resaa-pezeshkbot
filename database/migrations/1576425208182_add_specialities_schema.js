@@ -8,11 +8,13 @@ const Env = use('Env');
 let API_URL = Env.getOrFail('RESAA_API');
 class AddSpecialitiesSchema extends Schema {
   async up() {
-    let { data } = await axios.get(
-      `${API_URL}/Rubika/Doctors/MedicalSpecialties`
-    );
-    let specialities = data.result.medicalSpecialties;
-    Speciality.createMany(specialities);
+    try {
+      let { data } = await axios.get(
+        `${API_URL}/Rubika/Doctors/MedicalSpecialties`
+      );
+      let specialities = data.result.medicalSpecialties;
+      Speciality.createMany(specialities);
+    } catch (error) {}
   }
 
   down() {
