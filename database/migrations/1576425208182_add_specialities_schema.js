@@ -6,11 +6,11 @@ const Speciality = use('App/Models/Speciality');
 const axios = use('axios');
 class AddSpecialitiesSchema extends Schema {
   async up() {
-    let { data } = await axios.get(
-      `https://www.resaa.net/api/Rubika/Doctors/MedicalSpecialties`
-    );
-    let specialities = data.result.medicalSpecialties;
-    Speciality.createMany(specialities);
+    // let { data } = await axios.get(
+    //   `https://www.resaa.net/api/Rubika/Doctors/MedicalSpecialties`
+    // );
+    // let specialities = data.result.medicalSpecialties;
+    // Speciality.createMany(specialities);
   }
 
   down() {

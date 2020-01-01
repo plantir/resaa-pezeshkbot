@@ -6,7 +6,7 @@ const Model = use('BaseModel');
 class Quiz extends Model {
   static boot() {
     super.boot();
-    this.addTrait('convertToJson');
+    this.addTrait('ConvertToJson');
     this.addTrait('ConvertToBase64');
   }
   static get allowField() {
