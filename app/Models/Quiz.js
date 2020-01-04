@@ -18,6 +18,9 @@ class Quiz extends Model {
   static get base64Fields() {
     return ['question'];
   }
+  static get dates() {
+    return super.dates.concat(['send_time']);
+  }
 }
 
 module.exports = Quiz;
