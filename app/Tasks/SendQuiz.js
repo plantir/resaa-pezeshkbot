@@ -11,6 +11,9 @@ const bot = use('Bot');
 /** @type {import('@adonisjs/framework/src/Env')} */
 const Env = use('Env');
 
+/** @type {import('moment')} */
+const moment = use('moment');
+
 const CHANNEL_ID = Env.getOrFail('CHANNEL_ID');
 
 class SendQuiz extends Task {
@@ -55,6 +58,7 @@ class SendQuiz extends Task {
         }
       });
       quiz.is_posted = 1;
+      quiz.send_time = moment().format('YYYY/MM/DD HH:mm:ss');
       await quiz.save();
     } catch (error) {
       console.log(error);
