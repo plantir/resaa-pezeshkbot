@@ -21,7 +21,7 @@ const _ = use('lodash');
 
 class SendQuestion extends Task {
   static get schedule() {
-    return '* * * * 0 *';
+    return '0 * * * * *';
   }
 
   async handle() {
@@ -35,13 +35,13 @@ class SendQuestion extends Task {
             .orWhereNotNull('answer')
         )
         .fetch();
-      let da = await DoctorAnswer.query()
-        .where(builder => builder.where({ is_expired: 0 }).whereNull('answer'))
-        .orWhereNotNull('answer')
-        .fetch();
+      // let da = await DoctorAnswer.query()
+      //   .where(builder => builder.where({ is_expired: 0 }).whereNull('answer'))
+      //   .orWhereNotNull('answer')
+      //   .fetch();
       // questions = _.groupBy(questions.toJSON(), 'speciality_id');
       let doctors = await Doctor.query()
-        // .where({ is_deleted: false })
+        .where({ is_deleted: false })
         // .groupBy('speciality_id')
         .fetch();
       doctors = _.groupBy(doctors.toJSON(), 'speciality_id');
@@ -52,7 +52,6 @@ class SendQuestion extends Task {
         let doctor = doctors[question.speciality_id].pop();
         try {
           let message = await bot.sendMessage(doctor.chat_id, question.text);
-          console.log('رفت');
           await DoctorAnswer.create({
             question_id: question.id,
             doctor_id: doctor.id,
