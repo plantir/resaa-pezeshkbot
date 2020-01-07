@@ -18,6 +18,9 @@ const _enum = require('../config/enum');
 /** @type {import('@adonisjs/framework/src/Env')} */
 const Env = use('Env');
 
+/** @type {import('@adonisjs/framework/src/Logger')} */
+const Logger = use('Logger');
+
 const BOT_TOKEN = Env.getOrFail('BOT_TOKEN');
 bot.on('message', async msg => {
   if (!msg.reply_to_message) {
@@ -67,7 +70,7 @@ bot.on('message', async msg => {
     );
     await doctor_answer.save();
   } catch (error) {
-    console.log(error);
+    Logger.error(error);
   }
 });
 

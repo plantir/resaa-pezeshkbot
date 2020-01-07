@@ -60,11 +60,9 @@ class SendQuestion extends Task {
         } catch (error) {
           Logger.error(error);
         }
-        console.log(doctor);
       }
-      console.log(doctors);
     } catch (error) {
-      console.log(error);
+      Logger.error(error);
     }
   }
 }

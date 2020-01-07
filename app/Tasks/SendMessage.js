@@ -4,6 +4,8 @@ const Task = use('Task');
 const ScheduleMessage = use('App/Models/ScheduleMessage');
 const User = use('App/Models/User');
 const moment = use('moment');
+/** @type {import('@adonisjs/framework/src/Logger')} */
+const Logger = use('Logger');
 class SendMessage extends Task {
   static get schedule() {
     return '0 * * * * *';
@@ -28,7 +30,7 @@ class SendMessage extends Task {
         item.save();
       }
     } catch (error) {
-      console.log(error);
+      Logger.error(error);
     }
   }
 }

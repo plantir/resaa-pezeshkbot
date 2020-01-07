@@ -14,7 +14,7 @@ Route.group(() => {
 
 // route for doctors
 Route.group(() => {
-  Route.get('', 'DoctorController.index');
+  Route.customResource('', 'DoctorController');
 })
   .namespace('Admin')
   .prefix('admin/doctors')

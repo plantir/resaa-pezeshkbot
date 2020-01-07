@@ -6,6 +6,7 @@
 const bot = use('Bot');
 const _enum = require('../config/enum');
 const Doctor = use('App/Models/Doctor');
+const Speciality = use('App/Models/Speciality');
 bot.onText(_enum.regex_state.register_doctor, async msg => {
   bot.sendMessage(msg.chat.id, 'کد ۴ رقمی رسا پزشک را وارد نمایید');
 });
@@ -62,6 +63,10 @@ bot.on('callback_query', async ({ data, from }) => {
     doctor.first_name = resaa_doctor.firstName;
     doctor.last_name = resaa_doctor.lastName;
     doctor.speciality_id = resaa_doctor.specialty.id;
+    let speciality = await Speciality.find(doctor.speciality_id);
+    if (!speciality) {
+      return bot.sendMessage(from.id, 'تخصص این پزشک در ربات رسا ثبت نشده است');
+    }
     await doctor.save();
     bot.sendMessage(from.id, 'با موفقیت ثبت شد');
   } catch (error) {

@@ -3,6 +3,10 @@ const bot = use('Bot');
 const _enum = require('../config/enum');
 const Speciality = use('App/Models/Speciality');
 const User = use('App/Models/User');
+
+/** @type {import('@adonisjs/framework/src/Logger')} */
+const Logger = use('Logger');
+
 bot.onText(_enum.regex_state.specialities, async msg => {
   try {
     let user = await User.get(msg);
@@ -39,6 +43,6 @@ bot.onText(_enum.regex_state.specialities, async msg => {
 
     bot.sendMessage(msg.chat.id, message, options);
   } catch (error) {
-    console.error(error);
+    Logger.error(error);
   }
 });

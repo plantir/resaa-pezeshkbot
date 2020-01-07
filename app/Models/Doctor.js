@@ -20,7 +20,15 @@ class Doctor extends Model {
       }
     });
   }
-
+  static get allowField() {
+    return [
+      'first_name',
+      'last_name',
+      'subscriber_number',
+      'image',
+      'description'
+    ];
+  }
   static listOption(qs) {
     qs.withArray = ['speciality'].concat(qs.withArray || []);
     return super.listOption(qs);
