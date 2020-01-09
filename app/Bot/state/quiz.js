@@ -31,7 +31,9 @@ bot.on('callback_query', async callback => {
     quiz_id,
     is_correct
   });
-  let msg = ` جواب شما به کویز شماره ۱ ${is_correct ? 'درست' : 'غلط'} بود  \n`;
+  let msg = ` جواب شما به کویز شماره ${quiz_id} ${
+    is_correct ? 'درست' : 'غلط'
+  } بود  \n`;
   let correct_count = await QuizAnswer.query()
     .where({
       user_id: user.id,

@@ -46,12 +46,18 @@ class SendQuestion extends Task {
         .fetch();
       doctors = _.groupBy(doctors.toJSON(), 'speciality_id');
       for (const question of questions.toJSON()) {
-        if (doctors[question.speciality_id].length == 0) {
+        if (
+          !doctors[question.speciality_id] ||
+          doctors[question.speciality_id].length == 0
+        ) {
           continue;
         }
         let doctor = doctors[question.speciality_id].pop();
         try {
-          let message = await bot.sendMessage(doctor.chat_id, question.text);
+          let message = await bot.sendMessage(
+            doctor.chat_id,
+            `سوال پرسیده شده توسط کاربران ربات:\n${question.text} \n\n#question_${question.id}`
+          );
           await DoctorAnswer.create({
             question_id: question.id,
             doctor_id: doctor.id,

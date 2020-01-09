@@ -18,7 +18,7 @@ const moment = use('moment');
 const Logger = use('Logger');
 
 const CHANNEL_ID = Env.getOrFail('CHANNEL_ID');
-
+const SITE_URL = Env.getOrFail('SITE_URL');
 class SendQuiz extends Task {
   static get schedule() {
     return '0 * * * * *';
@@ -55,7 +55,10 @@ class SendQuiz extends Task {
           });
         }
       });
-      await bot.sendMessage(CHANNEL_ID, quiz.question, {
+
+      let image_url = `${SITE_URL}${quiz.image}`;
+      await bot.sendPhoto(CHANNEL_ID, image_url, {
+        caption: `${quiz.question}\n#quiz #quiz_${quiz.id}`,
         reply_markup: {
           inline_keyboard
         }

@@ -20,6 +20,18 @@ class Doctor extends Model {
       }
     });
   }
+  static get_image(id) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let { data } = await axios.get(`${BASE_API}/doctors/${id}/image`, {
+          responseType: 'stream'
+        });
+        resolve(data);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
   static get allowField() {
     return [
       'first_name',

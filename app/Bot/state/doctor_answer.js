@@ -21,6 +21,8 @@ const Env = use('Env');
 /** @type {import('@adonisjs/framework/src/Logger')} */
 const Logger = use('Logger');
 
+const SITE_URL = Env.getOrFail('SITE_URL');
+
 const BOT_TOKEN = Env.getOrFail('BOT_TOKEN');
 bot.on('message', async msg => {
   if (!msg.reply_to_message) {
@@ -40,6 +42,7 @@ bot.on('message', async msg => {
     let doctor_answer = await DoctorAnswer.query()
       .where({ message_id: msg.reply_to_message.message_id })
       .with('question', builder => builder.with('user'))
+      .with('doctor')
       .first();
     let doctor_answer_json = doctor_answer.toJSON();
     if (msg.voice) {
@@ -53,7 +56,12 @@ bot.on('message', async msg => {
       doctor_answer.answer = msg.text;
     }
     let message = `سوال پرسیده شده توسط شما : \n${doctor_answer_json.question.text}\n\n پاسخ پزشک:\n${msg.text}`;
-    await bot.sendMessage(doctor_answer_json.question.user.chat_id, message);
+    let doctor_image = `${SITE_URL}${doctor_answer_json.doctor.image}`;
+    await bot.sendPhoto(
+      doctor_answer_json.question.user.chat_id,
+      doctor_image,
+      { caption: message }
+    );
     bot.sendMessage(
       msg.chat.id,
       'پاسخ شما با موفقیت برای بیمار ارسال شد، سپاس',

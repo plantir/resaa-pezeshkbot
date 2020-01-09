@@ -18,13 +18,15 @@ const providers = [
   '@adonisjs/lucid/providers/LucidProvider',
   '@adonisjs/redis/providers/RedisProvider',
   '@adonisjs/framework/providers/ViewProvider',
+  '@adonisjs/drive/providers/DriveProvider',
   'adonis-scheduler/providers/SchedulerProvider',
   'vrwebdesign-adonis/BaseModel/providers/BaseModelProvider',
   'vrwebdesign-adonis/BaseRoute/providers/BaseRouteProvider',
   'vrwebdesign-adonis/Helper/providers/HelperProvider',
   'vrwebdesign-adonis/Providers/kue/providers/KueProvider',
   'vrwebdesign-adonis/Providers/sms',
-  path.join(__dirname, '..', 'providers', 'BotProvider')
+  path.join(__dirname, '..', 'providers', 'BotProvider'),
+  path.join(__dirname, '..', 'providers', 'SaveFileProvider')
 ];
 /*
 |--------------------------------------------------------------------------

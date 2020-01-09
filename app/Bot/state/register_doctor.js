@@ -7,6 +7,8 @@ const bot = use('Bot');
 const _enum = require('../config/enum');
 const Doctor = use('App/Models/Doctor');
 const Speciality = use('App/Models/Speciality');
+const SaveFile = use('SaveFile');
+const request = use('request');
 bot.onText(_enum.regex_state.register_doctor, async msg => {
   bot.sendMessage(msg.chat.id, 'کد ۴ رقمی رسا پزشک را وارد نمایید');
 });
@@ -15,7 +17,9 @@ bot.onText(/^\d{4}$/, async msg => {
   try {
     let doctor = await Doctor.get(msg.text);
     let message = `مشخصات پزشک \nنام پزشک ${doctor.firstName}\n نام خانوادگی: ${doctor.lastName} \n تخصص: ${doctor.specialty.title} \n 👩‍⚕️👨‍⚕️👩‍⚕️👨‍⚕️`;
-    bot.sendMessage(msg.chat.id, message, {
+    let doctor_image = await Doctor.get_image(msg.text);
+    bot.sendPhoto(msg.chat.id, doctor_image, {
+      caption: message,
       reply_markup: {
         inline_keyboard: [
           [
@@ -63,6 +67,10 @@ bot.on('callback_query', async ({ data, from }) => {
     doctor.first_name = resaa_doctor.firstName;
     doctor.last_name = resaa_doctor.lastName;
     doctor.speciality_id = resaa_doctor.specialty.id;
+    try {
+      let doctor_image = await Doctor.get_image(doctor_id);
+      doctor.image = SaveFile({ stream: doctor_image });
+    } catch (error) {}
     let speciality = await Speciality.find(doctor.speciality_id);
     if (!speciality) {
       return bot.sendMessage(from.id, 'تخصص این پزشک در ربات رسا ثبت نشده است');
