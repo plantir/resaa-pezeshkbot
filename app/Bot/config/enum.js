@@ -25,7 +25,8 @@ const regex_state = {
   test_answer: /ارسال جواب آزمایش/,
   finish_file_upload: /اتمام|تلاش مجدد/,
   reset_file_upload: /حذف تمامی فایل ها و ارسال مجدد/,
-  register: /[98][9][0-3|9][0-9]{8,8}$/
+  register: /[98][9][0-3|9][0-9]{8,8}$/,
+  no_answer_quistion: /مشاهده سوال پاسخ داده نشده/
 };
 module.exports = {
   state,

@@ -91,6 +91,21 @@ bot.on('callback_query', async callback => {
   }
   if (callback.data == 'next_question') {
     let doctor = await Doctor.findBy({ chat_id: callback.from.id });
+    let no_answer_question = await DoctorAnswer.query()
+      .where({ is_expired: 0 })
+      .whereNull('answer')
+      .whereHas('doctor', builder => builder.where({ chat_id: doctor.chat_id }))
+      .first();
+
+    if (no_answer_question) {
+      return bot.sendMessage(
+        doctor.chat_id,
+        'شما به این سوال هنوز پاسخ نداده اید',
+        {
+          reply_to_message_id: no_answer_question.message_id
+        }
+      );
+    }
     let question = await Question.query()
       .where({ speciality_id: doctor.speciality_id })
       .whereDoesntHave('answer', builder => {
