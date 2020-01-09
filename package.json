@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node server.js",
     "test": "node ace test",
-    "release": "git push origin next && git push origin master"
+    "release": "git push dist master && git push dist next"
   },
   "keywords": [
     "adonisjs",
