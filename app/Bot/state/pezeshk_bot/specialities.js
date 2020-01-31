@@ -1,6 +1,6 @@
 /** @type {import('node-telegram-bot-api')} */
 const bot = use('Bot');
-const _enum = require('../config/enum');
+const _enum = require('./enum');
 const Speciality = use('App/Models/Speciality');
 const User = use('App/Models/User');
 

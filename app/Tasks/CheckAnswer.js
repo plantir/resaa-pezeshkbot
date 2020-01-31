@@ -9,7 +9,7 @@ const DoctorAnswer = use('App/Models/DoctorAnswer');
 const moment = use('moment');
 
 /** @type {import('node-telegram-bot-api')} */
-const bot = use('Bot');
+const bot = use('PezeshkBot');
 
 /** @type {import('@adonisjs/framework/src/Logger')} */
 const Logger = use('Logger');

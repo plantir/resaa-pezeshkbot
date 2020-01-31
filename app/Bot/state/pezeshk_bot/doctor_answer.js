@@ -13,7 +13,7 @@ const Question = use('App/Models/Question');
 /** @type {import ('@adonisjs/lucid/src/Lucid/Model')} */
 const DoctorAnswer = use('App/Models/DoctorAnswer');
 
-const _enum = require('../config/enum');
+const _enum = require('./enum');
 
 /** @type {import('@adonisjs/framework/src/Env')} */
 const Env = use('Env');
@@ -23,7 +23,7 @@ const Logger = use('Logger');
 
 const SITE_URL = Env.getOrFail('SITE_URL');
 
-const BOT_TOKEN = Env.getOrFail('BOT_TOKEN');
+const PEZESHK_BOT_TOKEN = Env.getOrFail('PEZESHK_BOT_TOKEN');
 bot.on('message', async msg => {
   if (!msg.reply_to_message) {
     return;
@@ -47,10 +47,10 @@ bot.on('message', async msg => {
     let doctor_answer_json = doctor_answer.toJSON();
     if (msg.voice) {
       let { result } = await request.get({
-        url: `https://api.telegram.org/bot${BOT_TOKEN}/getFile?file_id=${msg.voice.file_id}`,
+        url: `https://api.telegram.org/bot${PEZESHK_BOT_TOKEN}/getFile?file_id=${msg.voice.file_id}`,
         json: true
       });
-      msg.voice.file_path = `https://api.telegram.org/file/bot${BOT_TOKEN}/${result.file_path}`;
+      msg.voice.file_path = `https://api.telegram.org/file/bot${PEZESHK_BOT_TOKEN}/${result.file_path}`;
       doctor_answer.answer = msg.voice.file_path;
     } else {
       doctor_answer.answer = msg.text;

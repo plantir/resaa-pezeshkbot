@@ -21,7 +21,7 @@ const { Ignitor } = require('@adonisjs/ignitor');
 
 new Ignitor(require('@adonisjs/fold'))
   .appRoot(__dirname)
-  .preLoad('start/start-scheduler')
-  .preLoad('start/job')
+  .preLoad('preloads/scheduler')
+  .preLoad('preloads/bull')
   .fireHttpServer()
   .catch(console.error);

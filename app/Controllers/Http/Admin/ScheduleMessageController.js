@@ -7,7 +7,7 @@
 const Resource = use('Resource');
 
 /** @type {import('node-telegram-bot-api')} */
-const bot = use('Bot');
+const bot = use('PezeshkBot');
 class ScheduleMessageController extends Resource {
   constructor() {
     super();

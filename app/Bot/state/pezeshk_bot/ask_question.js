@@ -10,7 +10,7 @@ const Speciality = use('App/Models/Speciality');
 /** @type {import ('@adonisjs/lucid/src/Lucid/Model')} */
 const Question = use('App/Models/Question');
 
-const _enum = require('../config/enum');
+const _enum = require('./enum');
 
 /** @type {import('@adonisjs/framework/src/Env')} */
 const Env = use('Env');

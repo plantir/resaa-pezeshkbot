@@ -5,26 +5,36 @@ const TelegramBot = require('node-telegram-bot-api');
 // const Env = use('Env');
 
 class Bot extends TelegramBot {
-  //   async sendMessage(chatId, text, body = {}, whith_history = true) {
-  //     if (whith_history) {
-  //       let user = new User(chatId);
-  //       await user.push_history({
-  //         text,
-  //         body
-  //       });
-  //     }
-  //     return super.sendMessage(chatId, text, body);
-  //   }
-  //   async sendPhoto(chatId, doctor_image_id, body = {}, whith_history = true) {
-  //     if (whith_history) {
-  //       let user = new User(chatId);
-  //       await user.push_history({
-  //         text: doctor_image_id,
-  //         body
-  //       });
-  //     }
-  //     return super.sendPhoto(chatId, doctor_image_id, body);
-  //   }
+  constructor(token, options, Config) {
+    super(token, options);
+    this.Config = Config;
+  }
+  connection(name) {
+    name = name || this.Config.get('bot.connection');
+
+    /**
+     * Cannot get default connection
+     */
+    if (!name) {
+      throw GE.InvalidArgumentException.invalidParameter(
+        'Make sure to define connection inside config/bot.js file'
+      );
+    }
+
+    /**
+     * Get connection config
+     */
+    const connectionConfig = this.Config.get(`bot.${name}`);
+
+    /**
+     * Cannot get config for the defined connection
+     */
+    if (!connectionConfig) {
+      throw GE.RuntimeException.missingConfig(name, 'config/bot.js');
+    }
+
+    this.token = connectionConfig.token;
+  }
 }
 
 class BotProvider extends ServiceProvider {
@@ -36,19 +46,39 @@ class BotProvider extends ServiceProvider {
    * @return {void}
    */
   register() {
-    this.app.singleton('Bot', () => {
-      const Env = this.app.use('Adonis/Src/Env');
-      const Logger = this.app.use('Logger');
-      const token = Env.get('BOT_TOKEN');
+    this.app.bind('Bot', app => {
+      const Env = app.use('Adonis/Src/Env');
+      const Logger = app.use('Logger');
+      const Config = app.use('Adonis/Src/Config');
+      let name = Config.get('bot.connection');
+      if (!name) {
+        throw GE.InvalidArgumentException.invalidParameter(
+          'Make sure to define connection inside config/bot.js file'
+        );
+      }
+      const connectionConfig = Config.get(`bot.${name}`);
+      if (!connectionConfig) {
+        throw GE.RuntimeException.missingConfig(name, 'config/bot.js');
+      }
+
+      let token = connectionConfig.token;
       const mode = Env.get('BOT_MODE', 'polling');
       const is_polling = mode == 'polling' ? true : false;
-      let bot = new Bot(token, {
-        polling: is_polling
-      });
+      let bot = new Bot(
+        token,
+        {
+          polling: is_polling
+        },
+        Config
+      );
+      // bot.connection();
       bot.sendError = function(id, error) {
         Logger.error(error);
         this.sendMessage(id, 'خطایی رخ داده است');
       };
+      // ResaaBot: 'App/Bot/Service/ResaaBot',
+      // PezeshkBot: 'App/Bot/Service/PezeshkBot',
+      // DoctorBot: 'App/Bot/Service/DoctorBot'
       return bot;
     });
 
@@ -64,7 +94,10 @@ class BotProvider extends ServiceProvider {
    * @return {void}
    */
   boot() {
-    this.app.use('App/Bot/index.js');
+    this.app.alias('App/Bot/Service/ResaaBot', 'ResaaBot');
+    this.app.alias('App/Bot/Service/PezeshkBot', 'PezeshkBot');
+    this.app.alias('App/Bot/Service/DoctorBot', 'DoctorBot');
+    this.app.use('App/Bot/state/index.js');
   }
 }
 

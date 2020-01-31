@@ -1,6 +1,6 @@
 /**  @type {import('node-telegram-bot-api')} */
 const bot = use('Bot');
-const _enum = require('../config/enum');
+const _enum = require('./enum');
 /** @type {import('@adonisjs/framework/src/Env')} */
 const Env = use('Env');
 

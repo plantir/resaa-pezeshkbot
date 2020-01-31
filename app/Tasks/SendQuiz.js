@@ -6,7 +6,7 @@ const Task = use('Task');
 const Quiz = use('App/Models/Quiz');
 
 /** @type {import('node-telegram-bot-api')} */
-const bot = use('Bot');
+const bot = use('PezeshkBot');
 
 /** @type {import('@adonisjs/framework/src/Env')} */
 const Env = use('Env');

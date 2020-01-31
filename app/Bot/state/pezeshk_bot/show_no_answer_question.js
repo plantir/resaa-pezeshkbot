@@ -10,7 +10,7 @@ const Speciality = use('App/Models/Speciality');
 /** @type {typeof import ('@adonisjs/lucid/src/Lucid/Model')} */
 const DoctorAnswer = use('App/Models/DoctorAnswer');
 
-const { regex_state } = require('../config/enum');
+const { regex_state } = require('./enum');
 
 /** @type {import('@adonisjs/framework/src/Env')} */
 const Env = use('Env');

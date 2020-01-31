@@ -23,8 +23,9 @@ const providers = [
   'vrwebdesign-adonis/BaseModel/providers/BaseModelProvider',
   'vrwebdesign-adonis/BaseRoute/providers/BaseRouteProvider',
   'vrwebdesign-adonis/Helper/providers/HelperProvider',
-  'vrwebdesign-adonis/Providers/kue/providers/KueProvider',
-  'vrwebdesign-adonis/Providers/sms',
+  '@rocketseat/adonis-bull/providers/Bull',
+  // 'vrwebdesign-adonis/Providers/kue/providers/KueProvider',
+  // 'vrwebdesign-adonis/Providers/sms',
   path.join(__dirname, '..', 'providers', 'BotProvider'),
   path.join(__dirname, '..', 'providers', 'SaveFileProvider')
 ];
@@ -39,8 +40,8 @@ const providers = [
 */
 const aceProviders = [
   '@adonisjs/lucid/providers/MigrationsProvider',
-  'adonis-scheduler/providers/CommandsProvider',
-  'vrwebdesign-adonis/Providers/kue/providers/CommandsProvider'
+  'adonis-scheduler/providers/CommandsProvider'
+  // 'vrwebdesign-adonis/Providers/kue/providers/CommandsProvider'
 ];
 
 /*
@@ -70,5 +71,5 @@ const aliases = {
 const commands = [
   // 'vrwebdesign-adonis/Providers/kue/providers/CommandsProvider'
 ];
-const jobs = ['App/Jobs/Message'];
-module.exports = { providers, aceProviders, aliases, commands, jobs };
+// const jobs = ['App/Jobs/Message'];
+module.exports = { providers, aceProviders, aliases, commands };

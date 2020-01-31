@@ -1,6 +1,6 @@
 'use strict';
 /** @type {import('node-telegram-bot-api')} */
-const bot = use('Bot');
+const bot = use('PezeshkBot');
 
 const Task = use('Task');
 

@@ -6,8 +6,8 @@ const Model = use('Model');
 /** @type {typeof import('@adonisjs/redis/src/Redis')} */
 const Redis = use('Redis');
 
-const kue = use('Kue');
-const Message_JOB = use('App/Jobs/Message');
+const Bull = use('Rocketseat/Bull');
+const Message_JOB = use('App/Jobs/SendMessage');
 const ScheduleMessage = use('App/Models/ScheduleMessage');
 class User extends Model {
   static boot() {
@@ -56,16 +56,20 @@ class User extends Model {
       .where({ is_deleted: 0 })
       .fetch();
     for (let user of users.toJSON()) {
-      kue.dispatch(
-        Message_JOB.key,
-        {
-          user,
-          schedule
-        },
-        {
-          priority: 'high'
-        }
-      );
+      Bull.add(Message_JOB.key, {
+        user,
+        schedule
+      });
+      // kue.dispatch(
+      //   Message_JOB.key,
+      //   {
+      //     user,
+      //     schedule
+      //   },
+      //   {
+      //     priority: 'high'
+      //   }
+      // );
     }
     setTimeout(async () => {
       let success_count = await Redis.get(`schedule_${schedule.id}_success`);
