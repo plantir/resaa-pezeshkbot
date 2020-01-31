@@ -6,6 +6,14 @@ const Model = use('Model');
 /** @type {typeof import('@adonisjs/redis/src/Redis')} */
 const Redis = use('Redis');
 
+/** @type { import('axios')} */
+const axios = require('axios');
+
+/** @type { import('@adonisjs/framework/src/Env')} */
+const Env = use('Env');
+
+const BASE_API = Env.getOrFail('RESAA_API');
+
 const Bull = use('Rocketseat/Bull');
 const Message_JOB = use('App/Jobs/SendMessage');
 const ScheduleMessage = use('App/Models/ScheduleMessage');
@@ -84,28 +92,27 @@ class User extends Model {
       await Redis.del(`schedule_${schedule.id}_error`);
     }, 300000);
   }
-  async register(phoneNumber) {
-    try {
-      let { data } = await axios.post(
-        `${BASE_API}/rubika/Patients/Registration`,
-        {
+  register(phoneNumber) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        await axios.post(`${BASE_API}/rubika/Patients/Registration`, {
           phoneNumber
-        }
-      );
-      this.phone = phoneNumber;
-      this.save();
-      resolve(true);
-    } catch (err) {
-      if (err.error.code == 409) {
+        });
         this.phone = phoneNumber;
         this.save();
-        reject(
-          'شما با این شماره موبایل قبلا ثبت نام کرده بودید و با موفقیت وارد شدید'
-        );
-      } else {
-        reject('خطایی رخ داده است لطفا بعدا امتحان کنید');
+        resolve(true);
+      } catch (err) {
+        if (err.response.status == 409) {
+          this.phone = phoneNumber;
+          this.save();
+          reject(
+            'شما با این شماره موبایل قبلا ثبت نام کرده بودید و با موفقیت وارد شدید'
+          );
+        } else {
+          reject('خطایی رخ داده است لطفا بعدا امتحان کنید');
+        }
       }
-    }
+    });
   }
 }
 

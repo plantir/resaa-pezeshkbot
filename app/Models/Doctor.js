@@ -2,9 +2,12 @@
 
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('BaseModel');
+
 /** @type { import('@adonisjs/framework/src/Env')} */
 const Env = use('Env');
+
 const BASE_API = Env.getOrFail('RESAA_API');
+
 /** @type { import('axios')} */
 const axios = require('axios');
 

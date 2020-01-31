@@ -9,6 +9,7 @@ const start_video =
 bot.onText(regex_state.start, async msg => {
   let user = await User.getOrCreate(msg);
   user.state = 0;
+  user.history = [];
   await User.update_redis(user);
 
   // let user = new User(msg.chat.id);
