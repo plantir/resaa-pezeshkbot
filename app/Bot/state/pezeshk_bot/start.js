@@ -1,6 +1,6 @@
 /**  @type {import('node-telegram-bot-api')} */
 
-const bot = use('Bot');
+const bot = use('PezeshkBot');
 
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const User = use('App/Models/User');

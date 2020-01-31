@@ -3,7 +3,7 @@
 // const DoctorProvider = require('../provider/DoctorProvider')
 
 /** @type {import('node-telegram-bot-api')} */
-const bot = use('Bot');
+const bot = use('PezeshkBot');
 const _enum = require('./enum');
 const Doctor = use('App/Models/Doctor');
 const Speciality = use('App/Models/Speciality');

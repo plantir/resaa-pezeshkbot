@@ -27,22 +27,19 @@ class SendQuestion extends Task {
   async handle() {
     try {
       let questions = await Question.query()
-        .whereDoesntHave('answer', builder =>
-          builder
-            .where(builder =>
-              builder.where({ is_expired: 0 }).whereNull('answer')
-            )
-            .orWhereNotNull('answer')
+        .where({ is_deleted: 0 })
+        .doesntHave('answer')
+        .orWhereDoesntHave('answer', builder =>
+          builder.where(builder => builder.where({ is_expired: 0 }))
         )
         .fetch();
-      // let da = await DoctorAnswer.query()
-      //   .where(builder => builder.where({ is_expired: 0 }).whereNull('answer'))
-      //   .orWhereNotNull('answer')
-      //   .fetch();
-      // questions = _.groupBy(questions.toJSON(), 'speciality_id');
       let doctors = await Doctor.query()
         .where({ is_deleted: false })
-        // .groupBy('speciality_id')
+        .whereDoesntHave('answer', builder =>
+          builder.where(builder =>
+            builder.where({ is_expired: 0 }).whereNull('answer')
+          )
+        )
         .fetch();
       doctors = _.groupBy(doctors.toJSON(), 'speciality_id');
       for (const question of questions.toJSON()) {

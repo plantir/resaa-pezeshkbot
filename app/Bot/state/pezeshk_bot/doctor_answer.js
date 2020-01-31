@@ -1,5 +1,5 @@
 /** @type {import ('node-telegram-bot-api')} */
-const bot = use('Bot');
+const bot = use('PezeshkBot');
 
 /** @type {import ('@adonisjs/lucid/src/Lucid/Model')} */
 const User = use('App/Models/User');
@@ -79,6 +79,7 @@ bot.on('message', async msg => {
     await doctor_answer.save();
   } catch (error) {
     Logger.error(error);
+    bot.sendMessage(msg.chat.id, 'خطایی رخ داده است');
   }
 });
 
