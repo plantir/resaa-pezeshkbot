@@ -13,6 +13,7 @@ const axios = require('axios');
 
 const bot = use('ResaaBot');
 const _ = use('lodash');
+const User = use('App/Models/User');
 class Doctor extends Model {
   static get fields() {}
 
@@ -90,9 +91,12 @@ class Doctor extends Model {
     let doctor = await Doctor.get(doctor_id);
     let doctor_image_id = await Doctor.get_image(doctor_id);
     user.last_visit_doctor = doctor;
+    await User.update_redis(user);
     let message = `\nدکتر ${doctor.firstName} ${doctor.lastName}`;
     message += `\nکد رسا ${doctor.subscriberNumber}`;
-    message += `\n${doctor.expertise}`;
+    if (doctor.expertise) {
+      message += `\n${doctor.expertise}`;
+    }
     message += `\nوضعیت ${
       doctor.currentlyAvailable ? ' ✅ در دسترس' : ' ❌ خارج از دسترس '
     }`;

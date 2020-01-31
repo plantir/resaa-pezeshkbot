@@ -41,7 +41,7 @@ bot.onText(_enum.regex_state.specialities, async msg => {
       }
     ]);
 
-    bot.sendMessage(msg.chat.id, message, options, false);
+    bot.sendMessage(msg.chat.id, message, options);
   } catch (error) {
     Logger.error(error);
   }

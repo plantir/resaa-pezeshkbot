@@ -1,4 +1,5 @@
 const User = use('App/Models/User');
+const Doctor = use('App/Models/Doctor');
 
 /** @type {import('node-telegram-bot-api')} */
 const bot = use('ResaaBot');
@@ -27,8 +28,8 @@ bot.on('message', async msg => {
   let cache_user = await User.get(msg);
   cache_user.phone = user.phone;
   await User.update_redis(cache_user);
-  let doctor_id = user.last_visit_doctor;
-  if (!doctor_id) {
+  let doctor = cache_user.last_visit_doctor;
+  if (!doctor) {
     options.reply_markup.keyboard.push([
       {
         text: 'بازگشت به خانه'
@@ -36,5 +37,5 @@ bot.on('message', async msg => {
     ]);
     return bot.sendMessage(msg.chat.id, 'لطفا انتخاب کنید', options);
   }
-  Doctor.sned_profiel({ user, doctor_id });
+  Doctor.sned_profile({ user, doctor_id: doctor.subscriberNumber });
 });
