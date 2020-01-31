@@ -3,8 +3,10 @@ const state = {
   '0': 'start',
   specialities: 1,
   '1': 'specialities',
-  ask_question: 4,
-  '4': 'ask_question',
+  search_doctor: 2,
+  '2': 'search_doctor',
+  select_doctor: 4,
+  '4': 'select_doctor',
   doctor_detail: 5,
   '5': 'doctor_detail',
   test_answer: 6,
@@ -13,20 +15,18 @@ const state = {
   '7': 'call_doctor'
 };
 const regex_state = {
-  register_doctor: /ثبت نام پزشک/,
-  start: /^شروع$|بازگشت به خانه/,
-  refer: /دعوت از دوست/,
+  start: /^شروع$|بازگشت به خانه|start/,
   specialities: /سوال پزشکی دارم/,
   call_doctor: /تماس با دکتر *.*/,
   charge: /شارژ اعتبار رسا/,
   test_charge: /تست شارژ/,
+  speciality: /انتخاب پزشکان دیگر|بازگشت به صفحه تخصص ها/,
   my_doctor: /پرسش از پزشک خودم/,
   payment_check: /بررسی وضعیت پرداخت/,
   test_answer: /ارسال جواب آزمایش/,
   finish_file_upload: /اتمام|تلاش مجدد/,
   reset_file_upload: /حذف تمامی فایل ها و ارسال مجدد/,
-  register: /[98][9][0-3|9][0-9]{8,8}$/,
-  no_answer_quistion: /مشاهده سوال پاسخ داده نشده/
+  register: /[98][9][0-3|9][0-9]{8,8}$/
 };
 module.exports = {
   state,

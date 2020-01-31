@@ -16,7 +16,7 @@ bot.onText(_enum.regex_state.register_doctor, async msg => {
 bot.onText(/^\d{4}$/, async msg => {
   try {
     let doctor = await Doctor.get(msg.text);
-    let message = `مشخصات پزشک \nنام پزشک ${doctor.firstName}\n نام خانوادگی: ${doctor.lastName} \n تخصص: ${doctor.specialty.title} \n 👩‍⚕️👨‍⚕️👩‍⚕️👨‍⚕️`;
+    let message = `مشخصات پزشک \nنام پزشک ${doctor.firstName}\n نام خانوادگی: ${doctor.lastName} \n تخصص: ${doctor.specialtyTitle} \n 👩‍⚕️👨‍⚕️👩‍⚕️👨‍⚕️`;
     let doctor_image = await Doctor.get_image(msg.text);
     bot.sendPhoto(msg.chat.id, doctor_image, {
       caption: message,

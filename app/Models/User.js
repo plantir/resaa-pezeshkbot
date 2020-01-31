@@ -84,6 +84,29 @@ class User extends Model {
       await Redis.del(`schedule_${schedule.id}_error`);
     }, 300000);
   }
+  async register(phoneNumber) {
+    try {
+      let { data } = await axios.post(
+        `${BASE_API}/rubika/Patients/Registration`,
+        {
+          phoneNumber
+        }
+      );
+      this.phone = phoneNumber;
+      this.save();
+      resolve(true);
+    } catch (err) {
+      if (err.error.code == 409) {
+        this.phone = phoneNumber;
+        this.save();
+        reject(
+          'شما با این شماره موبایل قبلا ثبت نام کرده بودید و با موفقیت وارد شدید'
+        );
+      } else {
+        reject('خطایی رخ داده است لطفا بعدا امتحان کنید');
+      }
+    }
+  }
 }
 
 module.exports = User;

@@ -29,9 +29,9 @@ class Message {
     }
   }
 
-  onCompleted(job, result) {
-    console.log(job, result);
-  }
+  // onCompleted(job, result) {
+  //   console.log(job, result);
+  // }
 }
 
 module.exports = Message;
