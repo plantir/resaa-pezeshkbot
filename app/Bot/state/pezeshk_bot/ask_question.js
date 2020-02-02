@@ -18,7 +18,7 @@ const Env = use('Env');
 const CHANNEL_ID = Env.getOrFail('CHANNEL_ID');
 const CHANNEL_URL = Env.getOrFail('CHANNEL_URL');
 bot.on('message', async msg => {
-  let user = await User.get(msg);
+  let user = await bot.getUser(msg);
   if (msg.text == 'بازگشت به خانه') {
     return;
   }
@@ -80,7 +80,7 @@ bot.on('message', async msg => {
 });
 
 bot.on('message', async msg => {
-  let user = await User.get(msg);
+  let user = await bot.getUser(msg);
   if (msg.text == 'بازگشت به خانه') {
     return;
   }
@@ -106,7 +106,7 @@ bot.on('message', async msg => {
 
 bot.on('callback_query', async callback => {
   if (callback.data == 'send_question') {
-    let user = await User.get({ chat: callback.from });
+    let user = await bot.getUser({ chat: callback.from });
     let question = await Question.query()
       .where({ text: user.question.text })
       .where({ user_id: user.id })

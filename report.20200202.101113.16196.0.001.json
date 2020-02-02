@@ -1,0 +1,164 @@
+
+{
+  "header": {
+    "reportVersion": 1,
+    "event": "Allocation failed - JavaScript heap out of memory",
+    "trigger": "FatalError",
+    "filename": "report.20200202.101113.16196.0.001.json",
+    "dumpEventTime": "2020-02-02T10:11:13Z",
+    "dumpEventTimeStamp": "1580625673055",
+    "processId": 16196,
+    "cwd": "D:\\Resaa\\resaa-pezeshk-bot",
+    "commandLine": [
+      "node",
+      "--inspect-brk=28196",
+      "server.js"
+    ],
+    "nodejsVersion": "v12.14.1",
+    "wordSize": 64,
+    "arch": "x64",
+    "platform": "win32",
+    "componentVersions": {
+      "node": "12.14.1",
+      "v8": "7.7.299.13-node.16",
+      "uv": "1.33.1",
+      "zlib": "1.2.11",
+      "brotli": "1.0.7",
+      "ares": "1.15.0",
+      "modules": "72",
+      "nghttp2": "1.40.0",
+      "napi": "5",
+      "llhttp": "2.0.1",
+      "http_parser": "2.8.0",
+      "openssl": "1.1.1d",
+      "cldr": "35.1",
+      "icu": "64.2",
+      "tz": "2019c",
+      "unicode": "12.1"
+    },
+    "release": {
+      "name": "node",
+      "lts": "Erbium",
+      "headersUrl": "https://nodejs.org/download/release/v12.14.1/node-v12.14.1-headers.tar.gz",
+      "sourceUrl": "https://nodejs.org/download/release/v12.14.1/node-v12.14.1.tar.gz",
+      "libUrl": "https://nodejs.org/download/release/v12.14.1/win-x64/node.lib"
+    },
+    "osName": "Windows_NT",
+    "osRelease": "10.0.18363",
+    "osVersion": "Windows 10 Pro N",
+    "osMachine": "x86_64",
+    "cpus": [
+      {
+        "model": "Intel(R) Core(TM) i9-9900K CPU @ 3.60GHz",
+        "speed": 3600,
+        "user": 38734,
+        "nice": 0,
+        "sys": 102968,
+        "idle": 2079140,
+        "irq": 23781
+      },
+      {
+        "model": "Intel(R) Core(TM) i9-9900K CPU @ 3.60GHz",
+        "speed": 3600,
+        "user": 30906,
+        "nice": 0,
+        "sys": 14812,
+        "idle": 2174843,
+        "irq": 3421
+      },
+      {
+        "model": "Intel(R) Core(TM) i9-9900K CPU @ 3.60GHz",
+        "speed": 3600,
+        "user": 223890,
+        "nice": 0,
+        "sys": 78218,
+        "idle": 1918453,
+        "irq": 1421
+      },
+      {
+        "model": "Intel(R) Core(TM) i9-9900K CPU @ 3.60GHz",
+        "speed": 3600,
+        "user": 22781,
+        "nice": 0,
+        "sys": 7484,
+        "idle": 2190296,
+        "irq": 312
+      },
+      {
+        "model": "Intel(R) Core(TM) i9-9900K CPU @ 3.60GHz",
+        "speed": 3600,
+        "user": 87718,
+        "nice": 0,
+        "sys": 30343,
+        "idle": 2102500,
+        "irq": 703
+      },
+      {
+        "model": "Intel(R) Core(TM) i9-9900K CPU @ 3.60GHz",
+        "speed": 3600,
+        "user": 46968,
+        "nice": 0,
+        "sys": 9500,
+        "idle": 2164093,
+        "irq": 515
+      },
+      {
+        "model": "Intel(R) Core(TM) i9-9900K CPU @ 3.60GHz",
+        "speed": 3600,
+        "user": 56343,
+        "nice": 0,
+        "sys": 27890,
+        "idle": 2136328,
+        "irq": 656
+      },
+      {
+        "model": "Intel(R) Core(TM) i9-9900K CPU @ 3.60GHz",
+        "speed": 3600,
+        "user": 48640,
+        "nice": 0,
+        "sys": 434406,
+        "idle": 1737515,
+        "irq": 296
+      },
+      {
+        "model": "Intel(R) Core(TM) i9-9900K CPU @ 3.60GHz",
+        "speed": 3600,
+        "user": 64171,
+        "nice": 0,
+        "sys": 83953,
+        "idle": 2072406,
+        "irq": 703
+      },
+      {
+        "model": "Intel(R) Core(TM) i9-9900K CPU @ 3.60GHz",
+        "speed": 3600,
+        "user": 52187,
+        "nice": 0,
+        "sys": 9234,
+        "idle": 2159125,
+        "irq": 390
+      },
+      {
+        "model": "Intel(R) Core(TM) i9-9900K CPU @ 3.60GHz",
+        "speed": 3600,
+        "user": 142000,
+        "nice": 0,
+        "sys": 51796,
+        "idle": 2026750,
+        "irq": 859
+      },
+      {
+        "model": "Intel(R) Core(TM) i9-9900K CPU @ 3.60GHz",
+        "speed": 3600,
+        "user": 14875,
+        "nice": 0,
+        "sys": 10203,
+        "idle": 2195468,
+        "irq": 125
+      },
+      {
+        "model": "Intel(R) Core(TM) i9-9900K CPU @ 3.60GHz",
+        "speed": 3600,
+        "user": 61859,
+        "nice": 0,
+        "sys": 

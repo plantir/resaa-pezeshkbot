@@ -9,7 +9,7 @@ const Logger = use('Logger');
 
 bot.onText(_enum.regex_state.specialities, async msg => {
   try {
-    let user = await User.get(msg);
+    let user = await bot.getUser(msg);
     user.state = _enum.state.specialities;
     await User.update_redis(user);
     let message = `لطفا تخصص خود را از لیست انتخاب کنید`;

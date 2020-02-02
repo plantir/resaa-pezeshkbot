@@ -5,7 +5,7 @@ const User = use('App/Models/User');
 const Doctor = use('App/Models/Doctor');
 const _enum = require('./enum');
 bot.onText(/پرسش از پزشک خودم/, async msg => {
-  let user = await User.get(msg);
+  let user = await bot.getUser(msg);
   user.state = _enum.state.search_doctor;
   await User.update_redis(user);
   let doctor = user.last_visit_doctor;
@@ -44,7 +44,7 @@ bot.on('message', async msg => {
   if (is_doctor) {
     return;
   }
-  let user = await User.get(msg);
+  let user = await bot.getUser(msg);
   let doctors = [];
   if (user.state != _enum.state.search_doctor) {
     return;

@@ -9,7 +9,7 @@ bot.onText(/شارژ اعتبار رسا/, async msg => {
       inline_keyboard: []
     }
   };
-  let user = await User.get(msg);
+  let user = await bot.getUser(msg);
   let amounts = [10000, 20000, 30000, 40000, 50000];
   for (let key in amounts) {
     options.reply_markup.inline_keyboard.push([

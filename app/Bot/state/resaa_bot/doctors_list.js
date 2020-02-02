@@ -5,7 +5,7 @@ const bot = use('ResaaBot');
 const _enum = require('./enum');
 const _ = use('lodash');
 bot.on('message', async msg => {
-  let user = await User.get(msg);
+  let user = await bot.getUser(msg);
   if (user.state != _enum.state.specialities) {
     return;
   }

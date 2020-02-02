@@ -4,7 +4,6 @@ const bot = use('PezeshkBot');
 
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const User = use('App/Models/User');
-
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Doctor = use('App/Models/Doctor');
 
@@ -12,10 +11,6 @@ bot.onText(/mychatid/, async msg => {
   bot.sendMessage(msg.chat.id, msg.chat.id);
 });
 bot.onText(/شروع|بازگشت به خانه|start/i, async msg => {
-  // let user = new User(msg.chat.id)
-  // user.reset_state_history()
-  // user.state = _enum.state.start
-  // let phone = await user.phone
   let doctor = await Doctor.findBy({ chat_id: msg.chat.id });
   if (doctor) {
     let message = `به رسا خوش آمدید`;
@@ -42,9 +37,8 @@ bot.onText(/شروع|بازگشت به خانه|start/i, async msg => {
     ]);
     return bot.sendMessage(msg.chat.id, message, options);
   }
-  let user = await User.getOrCreate(msg);
+  let user = await bot.getOrCreateUser(msg);
   user.state = 0;
-
   await User.update_redis(user);
   let message = `به رسا خوش آمدید`;
 

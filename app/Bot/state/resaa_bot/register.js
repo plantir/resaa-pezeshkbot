@@ -8,7 +8,8 @@ bot.on('message', async msg => {
   if (!msg.contact) {
     return;
   }
-  let user = await User.findBy({ chat_id: msg.chat.id });
+  let cache_user = await bot.getUser(msg);
+  let user = await User.find(cache_user.id);
   let message = '';
   let options = {
     reply_markup: {
@@ -21,11 +22,10 @@ bot.on('message', async msg => {
   try {
     await user.register(phone);
     message = `ثبت نام با موفقیت انجام شد`;
-    await bot.sendMessage(msg.chat.id, message);
+    await bot.sendMessage(msg.chat.id, message, {}, false);
   } catch (error) {
-    await bot.sendMessage(msg.chat.id, error);
+    await bot.sendMessage(msg.chat.id, error, {}, false);
   }
-  let cache_user = await User.get(msg);
   cache_user.phone = user.phone;
   await User.update_redis(cache_user);
   let doctor = cache_user.last_visit_doctor;
@@ -35,7 +35,7 @@ bot.on('message', async msg => {
         text: 'بازگشت به خانه'
       }
     ]);
-    return bot.sendMessage(msg.chat.id, 'لطفا انتخاب کنید', options);
+    return bot.sendMessage(msg.chat.id, 'لطفا انتخاب کنید', options, false);
   }
   Doctor.sned_profile({ user, doctor_id: doctor.subscriberNumber });
 });

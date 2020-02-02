@@ -10,6 +10,7 @@ UserHook.beforeCreate = async modelInstance => {
       .where({
         chat_id: modelInstance.chat_id
       })
+      .where({ bot_source: modelInstance.bot_source })
       .first();
     if (is_exist) {
       throw new Error('exist user');

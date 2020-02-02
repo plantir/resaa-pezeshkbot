@@ -7,7 +7,7 @@ const start_video =
     : 'BAADBAAD_QQAAnSf6FGNx82JyiDeDQI';
 
 bot.onText(regex_state.start, async msg => {
-  let user = await User.getOrCreate(msg);
+  let user = await bot.getOrCreateUser(msg);
   user.state = 0;
   user.history = [];
   await User.update_redis(user);

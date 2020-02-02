@@ -1,15 +1,19 @@
-let t_bot = require('node-telegram-bot-api');
+class Parent {
+  static get foo() {
+    // Throw an error to indicate that this is an abstract method.
+    return 'vow';
+  }
 
-let bot1 = new t_bot('1038748008:AAFfVggn7myfXUnkfqUBEA-RzT6jO3LPaMo', {
-  polling: true
-});
-let bot2 = new t_bot('465416748:AAEydD2N7i6Ga0ChGxE3L59ZOTVYDnIpeEk', {
-  polling: true
-});
+  logFoo() {
+    console.log(this.constructor.foo);
+  }
+}
 
-bot1.onText(/start/, msg => {
-  bot1.sendMessage(msg.chat.id, 'hi');
-});
-bot2.onText(/start/, msg => {
-  bot2.sendMessage(msg.chat.id, 'hi');
-});
+class Child extends Parent {
+  // static get foo() {
+  //   return 'yay';
+  // }
+}
+
+const child = new Child(); // Prints 'yay'
+child.logFoo(); // Prints 'yay'

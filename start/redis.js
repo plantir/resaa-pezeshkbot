@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 /*
 |--------------------------------------------------------------------------
@@ -11,7 +11,7 @@
 */
 
 // const Redis = use('Redis')
-
+console.log('object');
 /**
  * Inline subscriber
  */

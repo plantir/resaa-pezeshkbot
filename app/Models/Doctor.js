@@ -74,6 +74,71 @@ class Doctor extends Model {
       }
     });
   }
+  static get_time_price(id, phone) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let { data } = await axios.get(
+          `${BASE_API}/Rubika/Doctors/${id}/communicationquote?patientphonenumber=${phone}`
+        );
+        resolve(data.result.quote);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+  static book(id, phone) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let { data } = await axios.get(
+          `${BASE_API}/Doctors/${id}/CommunicationBooking?patientPhoneNumber=${phone}`
+        );
+        resolve(data);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+  static request_test_answer(id, phone) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let { data } = await axios.get(
+          `${BASE_API}/Doctors/${id}/DiagnosticDocumentsService/Quote?patientPhoneNumber=${phone}`
+        );
+        let status = data.result.quote.status;
+        let request_price = data.result.quote.costPerRequest;
+        switch (status) {
+          case 0:
+            resolve({
+              status: 'ok',
+              request_price: request_price,
+              chat_id: data.result.quote.destinations[0].identifier
+            });
+            break;
+          case 1:
+            resolve({
+              status: 'ServiceUnavailable'
+            });
+            break;
+          case 2:
+            resolve({
+              status: 'needTalk',
+              request_price: request_price
+            });
+            break;
+          case 3:
+            resolve({
+              status: 'needMoney',
+              request_price: request_price
+            });
+            break;
+        }
+      } catch (error) {
+        reject({
+          err
+        });
+      }
+    });
+  }
   static get allowField() {
     return [
       'first_name',

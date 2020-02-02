@@ -1,23 +1,19 @@
-const User = require('../Model/User');
-const Doctor = require('../Model/Doctor');
+const Doctor = use('App/Models/Doctor');
 const bot = use('ResaaBot');
-const _enum = require('../config/enum');
-const _ = require('lodash');
+const _enum = require('./enum');
 const resaa_url = 'https://resaa.net';
 bot.onText(/تماس با دکتر *.*/, async msg => {
-  let user = new User(msg.chat.id);
-  let state = await user.state;
+  let user = await bot.getUser(msg);
   let message = '';
   let options = {
     reply_markup: {
       inline_keyboard: []
     }
   };
-  if (state != _enum.state.doctor_detail) {
+  if (user.state != _enum.state.doctor_detail) {
     return;
   }
-  let phone = await user.phone;
-  if (!phone) {
+  if (!user.phone) {
     message = `شما هنوز در رسا ثبت نام نکرده اید حهت ثبت نام روی دکمه ثبت نام کلیک کنید`;
     options.reply_markup.keyboard = [
       [
@@ -36,14 +32,13 @@ bot.onText(/تماس با دکتر *.*/, async msg => {
     return bot.sendMessage(msg.chat.id, message, options);
   }
 
-  let visit_doctor = await user.visit_doctor;
-  let res = await Doctor.find(visit_doctor);
-  let doctor = res.result.doctor;
+  let doctor = await user.last_visit_doctor;
   let minute_array = doctor.specialty.id == 41 ? [5, 10, 15, 30] : [3, 5, 10];
-  let price = await Doctor.get_time_price(visit_doctor, phone);
-  // let duration = price.result.quote.duration;
-  // let costPerMinute = price.result.quote.costPerMinute
-  let { costPerMinute, duration, isFreeFirstCall } = price.result.quote;
+  let {
+    costPerMinute,
+    duration,
+    isFreeFirstCall
+  } = await Doctor.get_time_price(doctor.subscriberNumber, user.phone);
   if (isFreeFirstCall) {
     try {
       await Doctor.book(doctor.subscriberNumber, phone);
@@ -60,8 +55,8 @@ bot.onText(/تماس با دکتر *.*/, async msg => {
   for (let item of amount_list) {
     options.reply_markup.inline_keyboard.push([
       {
-        text: `${item.perioud} دقیقه ${item.amount} تومان`,
-        url: `${resaa_url}/charge?mobile=${phone}&chat_id=${msg.chat.id}`
+        text: `${item.period} دقیقه ${item.amount} تومان`,
+        url: `${resaa_url}/charge?mobile=${user.phone}&chat_id=${msg.chat.id}`
       }
     ]);
   }
@@ -108,11 +103,6 @@ bot.onText(/تماس با دکتر *.*/, async msg => {
   //   }
   // })
 });
-bot.onText(/تماس با پزشک/, async msg => {
-  let user = new User(msg.chat.id);
-  let doctor_id = await user.last_visit_doctor;
-  bot.sendMessage(msg.chat.id, `برای صحبت با پزشک ابتدا شماره `);
-});
 
 function calc_amount(costPerMinute, minutes) {
   let amount_list = [];
@@ -124,7 +114,7 @@ function calc_amount(costPerMinute, minutes) {
       amount = Math.ceil(amount / 5000) * 5000;
     }
     amount_list.push({
-      perioud: min,
+      period: min,
       amount
     });
   }

@@ -43,7 +43,7 @@ module.exports = {
     port: 6379,
     password: Env.get('REDIS_PASSWORD', null),
     db: 0,
-    keyPrefix: 'pezeshk_bot_'
+    keyPrefix: 'bot_'
   },
   kue: {
     host: 'localhost',

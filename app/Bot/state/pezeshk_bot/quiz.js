@@ -13,7 +13,7 @@ bot.on('callback_query', async callback => {
   if (!callback.data.includes('quiz')) {
     return;
   }
-  let user = await User.get({ chat: callback.from });
+  let user = await bot.getUser({ chat: callback.from });
   let quiz_id = callback.data.replace(/\D/g, '');
   let quiz_answer = await QuizAnswer.query()
     .where({ user_id: user.id })

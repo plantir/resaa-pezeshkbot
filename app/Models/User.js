@@ -17,51 +17,70 @@ const BASE_API = Env.getOrFail('RESAA_API');
 const Bull = use('Rocketseat/Bull');
 const Message_JOB = use('App/Jobs/SendMessage');
 const ScheduleMessage = use('App/Models/ScheduleMessage');
+
 class User extends Model {
   static boot() {
     super.boot();
     this.addHook('beforeCreate', 'UserHook.beforeCreate');
     this.addHook('afterCreate', 'UserHook.afterCreate');
   }
-  static async get(msg) {
-    let cached_user = await Redis.get(`user_${msg.chat.id}`);
+
+  static async get(msg, bot_source) {
+    let cached_user = await Redis.get(`${bot_source}_user_${msg.chat.id}`);
     if (cached_user) {
       return JSON.parse(cached_user);
     }
-    let user = await this.findBy({ chat_id: msg.chat.id });
+    let user = await this.query()
+      .where({ chat_id: msg.chat.id })
+      .where({ bot_source })
+      .first();
     if (user) {
-      await Redis.set(`user_${msg.chat.id}`, JSON.stringify(user));
+      await Redis.set(
+        `${bot_source}_user_${msg.chat.id}`,
+        JSON.stringify(user)
+      );
       return user.toJSON();
     }
     return {};
   }
-  static async getOrCreate(msg) {
-    let cached_user = await Redis.get(`user_${msg.chat.id}`);
+  static async getOrCreate(msg, bot_source) {
+    let cached_user = await Redis.get(`${bot_source}_user_${msg.chat.id}`);
     if (cached_user) {
       return JSON.parse(cached_user);
     }
-    let user = await this.findBy({ chat_id: msg.chat.id });
+    let user = await this.query()
+      .where({ chat_id: msg.chat.id })
+      .where({ bot_source })
+      .first();
     if (!user) {
       let caller_id = msg.text.split(' ')[1];
       let caller_user;
       if (caller_id) {
-        caller_user = await this.findBy({ chat_id: caller_id });
+        caller_user = await this.query()
+          .where({ chat_id: caller_id })
+          .where({ bot_source })
+          .first();
       }
       user = await User.create({
         chat_id: msg.chat.id,
+        bot_source,
         refer_by: caller_user ? caller_user.id : null,
         question_count: 1
       });
     }
-    await Redis.set(`user_${msg.chat.id}`, JSON.stringify(user));
+    await Redis.set(`${bot_source}_user_${msg.chat.id}`, JSON.stringify(user));
     return user.toJSON();
   }
   static update_redis(user) {
-    return Redis.set(`user_${user.chat_id}`, JSON.stringify(user));
+    return Redis.set(
+      `${user.bot_source}_user_${user.chat_id}`,
+      JSON.stringify(user)
+    );
   }
   static async sendToAll(schedule) {
     let users = await this.query()
       .where({ is_deleted: 0 })
+      .where({ bot_source: 'pezeshk' })
       .fetch();
     for (let user of users.toJSON()) {
       Bull.add(Message_JOB.key, {
@@ -111,6 +130,19 @@ class User extends Model {
         } else {
           reject('خطایی رخ داده است لطفا بعدا امتحان کنید');
         }
+      }
+    });
+  }
+
+  confirm_testAnswer(doctor_id, referenceNumber, user) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let { data } = await axios.post(
+          `${BASE_API}/Doctors/${doctor_id}/DiagnosticDocumentsService/Invoice?patientPhoneNumber=${user.phone}`
+        );
+        resolve(data);
+      } catch (error) {
+        reject(err);
       }
     });
   }

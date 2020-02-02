@@ -23,5 +23,6 @@ new Ignitor(require('@adonisjs/fold'))
   .appRoot(__dirname)
   .preLoad('preloads/scheduler')
   .preLoad('preloads/bull')
+  .preLoad('preloads/bot')
   .fireHttpServer()
   .catch(console.error);

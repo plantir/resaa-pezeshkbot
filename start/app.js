@@ -26,7 +26,7 @@ const providers = [
   '@rocketseat/adonis-bull/providers/Bull',
   // 'vrwebdesign-adonis/Providers/kue/providers/KueProvider',
   // 'vrwebdesign-adonis/Providers/sms',
-  path.join(__dirname, '..', 'providers', 'BotProvider'),
+  // path.join(__dirname, '..', 'providers', 'BotProvider'),
   path.join(__dirname, '..', 'providers', 'SaveFileProvider')
 ];
 /*
@@ -57,7 +57,11 @@ const aceProviders = [
 |
 */
 const aliases = {
-  Scheduler: 'Adonis/Addons/Scheduler'
+  Scheduler: 'Adonis/Addons/Scheduler',
+  Bot: 'App/Bot/Service/Base',
+  ResaaBot: 'App/Bot/Service/ResaaBot',
+  PezeshkBot: 'App/Bot/Service/PezeshkBot',
+  DoctorBot: 'App/Bot/Service/DoctorBot'
 };
 
 /*

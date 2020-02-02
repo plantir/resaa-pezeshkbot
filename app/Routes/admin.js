@@ -37,3 +37,12 @@ Route.group(() => {
   .namespace('Admin')
   .prefix('admin/quiz')
   .middleware('auth');
+
+// route for test-answer
+Route.group(() => {
+  Route.customResource('', 'TestAnswerController');
+  // Route.post(':id/send_test', 'TestAnswer.send_test');
+})
+  .namespace('Admin')
+  .prefix('admin/test_answer')
+  .middleware('auth');

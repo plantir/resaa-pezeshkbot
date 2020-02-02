@@ -7,7 +7,7 @@ bot.onText(/بازگشت/, async msg => {
   if (msg.text == 'بازگشت به خانه') {
     return;
   }
-  let user = await User.get(msg);
+  let user = await bot.getUser(msg);
   user.history.pop();
   let last_state = user.history.pop();
   if (last_state) {
