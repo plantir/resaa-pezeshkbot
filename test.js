@@ -1,19 +1,7 @@
-class Parent {
-  static get foo() {
-    // Throw an error to indicate that this is an abstract method.
-    return 'vow';
-  }
-
-  logFoo() {
-    console.log(this.constructor.foo);
-  }
-}
-
-class Child extends Parent {
-  // static get foo() {
-  //   return 'yay';
-  // }
-}
-
-const child = new Child(); // Prints 'yay'
-child.logFoo(); // Prints 'yay'
+const Bot = require('node-telegram-bot-api');
+let bot = new Bot('646189637:AAFLDZMefpHpm8MQobqv468Vw0iBotLlYC8', {
+  polling: ture
+});
+bot.on('message', msg => {
+  bot.sendMessage(msg.chat.id, 'hi');
+});
