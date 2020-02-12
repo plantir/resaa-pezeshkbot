@@ -1,3 +1,5 @@
+const moment = use('moment');
+
 const bot = use('DoctorBot');
 /** @type {import('node-telegram-bot-api')} */
 const ResaaBot = use('ResaaBot');
@@ -26,6 +28,7 @@ bot.on('message', async msg => {
     test_answer.doctor_answer = msg.text || msg.voice.file_path;
     test_answer.status = 'answered';
     test_answer.answer_type = msg.text ? 'text' : 'voice';
+    test_answer.answer_at = moment().format('YYYY-MM-DD HH:mm');
     await test_answer.save();
     let title = `پاسخ پزشک به آزمایش شماره ${test_answer.id}:\n\n ‼️توجه : شما نمیتوانید روی  این پیغام ریپلای کنید`;
     await test_answer.load('user');

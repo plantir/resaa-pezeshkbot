@@ -1,6 +1,8 @@
 const User = use('App/Models/User');
 const TestAnswer = use('App/Models/TestAnswer');
 const Doctor = use('App/Models/Doctor');
+
+/** @type {import('node-telegram-bot-api')}  */
 const bot = use('ResaaBot');
 const _enum = require('./enum');
 const axios = require('axios');
@@ -238,4 +240,9 @@ bot.on('callback_query', async callback => {
   test_answer.user_satisfaction = rate;
   await test_answer.save();
   bot.sendMessage(callback.from.id, `نظر شما با موفقیت ثبت شد`);
+  try {
+    await bot.deleteMessage(callback.from.id, callback.message.message_id);
+  } catch (error) {
+    console.log(error);
+  }
 });
