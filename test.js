@@ -10,8 +10,12 @@ const axios = require('axios');
 
 axios
   .get(
-    'https://api.telegram.org/bot646189637:AAFLDZMefpHpm8MQobqv468Vw0iBotLlYC8/getUpdates'
+    'https://api.telegram.org/bot646189637:AAFLDZMefpHpm8MQobqv468Vw0iBotLlYC8/getUpdates',
+    {
+      timeout: 5000
+    }
   )
+
   .then(res => {
     console.log(res);
   })

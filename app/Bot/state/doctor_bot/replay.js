@@ -44,16 +44,19 @@ bot.on('message', async msg => {
     }
     await ResaaBot.sendMessage(
       test_answer.$relations.user.chat_id,
-      'لطفا رضایت خود از جواب آزمایش را از ۱ تا ۵ انتخاب کنید\n ۱ کاملا ناراضی و ۵ کاملا راضی میباشد',
+      'لطفا رضایت خود از جواب آزمایش را اعلام کنید کنید',
       {
         reply_markup: {
           inline_keyboard: [
             [
-              { text: '1', callback_data: `test_answer:${test_answer.id}:1` },
-              { text: '2', callback_data: `test_answer:${test_answer.id}:2` },
-              { text: '3', callback_data: `test_answer:${test_answer.id}:3` },
-              { text: '4', callback_data: `test_answer:${test_answer.id}:4` },
-              { text: '5', callback_data: `test_answer:${test_answer.id}:5` }
+              {
+                text: 'راضی بودم',
+                callback_data: `test_answer:${test_answer.id}:5`
+              },
+              {
+                text: 'راضی نبودم',
+                callback_data: `test_answer:${test_answer.id}:1`
+              }
             ]
           ]
         }

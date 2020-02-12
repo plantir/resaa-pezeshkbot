@@ -8,6 +8,7 @@ class Question extends Model {
     super.boot();
     this.addHook('afterCreate', 'QuestionHook.afterCreate');
   }
+
   static listOption(qs) {
     qs.withArray = [
       {

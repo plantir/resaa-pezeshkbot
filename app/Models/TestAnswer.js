@@ -17,6 +17,9 @@ class TestAnswer extends Model {
     super.boot();
     this.addTrait('ConvertToJson');
   }
+  static get hidden() {
+    return ['files', 'doctor_answer'];
+  }
   static get jsonFields() {
     return ['files', 'doctor'];
   }
