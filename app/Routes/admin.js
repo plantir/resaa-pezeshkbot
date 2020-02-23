@@ -41,6 +41,8 @@ Route.group(() => {
 // route for test-answer
 Route.group(() => {
   Route.customResource('', 'TestAnswerController');
+  Route.post('/:id/reply', 'TestAnswerController.reply');
+  Route.get('/doctor/:id', 'TestAnswerController.doctorAnswers');
   // Route.post(':id/send_test', 'TestAnswer.send_test');
 })
   .namespace('Admin')

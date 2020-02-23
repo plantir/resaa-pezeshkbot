@@ -18,7 +18,7 @@ class TestAnswer extends Model {
     this.addTrait('ConvertToJson');
   }
   static get hidden() {
-    return ['files', 'doctor_answer'];
+    return ['doctor_answer'];
   }
   static get jsonFields() {
     return ['files', 'doctor'];
@@ -45,18 +45,21 @@ class TestAnswer extends Model {
         user_id: user.id,
         files: user.files
       });
+      user.photo = [];
       try {
         for (const file of user.files) {
-          let name = `./tmp/test_answer/#${testAnswer.id}__${Date.now()}.png`;
+          let name = `./tmp/test_answer/${Date.now()}.png`;
           let { data } = await axios.get(file, {
             responseType: 'stream'
           });
           data.pipe(fs.createWriteStream(name));
           // let photo = fs.createReadStream(name)
+          user.photo.push(name.replace('./', '/').replace('tmp', 'download'));
           await bot.sendPhoto(doctor.chat_id, data, {
             caption: `#${testAnswer.id}`
           });
         }
+        testAnswer.files = user.photo;
         testAnswer.status = 'sendToDoctor';
         await testAnswer.save();
         resolve({ tracking_code: testAnswer.id });

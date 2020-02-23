@@ -9,6 +9,9 @@ Route.post('upload', async ({ request, response }) => {
   });
   await request.multipart.process();
 });
+Route.get('download/test_answer/:fileId', async ({ params, response }) => {
+  response.download(Helpers.tmpPath(`test_answer/${params.fileId}`));
+});
 
 Route.get('download/:fileId', async ({ params, response }) => {
   response.download(Helpers.tmpPath(`uploads/${params.fileId}`));
