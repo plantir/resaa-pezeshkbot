@@ -127,7 +127,8 @@ module.exports = {
     | is to true. Otherwise everything is processed manually.
     |
     */
-    processManually: ['/upload']
+    //
+    processManually: ['/upload', '/admin/test_answer/:id/reply']
 
     /*
     |--------------------------------------------------------------------------

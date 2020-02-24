@@ -2,7 +2,6 @@
 
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('BaseModel');
-const fs = use('fs');
 
 /** @type { import('axios')} */
 const axios = require('axios');
@@ -10,7 +9,14 @@ const axios = require('axios');
 /** @type { import('@adonisjs/framework/src/Env')} */
 const Env = use('Env');
 
+/** @type {import('node-telegram-bot-api')} */
+const ResaaBot = use('ResaaBot');
+
 const BASE_API = Env.getOrFail('RESAA_API');
+
+const moment = use('moment');
+
+const fs = use('fs');
 
 class TestAnswer extends Model {
   static boot() {
@@ -89,7 +95,49 @@ class TestAnswer extends Model {
       }
     });
   }
-
+  static async reply(id, msg) {
+    let test_answer = await this.find(id);
+    test_answer.doctor_answer = msg.text || msg.voice;
+    test_answer.status = 'answered';
+    test_answer.answer_type = msg.text ? 'text' : 'voice';
+    test_answer.answer_at = moment().format('YYYY-MM-DD HH:mm');
+    await test_answer.save();
+    let title = `پاسخ پزشک به آزمایش شماره ${test_answer.id}:\n\n ‼️توجه : شما نمیتوانید روی  این پیغام ریپلای کنید`;
+    await test_answer.load('user');
+    await ResaaBot.sendMessage(test_answer.$relations.user.chat_id, title);
+    if (msg.text) {
+      await ResaaBot.sendMessage(
+        test_answer.$relations.user.chat_id,
+        `${msg.text}`,
+        {}
+      );
+    } else if (msg.voice) {
+      let voice = fs.createReadStream(msg.voice);
+      await ResaaBot.sendVoice(test_answer.$relations.user.chat_id, voice, {});
+    }
+    await ResaaBot.sendMessage(
+      test_answer.$relations.user.chat_id,
+      'لطفا رضایت خود از جواب آزمایش را اعلام کنید کنید',
+      {
+        reply_markup: {
+          inline_keyboard: [
+            [
+              {
+                text: 'راضی بودم',
+                callback_data: `test_answer:${test_answer.id}:5`
+              },
+              {
+                text: 'راضی نبودم',
+                callback_data: `test_answer:${test_answer.id}:1`
+              }
+            ]
+          ]
+        }
+      }
+    );
+    test_answer.status = 'sendToClient';
+    await test_answer.save();
+  }
   user() {
     return this.belongsTo('App/Models/User');
   }

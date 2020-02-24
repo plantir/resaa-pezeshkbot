@@ -1,17 +1,61 @@
 'use strict';
+const fs = require('fs');
 const Resource = use('Resource');
+const bot = use('ResaaBot');
 class TestAnswerController extends Resource {
   constructor() {
     super();
     this.Model = use('App/Models/TestAnswer');
   }
-  async reply({ request, response, params: { id } }) {}
+  // try {
+  //   request.multipart.file('voice', {}, async file => {
+  //     let { msg = {} } = request.post();
+  //     if (file) {
+  //       msg.voice = file.stream;
+  //     }
+  //     if (!msg || (!msg.text && !msg.voice)) {
+  //       return response
+  //         .status(500)
+  //         .json('msg.text or a voice file is required');
+  //     }
+  //     await this.Model.reply(id, msg);
+  //     return 'success';
+  //   });
+  //   await request.multipart.process();
+  // } catch (error) {
+  //   return response.status(500).send(error);
+  // }
+  async reply({ request, response, params: { id } }) {
+    try {
+      let { msg = {} } = request.post();
+      request.multipart.file('voice', {}, async file => {
+        if (file) {
+          let name = `./tmp/test_answer/${Date.now()}.mp3`;
+          file.stream.pipe(fs.WriteStream(name)).on('finish', async () => {
+            msg.voice = name;
+            await this.Model.reply(id, msg);
+            response.send('success');
+          });
+        } else {
+          return response.status(500).send('voice not found');
+        }
+      });
+      await request.multipart.process();
+    } catch (error) {
+      let { msg = {} } = request.post();
+      if (!msg.text) {
+        return response.status(500).send('msg.text not found');
+      }
+      await this.Model.reply(id, msg);
+      response.send('success');
+    }
+  }
   async doctorAnswers({ request, response, params: { id } }) {
     let options = request.get();
     options.filters = options.filters ? JSON.parse(options.filters) : [];
+    options.setHidden = ['doctor', 'user_id', 'is_deleted', 'doctor_chat_id'];
     options.filters.push(`doctor:"subscriberNumber"%"${id}":like`);
     options.filters = JSON.stringify(options.filters);
-    // listOption
     return this.Model.listOption(options);
   }
 }

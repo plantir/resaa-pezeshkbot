@@ -3,6 +3,7 @@ const User = use('App/Models/User');
 const Doctor = use('App/Models/Doctor');
 /**  @type {import('node-telegram-bot-api')} */
 const bot = use('ResaaBot');
+
 bot.onText(/بازگشت/, async msg => {
   if (msg.text == 'بازگشت به خانه') {
     return;
