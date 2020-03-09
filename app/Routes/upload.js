@@ -11,7 +11,7 @@ Route.post('upload', async ({ request, response }) => {
 });
 Route.get('download/test_answer/:fileId', async ({ params, response }) => {
   response.download(Helpers.tmpPath(`test_answer/${params.fileId}`));
-});
+}).middleware('auth');
 
 Route.get('download/:fileId', async ({ params, response }) => {
   response.download(Helpers.tmpPath(`uploads/${params.fileId}`));
