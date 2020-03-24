@@ -5,18 +5,21 @@ const bot = use('DoctorBot');
 const ResaaBot = use('ResaaBot');
 const axios = use('axios');
 const TestAnswer = use('App/Models/TestAnswer');
-
+/** @type {import('fs')} */
+const fs = use('fs');
+const Drive = use('Drive');
+const FileType = use('file-type');
 bot.on('message', async msg => {
   if (!msg.reply_to_message) {
     return;
   }
   try {
-    if (!msg.voice && !msg.text) {
-      return bot.sendMessage(
-        msg.chat.id,
-        `شما تنها امکان ارسال متن و صدا را برای بیمار دارید`
-      );
-    }
+    // if (!msg.voice && !msg.text) {
+    //   return bot.sendMessage(
+    //     msg.chat.id,
+    //     `شما تنها امکان ارسال متن و صدا را برای بیمار دارید`
+    //   );
+    // }
     let id = msg.reply_to_message.caption.replace('#', '');
     if (msg.voice) {
       let { data } = await axios.get(
@@ -31,52 +34,38 @@ bot.on('message', async msg => {
         msg.voice = name;
         await TestAnswer.reply(id, msg);
       });
+    } else if (msg.photo) {
+      let { file_id } = msg.photo.reverse()[0];
+      let { data } = await axios.get(
+        `https://api.telegram.org/bot${bot.token}/getFile?file_id=${file_id}`
+      );
+      let file = `https://api.telegram.org/file/bot${bot.token}/${data.result.file_path}`;
+      const { data: image } = await axios.get(file, {
+        responseType: 'stream'
+      });
+      let name = `./tmp/test_answer/${Date.now()}.png`;
+      image.pipe(fs.WriteStream(name)).on('finish', async () => {
+        msg.photo = name;
+        await TestAnswer.reply(id, msg);
+      });
+    } else if (msg.document) {
+      let { file_id, file_name } = msg.document;
+      let { data } = await axios.get(
+        `https://api.telegram.org/bot${bot.token}/getFile?file_id=${file_id}`
+      );
+      let file = `https://api.telegram.org/file/bot${bot.token}/${data.result.file_path}`;
+      const { data: document } = await axios.get(file, {
+        responseType: 'arraybuffer'
+      });
+      let name = `./tmp/test_answer/${Date.now()}.${file_name.split('.')[1]}`;
+      try {
+        fs.writeFileSync(name, document, 'binary');
+        msg.document = name;
+        await TestAnswer.reply(id, msg);
+      } catch (error) {}
     } else {
       await TestAnswer.reply(id, msg);
     }
-    // let test_answer = await TestAnswer.find(id);
-    // test_answer.doctor_answer = msg.text || msg.voice.file_path;
-    // test_answer.status = 'answered';
-    // test_answer.answer_type = msg.text ? 'text' : 'voice';
-    // test_answer.answer_at = moment().format('YYYY-MM-DD HH:mm');
-    // await test_answer.save();
-    // let title = `پاسخ پزشک به آزمایش شماره ${test_answer.id}:\n\n ‼️توجه : شما نمیتوانید روی  این پیغام ریپلای کنید`;
-    // await test_answer.load('user');
-    // await ResaaBot.sendMessage(test_answer.$relations.user.chat_id, title);
-    // if (msg.text) {
-    //   await ResaaBot.sendMessage(
-    //     test_answer.$relations.user.chat_id,
-    //     `${msg.text}`,
-    //     {}
-    //   );
-    // } else if (msg.voice) {
-    //   const { data } = await axios.get(msg.voice.file_path, {
-    //     responseType: 'stream'
-    //   });
-    //   await ResaaBot.sendVoice(test_answer.$relations.user.chat_id, data, {});
-    // }
-    // await ResaaBot.sendMessage(
-    //   test_answer.$relations.user.chat_id,
-    //   'لطفا رضایت خود از جواب آزمایش را اعلام کنید کنید',
-    //   {
-    //     reply_markup: {
-    //       inline_keyboard: [
-    //         [
-    //           {
-    //             text: 'راضی بودم',
-    //             callback_data: `test_answer:${test_answer.id}:5`
-    //           },
-    //           {
-    //             text: 'راضی نبودم',
-    //             callback_data: `test_answer:${test_answer.id}:1`
-    //           }
-    //         ]
-    //       ]
-    //     }
-    //   }
-    // );
-    // test_answer.status = 'sendToClient';
-    // await test_answer.save();
   } catch (error) {
     console.log(error);
   }

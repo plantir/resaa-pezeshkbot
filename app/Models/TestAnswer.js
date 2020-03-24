@@ -97,9 +97,20 @@ class TestAnswer extends Model {
   }
   static async reply(id, msg) {
     let test_answer = await this.find(id);
-    test_answer.doctor_answer = msg.text || msg.voice;
     test_answer.status = 'answered';
-    test_answer.answer_type = msg.text ? 'text' : 'voice';
+    if (msg.text) {
+      test_answer.answer_type = 'text';
+      test_answer.doctor_answer = msg.text;
+    } else if (msg.voice) {
+      test_answer.answer_type = 'text';
+      test_answer.doctor_answer = msg.voice;
+    } else if (msg.photo) {
+      test_answer.answer_type = 'photo';
+      test_answer.doctor_answer = msg.photo;
+    } else if (msg.document) {
+      test_answer.answer_type = 'file';
+      test_answer.doctor_answer = msg.document;
+    }
     test_answer.answer_at = moment().format('YYYY-MM-DD HH:mm');
     await test_answer.save();
     let title = `پاسخ پزشک به آزمایش شماره ${test_answer.id}:\n\n ‼️توجه : شما نمیتوانید روی  این پیغام ریپلای کنید`;
@@ -114,6 +125,16 @@ class TestAnswer extends Model {
     } else if (msg.voice) {
       let voice = fs.createReadStream(msg.voice);
       await ResaaBot.sendVoice(test_answer.$relations.user.chat_id, voice, {});
+    } else if (msg.photo) {
+      let photo = fs.createReadStream(msg.photo);
+      await ResaaBot.sendPhoto(test_answer.$relations.user.chat_id, photo, {});
+    } else if (msg.document) {
+      let document = fs.createReadStream(msg.document);
+      await ResaaBot.sendDocument(
+        test_answer.$relations.user.chat_id,
+        document,
+        {}
+      );
     }
     await ResaaBot.sendMessage(
       test_answer.$relations.user.chat_id,
