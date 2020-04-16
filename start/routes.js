@@ -12,7 +12,8 @@
 | http://adonisjs.com/docs/4.0/routing
 |
 */
+use('require-all')(`${use('Helpers').appRoot()}/app/Routes`);
 
-require('../app/Routes/upload');
-require('../app/Routes/admin');
-require('../app/Routes/auth');
+// require('../app/Routes/upload');
+// require('../app/Routes/admin');
+// require('../app/Routes/auth');

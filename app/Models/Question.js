@@ -12,13 +12,13 @@ class Question extends Model {
   static listOption(qs) {
     qs.withArray = [
       {
-        answer: builder =>
+        answer: (builder) =>
           builder
             .with('doctor')
             .where({ is_expired: 0 })
-            .whereNotNull('answer')
+            .whereNotNull('answer'),
       },
-      { doctor_asigned: builder => builder.where({ is_expired: 0 }) }
+      { doctor_asigned: (builder) => builder.where({ is_expired: 0 }) },
     ].concat(qs.withArray || []);
     return super.listOption(qs);
   }

@@ -66,7 +66,7 @@ class Doctor extends Model {
     return new Promise(async (resolve, reject) => {
       try {
         let { data } = await axios.get(`${BASE_API}/doctors/${id}/image`, {
-          responseType: 'stream'
+          responseType: 'stream',
         });
         resolve(data);
       } catch (error) {
@@ -111,30 +111,30 @@ class Doctor extends Model {
             resolve({
               status: 'ok',
               request_price: request_price,
-              chat_id: data.result.quote.destinations[0].identifier
+              chat_id: data.result.quote.destinations[0].identifier,
             });
             break;
           case 1:
             resolve({
-              status: 'ServiceUnavailable'
+              status: 'ServiceUnavailable',
             });
             break;
           case 2:
             resolve({
               status: 'needTalk',
-              request_price: request_price
+              request_price: request_price,
             });
             break;
           case 3:
             resolve({
               status: 'needMoney',
-              request_price: request_price
+              request_price: request_price,
             });
             break;
         }
       } catch (error) {
         reject({
-          err
+          err,
         });
       }
     });
@@ -145,7 +145,11 @@ class Doctor extends Model {
       'last_name',
       'subscriber_number',
       'image',
-      'description'
+      'description',
+      'work_experience',
+      'price_per_minute',
+      'culture_access',
+      'speciaity_access',
     ];
   }
   static listOption(qs) {
@@ -166,12 +170,12 @@ class Doctor extends Model {
       doctor.currentlyAvailable ? ' ✅ در دسترس' : ' ❌ خارج از دسترس '
     }`;
     await bot.sendPhoto(user.chat_id, doctor_image_id, {
-      caption: message
+      caption: message,
     });
     // Doctor.saveImage(doctor.subscriberNumber, photo)
     let time_message = `زمان های پاسخگویی\n`;
     let segments = await Doctor.timetable(doctor_id);
-    segments = _.sortBy(segments, o => o.from);
+    segments = _.sortBy(segments, (o) => o.from);
     for (const item of segments) {
       let date = Math.floor(item.from / 60 / 24);
       let date_name;
@@ -220,40 +224,40 @@ class Doctor extends Model {
     let options = {
       reply_markup: {
         keyboard: [],
-        resize_keyboard: true
-      }
+        resize_keyboard: true,
+      },
     };
     if (!user.phone) {
       options.reply_markup.keyboard.push([
         {
           text: `ثبت نام / ورود`,
-          request_contact: true
-        }
+          request_contact: true,
+        },
       ]);
     }
     if (user.phone && doctor.providesDiagnosticDocumentsService) {
       options.reply_markup.keyboard.push([
         {
-          text: `ارسال جواب آزمایش`
-        }
+          text: `ارسال جواب آزمایش`,
+        },
       ]);
     }
     if (user.phone && doctor.currentlyAvailable) {
       options.reply_markup.keyboard.push([
         {
-          text: `تماس با دکتر ${doctor.firstName} ${doctor.lastName}`
-        }
+          text: `تماس با دکتر ${doctor.firstName} ${doctor.lastName}`,
+        },
       ]);
     }
     options.reply_markup.keyboard.push([
       {
-        text: 'بازگشت'
-      }
+        text: 'بازگشت',
+      },
     ]);
     options.reply_markup.keyboard.push([
       {
-        text: 'بازگشت به خانه'
-      }
+        text: 'بازگشت به خانه',
+      },
     ]);
 
     bot.sendMessage(user.chat_id, time_message, options);
