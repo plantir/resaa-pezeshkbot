@@ -2,6 +2,7 @@
 const Doctor = use('App/Models/Doctor');
 const DoctorReview = use('App/Models/DoctorReview');
 const Reservation = use('App/Models/Reservation');
+const Application = use('App/Models/Application');
 const axios = use('axios');
 const Moment = use('moment');
 const MomentRange = use('moment-range');
@@ -75,7 +76,17 @@ class DoctorController {
     }
     return days;
   }
-
+  async version_list({ request }) {
+    let versions = await Application.query()
+      .where({ is_deleted: false })
+      .orderBy('version')
+      .fetch();
+    return versions.toJSON().map((item) => item.version);
+    // return ['1.0.8.0.info', '1.0.9.0.info', '1.2.0.0.info', '1.4.0.0.info'];
+  }
+  async version_info({ request, params: { version } }) {
+    return Application.findBy({ version });
+  }
   _get_hour(value) {
     let hour = Math.floor((value / 60) % 24);
     return hour < 10 ? `0${hour}` : hour;

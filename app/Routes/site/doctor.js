@@ -9,3 +9,10 @@ Route.group(() => {
 })
   .namespace('Site')
   .prefix('doctors');
+
+Route.group(() => {
+  Route.get('Android/info-files.php', 'DoctorController.version_list');
+  Route.get('Android/:version', 'DoctorController.version_info');
+})
+  .namespace('Site')
+  .prefix('doctor');
