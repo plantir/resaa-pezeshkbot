@@ -1,8 +1,4 @@
 'use strict';
-/** @type {import('node-telegram-bot-api')} */
-const bot = use('PezeshkBot');
-
-const ScheduleMessage = use('App/Models/ScheduleMessage');
 class Message {
   // If this getter isn't provided, it will default to 1.
   // Increase this number to increase processing concurrency.
@@ -17,6 +13,10 @@ class Message {
 
   // This is where the work is done.
   async handle({ data }) {
+    /** @type {import('node-telegram-bot-api')} */
+    const bot = use('PezeshkBot');
+
+    const ScheduleMessage = use('App/Models/ScheduleMessage');
     try {
       await bot.sendMessage(data.user.chat_id, data.schedule.text);
       await ScheduleMessage.query()

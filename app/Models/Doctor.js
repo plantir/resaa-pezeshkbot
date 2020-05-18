@@ -134,7 +134,7 @@ class Doctor extends Model {
         }
       } catch (error) {
         reject({
-          err,
+          error,
         });
       }
     });

@@ -1,8 +1,5 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('BaseRoute');
-Route.get('', ({ view }) => {
-  return 'Success';
-});
 
 // route for question
 Route.group(() => {

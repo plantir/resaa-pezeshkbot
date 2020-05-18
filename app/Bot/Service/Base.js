@@ -7,7 +7,7 @@ const BOT_MODE = Env.get('BOT_MODE');
 class Bot extends TelegramBot {
   constructor() {
     super(null, {
-      polling: BOT_MODE == 'polling' ? true : false
+      polling: BOT_MODE == 'polling' ? true : false,
     });
     this.token = this.constructor.token;
   }
@@ -37,7 +37,7 @@ class Bot extends TelegramBot {
       user.history.push({
         state: user.state,
         text,
-        body
+        body,
       });
       await User.update_redis(user);
     }

@@ -9,11 +9,9 @@ const axios = require('axios');
 /** @type { import('@adonisjs/framework/src/Env')} */
 const Env = use('Env');
 
-/** @type {import('node-telegram-bot-api')} */
-const ResaaBot = use('ResaaBot');
-
 const BASE_API = Env.getOrFail('RESAA_API');
 
+/** @type {typeof import('moment')} */
 const moment = use('moment');
 
 const fs = use('fs');
@@ -27,7 +25,7 @@ class TestAnswer extends Model {
     return ['doctor_answer'];
   }
   static get jsonFields() {
-    return ['files', 'doctor'];
+    return ['files', 'doctor', 'doctor_answer'];
   }
   static listOption(qs) {
     qs.withArray = ['user'].concat(qs.withArray || []);
@@ -49,20 +47,20 @@ class TestAnswer extends Model {
         price,
         doctor: doctor,
         user_id: user.id,
-        files: user.files
+        files: user.files,
       });
       user.photo = [];
       try {
         for (const file of user.files) {
           let name = `./tmp/test_answer/${Date.now()}.png`;
           let { data } = await axios.get(file, {
-            responseType: 'stream'
+            responseType: 'stream',
           });
           data.pipe(fs.createWriteStream(name));
           // let photo = fs.createReadStream(name)
           user.photo.push(name.replace('./', '/').replace('tmp', 'download'));
           await bot.sendPhoto(doctor.chat_id, data, {
-            caption: `#${testAnswer.id}`
+            caption: `#${testAnswer.id}`,
           });
         }
         testAnswer.files = user.photo;
@@ -82,7 +80,7 @@ class TestAnswer extends Model {
           `${BASE_API}/Doctors/${doctor_id}/DiagnosticDocumentsService/Invoice?patientPhoneNumber=${user.phone}`,
           {
             requestsCount: 1,
-            referenceNumber: testAnswer_id
+            referenceNumber: testAnswer_id,
           }
         );
         let test_answer = await TestAnswer.find(testAnswer_id);
@@ -99,69 +97,23 @@ class TestAnswer extends Model {
     let test_answer = await this.find(id);
     test_answer.status = 'answered';
     if (msg.text) {
-      test_answer.answer_type = 'text';
-      test_answer.doctor_answer = msg.text;
+      test_answer.doctor_answer.push({ text: msg.text, type: 'text' });
     } else if (msg.voice) {
-      test_answer.answer_type = 'text';
-      test_answer.doctor_answer = msg.voice;
+      test_answer.doctor_answer.push({ voice: msg.voice, type: 'voice' });
     } else if (msg.photo) {
-      test_answer.answer_type = 'photo';
-      test_answer.doctor_answer = msg.photo;
+      test_answer.doctor_answer.push({ photo: msg.photo, type: 'photo' });
     } else if (msg.document) {
-      test_answer.answer_type = 'file';
-      test_answer.doctor_answer = msg.document;
+      test_answer.doctor_answer.push({
+        document: msg.document,
+        type: 'document',
+      });
     }
-    test_answer.answer_at = moment().format('YYYY-MM-DD HH:mm');
-    await test_answer.save();
-    let title = `پاسخ پزشک به آزمایش شماره ${test_answer.id}:\n\n ‼️توجه : شما نمیتوانید روی  این پیغام ریپلای کنید`;
-    await test_answer.load('user');
-    await ResaaBot.sendMessage(test_answer.$relations.user.chat_id, title);
-    if (msg.text) {
-      await ResaaBot.sendMessage(
-        test_answer.$relations.user.chat_id,
-        `${msg.text}`,
-        {}
-      );
-    } else if (msg.voice) {
-      let voice = fs.createReadStream(msg.voice);
-      await ResaaBot.sendVoice(test_answer.$relations.user.chat_id, voice, {});
-    } else if (msg.photo) {
-      let photo = fs.createReadStream(msg.photo);
-      await ResaaBot.sendPhoto(test_answer.$relations.user.chat_id, photo, {});
-    } else if (msg.document) {
-      let document = fs.createReadStream(msg.document);
-      await ResaaBot.sendDocument(
-        test_answer.$relations.user.chat_id,
-        document,
-        {}
-      );
-    }
-    await ResaaBot.sendMessage(
-      test_answer.$relations.user.chat_id,
-      'لطفا رضایت خود از جواب آزمایش را اعلام کنید کنید',
-      {
-        reply_markup: {
-          inline_keyboard: [
-            [
-              {
-                text: 'راضی بودم',
-                callback_data: `test_answer:${test_answer.id}:5`
-              },
-              {
-                text: 'راضی نبودم',
-                callback_data: `test_answer:${test_answer.id}:1`
-              }
-            ]
-          ]
-        }
-      }
-    );
-    test_answer.status = 'sendToClient';
+    test_answer.answer_at = moment().second(0).format('YYYY-MM-DD HH:mm');
     await test_answer.save();
   }
   user() {
     return this.belongsTo('App/Models/User');
   }
 }
-
+[{ text: 'اینم یه تکست', type: 'text' }];
 module.exports = TestAnswer;
