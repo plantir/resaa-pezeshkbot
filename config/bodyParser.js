@@ -47,8 +47,8 @@ module.exports = {
       'application/json',
       'application/json-patch+json',
       'application/vnd.api+json',
-      'application/csp-report'
-    ]
+      'application/csp-report',
+    ],
   },
 
   /*
@@ -60,7 +60,7 @@ module.exports = {
   |
   */
   raw: {
-    types: ['text/*']
+    types: ['text/*'],
   },
 
   /*
@@ -72,7 +72,7 @@ module.exports = {
   |
   */
   form: {
-    types: ['application/x-www-form-urlencoded']
+    types: ['application/x-www-form-urlencoded'],
   },
 
   /*
@@ -127,8 +127,8 @@ module.exports = {
     | is to true. Otherwise everything is processed manually.
     |
     */
-    //
-    processManually: ['/upload', '/admin/test_answer/:id/reply']
+    //'/admin/test_answer/:id/reply'
+    processManually: ['/upload'],
 
     /*
     |--------------------------------------------------------------------------
@@ -148,5 +148,5 @@ module.exports = {
     | }
     |
     */
-  }
+  },
 };

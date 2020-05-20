@@ -26,29 +26,22 @@ class TestAnswerController extends Resource {
   //   return response.status(500).send(error);
   // }
   async reply({ request, response, params: { id } }) {
-    try {
-      let { msg = {} } = request.post();
-      request.multipart.file('voice', {}, async file => {
-        if (file) {
-          let name = `./tmp/test_answer/${Date.now()}.mp3`;
-          file.stream.pipe(fs.WriteStream(name)).on('finish', async () => {
-            msg.voice = name;
-            await this.Model.reply(id, msg);
-            response.send('success');
-          });
-        } else {
-          return response.status(500).send('voice not found');
-        }
-      });
-      await request.multipart.process();
-    } catch (error) {
-      let { msg = {} } = request.post();
-      if (!msg.text) {
-        return response.status(500).send('msg.text not found');
-      }
+    let { msg = {} } = request.post();
+    if (msg.text) {
       await this.Model.reply(id, msg);
-      response.send('success');
+      return response.send('success');
     }
+    let voice = request.file('voice');
+    if (!voice) {
+      return response
+        .status(500)
+        .send('request must contain msg.text or attach a voice');
+    }
+    let name = `./tmp/test_answer/${Date.now()}.mp3`;
+    voice.stream.pipe(fs.WriteStream(name));
+    msg.voice = name;
+    await this.Model.reply(id, msg);
+    return response.send('success');
   }
   async doctorAnswers({ request, response, params: { id } }) {
     let options = request.get();
