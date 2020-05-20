@@ -2,6 +2,7 @@
 const fs = require('fs');
 const Resource = use('Resource');
 const bot = use('ResaaBot');
+const Helpers = use('Helpers');
 class TestAnswerController extends Resource {
   constructor() {
     super();
@@ -37,9 +38,12 @@ class TestAnswerController extends Resource {
         .status(500)
         .send('request must contain msg.text or attach a voice');
     }
-    let name = `./tmp/test_answer/${Date.now()}.mp3`;
-    voice.stream.pipe(fs.WriteStream(name));
-    msg.voice = name;
+    let name = `${Date.now()}.mp3`;
+    await voice.move(Helpers.tmpPath('test_answer'), {
+      name: name,
+      overwrite: true,
+    });
+    msg.voice = `./tmp/test_answer/${name}`;
     await this.Model.reply(id, msg);
     return response.send('success');
   }
