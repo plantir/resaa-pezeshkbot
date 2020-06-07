@@ -8,10 +8,10 @@ class Application extends Model {
     return ['type', 'url', 'version'];
   }
   getUrl(url) {
-    if (url.includes('https://botpanel/resaa.net')) {
+    if (url.includes('https://botpanel.resaa.net')) {
       return url;
     }
-    return 'https://botpanel/resaa.net' + url;
+    return 'https://botpanel.resaa.net' + url;
   }
 }
 
