@@ -5,22 +5,12 @@ class AuthController {
   }
   async login({ request, auth, response }) {
     let { username, password } = request.post();
+    let user = await this.Model.findBy({ username });
+    if (!user || !user.is_active) {
+      throw new Error('نام کاربری شما هنوز تایید نشده است.');
+    }
     try {
-      let user = await this.Model.findBy({ username });
       await auth.attempt(username, password);
-      // let roles = await user.roles().fetch();
-      // roles = roles.toJSON();
-      // roles = roles.map(item => item.name);
-      // user.roles = roles;
-      // if ( //fekr konam in tikke alan karbord nadare. chon hame ba code melli login mikonan
-      //   roles[0] == 'student' &&
-      //   (!username.match(/^[0-9]+$/) || username.length != 10)
-      // ) {
-      //   return response.status(401).json({
-      //     status: 101,
-      //     message: 'invalid username for student'
-      //   });
-      // }
       return auth.generate(user, true);
     } catch (error) {
       throw new Error('نام کاربری یا کلمه عبور معتبر نیست.');
@@ -28,9 +18,7 @@ class AuthController {
   }
   async register({ request, response }) {
     let { username, password } = request.post();
-    let user = await this.Model.query()
-      .where({ username })
-      .first();
+    let user = await this.Model.query().where({ username }).first();
     if (user) {
       // let password = await User.create_password_token()
       // await user.send_verify_code(password, user)
@@ -40,7 +28,7 @@ class AuthController {
     } else {
       user = await this.Model.create({
         username,
-        password
+        password,
       });
     }
     return response.status(200).send('user created successfully');
