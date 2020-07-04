@@ -51,4 +51,5 @@ Route.group(() => {
   // Route.post(':id/send_test', 'TestAnswer.send_test');
 })
   .namespace('Admin')
-  .prefix('test_answer');
+  .prefix('test_answer')
+  .middleware('auth');
