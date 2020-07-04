@@ -45,3 +45,10 @@ Route.group(() => {
   .namespace('Admin')
   .prefix('admin/test_answer')
   .middleware('auth');
+
+Route.group(() => {
+  Route.post('/request', 'TestAnswerController.request');
+  // Route.post(':id/send_test', 'TestAnswer.send_test');
+})
+  .namespace('Admin')
+  .prefix('test_answer');
