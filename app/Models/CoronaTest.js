@@ -23,6 +23,8 @@ class CoronaTest extends Model {
       'phoneNumber',
       'subscriberNumber',
       'paymentRequestId',
+      'trackingNumber',
+      'trackingImage',
       'status',
       'description',
     ];
@@ -34,6 +36,8 @@ class CoronaTest extends Model {
         let {
           data: { result },
         } = await axios.get(`${BASE_API}/Charge/${chargeRequestId}/Receipt`);
+        this.trackingNumber = result.chargeReceipt.trackingNumber;
+        await this.save();
         if (result.chargeReceipt.status == 'Successful') {
           this.chargeRequestId = chargeRequestId;
           resolve(result);
