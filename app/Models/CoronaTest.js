@@ -36,9 +36,9 @@ class CoronaTest extends Model {
         } = await axios.get(`${BASE_API}/Charge/${chargeRequestId}/Receipt`);
         if (result.chargeReceipt.status == 'Successful') {
           this.chargeRequestId = chargeRequestId;
-          resolve(data);
+          resolve(result);
         } else {
-          reject(data);
+          reject(result);
         }
       } catch (error) {
         reject(error);
