@@ -85,7 +85,10 @@ class DoctorController {
     // return ['1.0.8.0.info', '1.0.9.0.info', '1.2.0.0.info', '1.4.0.0.info'];
   }
   async version_info({ request, params: { version } }) {
-    return Application.findBy({ version });
+    return Application.query()
+      .where({ version })
+      .where({ is_deleted: false })
+      .first();
   }
   _get_hour(value) {
     let hour = Math.floor((value / 60) % 24);
