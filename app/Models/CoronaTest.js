@@ -35,6 +35,7 @@ class CoronaTest extends Model {
       'trackingNumber',
       'trackingImage',
       'status',
+      'payment_status',
       'description',
     ];
   }
