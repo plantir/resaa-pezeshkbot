@@ -11,6 +11,7 @@ const Env = use('Env');
 
 const BASE_API = Env.getOrFail('RESAA_API');
 
+const Logger = use('Logger');
 class CoronaTest extends Model {
   static boot() {
     super.boot();
@@ -49,14 +50,18 @@ class CoronaTest extends Model {
         this.trackingNumber = result.chargeReceipt.trackingNumber;
         await this.save();
         if (result.chargeReceipt.currentBalance < this.amount) {
+          Logger.error('currentBalance', result);
           reject(result);
         } else if (result.chargeReceipt.status == 'Successful') {
+          Logger.info('successCharge', result);
           this.chargeRequestId = chargeRequestId;
           resolve(result);
         } else {
+          Logger.error('chargeNotSuccess', result);
           reject(result);
         }
       } catch (error) {
+        Logger.error('chargeFail', error);
         reject(error);
       }
     });
@@ -71,10 +76,12 @@ class CoronaTest extends Model {
             referenceNumber: this.id,
           }
         );
+        Logger.info('successConfirm', data);
         this.status = 'paid';
         await this.save();
         resolve(data);
       } catch (error) {
+        Logger.error('errorConfirm', error);
         reject(error);
       }
     });
