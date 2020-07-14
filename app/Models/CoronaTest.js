@@ -77,7 +77,7 @@ class CoronaTest extends Model {
           }
         );
         Logger.info('successConfirm', data);
-        this.status = 'paid';
+        this.payment_status = 'paid';
         await this.save();
         resolve(data);
       } catch (error) {
