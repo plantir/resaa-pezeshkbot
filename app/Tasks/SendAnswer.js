@@ -8,6 +8,8 @@ const TestAnswer = use('App/Models/TestAnswer');
 /** @type {typeof import('moment')} */
 const moment = use('moment');
 const fs = use('fs');
+const DoctorTestAnswer = use('App/Models/DoctorTestAnswer');
+
 class SendAnswer extends Task {
   static get schedule() {
     return '0 * * * * *';
@@ -20,6 +22,15 @@ class SendAnswer extends Task {
       .with('user')
       .fetch();
     for (const test_answer of test_answers.rows) {
+      try {
+        await DoctorTestAnswer.create({
+          tracking_code: test_answer.id,
+          doctor_id: test_answer.doctor.subscriberNumber,
+          answer: test_answer.doctor_answer,
+        });
+      } catch (error) {
+        console.log(error);
+      }
       let title = `پاسخ پزشک به آزمایش شماره ${test_answer.id}:\n\n ‼️توجه : شما نمیتوانید روی  این پیغام ریپلای کنید`;
       await ResaaBot.sendMessage(test_answer.$relations.user.chat_id, title);
       for (let msg of test_answer.doctor_answer) {
