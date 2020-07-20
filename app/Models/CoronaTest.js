@@ -44,26 +44,26 @@ class CoronaTest extends Model {
   async checkChargeRequest(chargeRequestId) {
     return new Promise(async (resolve, reject) => {
       try {
+        this.chargeRequestId = chargeRequestId;
         let {
           data: { result },
         } = await axios.get(`${BASE_API}/Charge/${chargeRequestId}/Receipt`);
         this.trackingNumber = result.chargeReceipt.trackingNumber;
-        await this.save();
         if (result.chargeReceipt.currentBalance < this.amount) {
-          Logger.error('currentBalance', result);
+          Logger.error('currentBalance', { result, test_id: this.id });
           reject(result);
         } else if (result.chargeReceipt.status == 'Successful') {
-          Logger.info('successCharge', result);
-          this.chargeRequestId = chargeRequestId;
+          Logger.info('successCharge', { result, test_id: this.id });
           resolve(result);
         } else {
-          Logger.error('chargeNotSuccess', result);
+          Logger.error('chargeNotSuccess', { result, test_id: this.id });
           reject(result);
         }
       } catch (error) {
-        Logger.error('chargeFail', error);
+        Logger.error('chargeFail', { error, test_id: this.id });
         reject(error);
       }
+      await this.save();
     });
   }
   confirmPayment() {
@@ -73,15 +73,15 @@ class CoronaTest extends Model {
           `${BASE_API}/Doctors/${this.doctor_id}/DiagnosticDocumentsService/Invoice?patientPhoneNumber=${this.phoneNumber}`,
           {
             requestsCount: 1,
-            referenceNumber: this.id,
+            referenceNumber: this.doctor_id,
           }
         );
-        Logger.info('successConfirm', data);
+        Logger.info('successConfirm', { result: data, id: this.id });
         this.payment_status = 'paid';
         await this.save();
         resolve(data);
       } catch (error) {
-        Logger.error('errorConfirm', error);
+        Logger.error('errorConfirm', { error, id: this.id });
         reject(error);
       }
     });
