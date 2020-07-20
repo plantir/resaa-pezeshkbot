@@ -73,7 +73,7 @@ class CoronaTest extends Model {
           `${BASE_API}/Doctors/${this.doctor_id}/DiagnosticDocumentsService/Invoice?patientPhoneNumber=${this.phoneNumber}`,
           {
             requestsCount: 1,
-            referenceNumber: this.doctor_id,
+            referenceNumber: this.id,
           }
         );
         Logger.info('successConfirm', { result: data, id: this.id });
