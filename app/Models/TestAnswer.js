@@ -97,7 +97,6 @@ class TestAnswer extends Model {
   static async reply(id, msg) {
     let test_answer = await this.find(id);
     test_answer.status = 'answered';
-
     if (msg.text) {
       test_answer.doctor_answer.push({ text: msg.text, type: 'text' });
     } else if (msg.voice) {
