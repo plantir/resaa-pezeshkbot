@@ -3,6 +3,7 @@ const Route = use('BaseRoute');
 
 // route for doctors
 Route.group(() => {
+  Route.get('flow', 'CoronaTestController.flow');
   Route.get('exportExcel', 'CoronaTestController.exportExcel');
   Route.customResource('', 'CoronaTestController');
 })

@@ -54,5 +54,19 @@ class CoronaTestController extends Resource {
     return workbook.xlsx.write(response.response);
     return { file: `${Env.get('APP_URL')}/admin/report/${fileName}` };
   }
+
+  async flow({ request }) {
+    let options = request.get();
+    if (options.filters) {
+      options.filters = JSON.parse(options.filters);
+    } else {
+      options.filters = [];
+    }
+    options.filters.push('payment_status:paid');
+    options.filters.push('status:canceled:<>');
+    options.filters.push('status:test_result_posted:<>');
+    options.filters = JSON.stringify(options.filters);
+    return this.Model.listOption(options);
+  }
 }
 module.exports = CoronaTestController;
