@@ -7,11 +7,11 @@ module.exports = {
   connection: Env.get('BULL_CONNECTION', 'bull'),
   bull: {
     redis: {
-      host: '127.0.0.1',
+      host: Env.get('REDIS_CONNECTION', 'localhost'),
       port: 6379,
       password: null,
       db: 0,
-      keyPrefix: 'bull'
-    }
-  }
+      keyPrefix: 'bull',
+    },
+  },
 };
