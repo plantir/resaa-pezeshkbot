@@ -39,14 +39,14 @@ module.exports = {
   //   keyPrefix: ''
   // },
   local: {
-    host: Env.get('REDIS_CONNECTION', 'localhost'),
+    host: Env.get('REDIS_HOST', 'localhost'),
     port: 6379,
     password: Env.get('REDIS_PASSWORD', null),
     db: 0,
     keyPrefix: 'bot_',
   },
   kue: {
-    host: Env.get('REDIS_CONNECTION', 'localhost'),
+    host: Env.get('REDIS_HOST', 'localhost'),
     port: 6379,
     password: Env.get('REDIS_PASSWORD', null),
     db: 0,
@@ -64,13 +64,13 @@ module.exports = {
   cluster: {
     clusters: [
       {
-        host: Env.get('REDIS_CONNECTION', 'localhost'),
+        host: Env.get('REDIS_HOST', 'localhost'),
         port: 6379,
         password: null,
         db: 0,
       },
       {
-        host: Env.get('REDIS_CONNECTION', 'localhost'),
+        host: Env.get('REDIS_HOST', 'localhost'),
         port: 6380,
         password: null,
         db: 0,
