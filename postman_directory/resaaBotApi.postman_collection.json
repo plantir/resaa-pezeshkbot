@@ -65,15 +65,15 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "test_answer",
+			"name": "bot_service",
 			"item": [
 				{
-					"name": "list",
+					"name": "send-test",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
-								"id": "27ba78f0-f7d0-461e-8bc8-71b4feac1ef0",
+								"id": "91aebce9-5a16-4770-892e-586b5c2d1538",
 								"exec": [
 									""
 								],
@@ -87,18 +87,18 @@
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
+								"type": "text",
+								"value": "application/json"
 							},
 							{
 								"key": "Authorization",
-								"value": "Bearer {{access_token}}",
-								"type": "text"
+								"type": "text",
+								"value": "Bearer {{access_token}}"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"msg\":{\n\t\t\"text\":\"جواب آزمایش\"\n\t}\n}",
+							"raw": "{\n    \"doctor\": {\n        \"id\": \"f87853af-42e6-4395-bd92-0497bbe8ca3a\",\n        \"title\": \"دکتر\",\n        \"gender\": null,\n        \"chat_id\": 96852497,\n        \"lastName\": \"میرجعفری\",\n        \"expertise\": null,\n        \"firstName\": \"امیرحسام\",\n        \"imagePath\": null,\n        \"subscriberNumber\": \"6843\"\n    },\n    \"files\": [\n        \"https://www.resaa.net/_nuxt/img/c45bf18.png\"\n    ],\n    \"price\": \"20000\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -106,27 +106,25 @@
 							}
 						},
 						"url": {
-							"raw": "{{API_URL}}/admin/test_answer/1/reply",
+							"raw": "{{API_URL}}/bot-service/send-test",
 							"host": [
 								"{{API_URL}}"
 							],
 							"path": [
-								"admin",
-								"test_answer",
-								"1",
-								"reply"
+								"bot-service",
+								"send-test"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "reply voice",
+					"name": "send-test-result",
 					"event": [
 						{
 							"listen": "test",
 							"script": {
-								"id": "27ba78f0-f7d0-461e-8bc8-71b4feac1ef0",
+								"id": "f32ab7a4-cf1f-404d-9969-64c92159d426",
 								"exec": [
 									""
 								],
@@ -140,24 +138,18 @@
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
+								"type": "text",
+								"value": "application/json"
 							},
 							{
 								"key": "Authorization",
-								"value": "Bearer {{access_token}}",
-								"type": "text"
+								"type": "text",
+								"value": "Bearer {{access_token}}"
 							}
 						],
 						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "voice",
-									"type": "file",
-									"src": "test.mp3"
-								}
-							],
+							"mode": "raw",
+							"raw": "{\n    \"doctor\": {\n        \"id\": \"f87853af-42e6-4395-bd92-0497bbe8ca3a\",\n        \"title\": \"دکتر\",\n        \"gender\": null,\n        \"chat_id\": 96852497,\n        \"lastName\": \"میرجعفری\",\n        \"expertise\": null,\n        \"firstName\": \"امیرحسام\",\n        \"imagePath\": null,\n        \"subscriberNumber\": \"6843\"\n    },\n    \"files\": [\n        \"https://www.resaa.net/_nuxt/img/c45bf18.png\"\n    ],\n    \"price\": \"20000\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -165,20 +157,132 @@
 							}
 						},
 						"url": {
-							"raw": "{{API_URL}}/admin/test_answer/1/reply",
+							"raw": "{{API_URL}}/test_answer/request",
 							"host": [
 								"{{API_URL}}"
 							],
 							"path": [
-								"admin",
 								"test_answer",
-								"1",
-								"reply"
+								"request"
 							]
 						}
 					},
 					"response": []
 				},
+				{
+					"name": "tests",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "36adc12e-456d-48a9-9b50-2b100c96724e",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/bot-service/tests",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"bot-service",
+								"tests"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "test-results",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "e71c9f4a-deff-49ec-8ccb-24170da19628",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/bot-service/test-results",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"bot-service",
+								"test-results"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "test_answer",
+			"item": [
 				{
 					"name": "reply text",
 					"event": [
@@ -283,6 +387,65 @@
 								"test_answer",
 								"doctor",
 								"6843"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reply voice",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "bb07a183-ead0-471f-90e8-dc63c52740b1",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "voice",
+									"type": "file",
+									"src": "test.mp3"
+								}
+							],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/admin/test_answer/1/reply",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"admin",
+								"test_answer",
+								"1",
+								"reply"
 							]
 						}
 					},
