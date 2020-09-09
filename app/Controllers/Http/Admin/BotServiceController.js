@@ -12,6 +12,13 @@ class BotServiceController {
       .where({ is_seen: false })
       .fetch();
     results = results.toJSON();
+    results = results.map((item) => {
+      let doctor = Object.assign({}, item.doctor);
+      item.doctor = {
+        subscriber_number: doctor.subscriberNumber,
+      };
+      return item;
+    });
     response.send(results);
     try {
       let ids = results.map((item) => item.id);
@@ -23,7 +30,7 @@ class BotServiceController {
   async testResults({ response }) {
     let results = await DoctorTestAnswer.query()
       .where({ is_deleted: false })
-      .where({ is_seen: false })
+      // .where({ is_seen: false })
       .fetch();
     results = results.toJSON();
     response.send(results);
