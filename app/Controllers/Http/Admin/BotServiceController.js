@@ -7,6 +7,7 @@ const User = use('App/Models/User');
 class BotServiceController {
   async tests({ response }) {
     let results = await TestAnswer.query()
+      .with('user', (builder) => builder.setVisible(['id', 'chat_id', 'phone']))
       .where({ is_deleted: false })
       .where({ is_seen: false })
       .fetch();
