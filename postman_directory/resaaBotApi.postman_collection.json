@@ -224,6 +224,57 @@
 					"response": []
 				},
 				{
+					"name": "seeTests",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "4735a9d3-8407-46bd-9f02-205f7ac7c91f",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ids\":[]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/bot-service/seeTests",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"bot-service",
+								"seeTests"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "test-results",
 					"event": [
 						{
@@ -272,6 +323,57 @@
 							"path": [
 								"bot-service",
 								"test-results"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "seeTestResults",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "d5180a76-df44-4581-880f-ca10cda62a76",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer {{access_token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ids\":[]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{API_URL}}/bot-service/seeTestResults",
+							"host": [
+								"{{API_URL}}"
+							],
+							"path": [
+								"bot-service",
+								"seeTestResults"
 							]
 						}
 					},

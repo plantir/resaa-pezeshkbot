@@ -34,7 +34,7 @@ class BotServiceController {
   async testResults({ response }) {
     let results = await DoctorTestAnswer.query()
       .where({ is_deleted: false })
-      // .where({ is_seen: false })
+      .where({ is_seen: false })
       .fetch();
     results = results.toJSON();
     response.send(results);
