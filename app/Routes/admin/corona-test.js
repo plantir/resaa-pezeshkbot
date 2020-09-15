@@ -9,4 +9,4 @@ Route.group(() => {
 })
   .namespace('Admin')
   .prefix('admin/corona_test')
-  .middleware('auth');
+  .middleware(['auth', 'role:administrator,corona_admin']);

@@ -11,6 +11,10 @@ class AuthController {
     }
     try {
       await auth.attempt(username, password);
+      let roles = await user.roles().fetch();
+      roles = roles.toJSON();
+      roles = roles.map((item) => item.name);
+      user.roles = roles;
       return auth.generate(user, true);
     } catch (error) {
       throw new Error('نام کاربری یا کلمه عبور معتبر نیست.');

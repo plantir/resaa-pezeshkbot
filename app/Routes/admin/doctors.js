@@ -3,8 +3,8 @@ const Route = use('BaseRoute');
 
 // route for doctors
 Route.group(() => {
-  Route.customResource('', 'DoctorReviewController');
+  Route.customResource('', 'DoctorController');
 })
   .namespace('Admin')
-  .prefix('admin/doctor-reviews')
-  .middleware('auth');
+  .prefix('admin/doctors')
+  .middleware(['auth', 'role:administrator,bot_admin']);

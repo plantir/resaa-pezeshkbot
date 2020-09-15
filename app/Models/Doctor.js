@@ -15,8 +15,21 @@ const bot = use('ResaaBot');
 const _ = use('lodash');
 const User = use('App/Models/User');
 class Doctor extends Model {
+  static boot() {
+    super.boot();
+    this.addHook('afterCreate', 'DoctorHook.afterCreate');
+  }
   static get fields() {}
-
+  static get allowField() {
+    return [
+      'first_name',
+      'last_name',
+      'subscriber_number',
+      'speciality_id',
+      'description',
+      'image',
+    ];
+  }
   static get(id) {
     return new Promise(async (resolve, reject) => {
       try {
@@ -139,19 +152,7 @@ class Doctor extends Model {
       }
     });
   }
-  static get allowField() {
-    return [
-      'first_name',
-      'last_name',
-      'subscriber_number',
-      'image',
-      'description',
-      'work_experience',
-      'price_per_minute',
-      'culture_access',
-      'speciaity_access',
-    ];
-  }
+
   static listOption(qs) {
     qs.withArray = ['speciality'].concat(qs.withArray || []);
     return super.listOption(qs);
