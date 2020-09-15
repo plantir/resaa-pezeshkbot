@@ -16,6 +16,23 @@ class CoronaTestController {
     }
     response.json(coronaTest);
   }
+  async tracking({ request }) {
+    let { nationalCode, mobile } = request.get();
+    return CoronaTest.query()
+      .where({
+        mobile,
+        nationalCode,
+      })
+      .setVisible([
+        'created_at',
+        'status',
+        'payment_status',
+        'amount',
+        'doctor_id',
+      ])
+      .where({ is_deleted: false })
+      .fetch();
+  }
 }
 
 module.exports = CoronaTestController;

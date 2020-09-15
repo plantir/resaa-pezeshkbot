@@ -7,7 +7,8 @@
   "scripts": {
     "start": "node server.js",
     "test": "node ace test",
-    "release": "git push dist master && git push dist develop"
+    "release": "git push origin master && git push origin develop",
+    "release:tfs": "git push tfs master && git push tfs develop"
   },
   "keywords": [
     "adonisjs",
@@ -32,6 +33,7 @@
     "adonis-kue": "^5.0.1",
     "adonis-scheduler": "^3.0.2",
     "axios": "^0.19.0",
+    "exceljs": "^4.1.1",
     "file-type": "^14.1.4",
     "lodash": "^4.17.15",
     "moment": "2.24.0",

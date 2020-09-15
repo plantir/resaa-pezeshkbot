@@ -8,12 +8,11 @@ const _enum = require('./enum');
 const Doctor = use('App/Models/Doctor');
 const Speciality = use('App/Models/Speciality');
 const SaveFile = use('SaveFile');
-const request = use('request');
-bot.onText(_enum.regex_state.register_doctor, async msg => {
+bot.onText(_enum.regex_state.register_doctor, async (msg) => {
   bot.sendMessage(msg.chat.id, 'کد ۴ رقمی رسا پزشک را وارد نمایید');
 });
 
-bot.onText(/^\d{4}$/, async msg => {
+bot.onText(/^\d{4}$/, async (msg) => {
   try {
     let doctor = await Doctor.get(msg.text);
     let message = `مشخصات پزشک \nنام پزشک ${doctor.firstName}\n نام خانوادگی: ${doctor.lastName} \n تخصص: ${doctor.specialtyTitle} \n 👩‍⚕️👨‍⚕️👩‍⚕️👨‍⚕️`;
@@ -26,17 +25,17 @@ bot.onText(/^\d{4}$/, async msg => {
             {
               text: 'درسته',
               callback_data: `add_doctor:${msg.text}`,
-              data: { name: 'armin' }
-            }
+              data: { name: 'armin' },
+            },
           ],
           [
             {
               text: 'اشتباهه',
-              callback_data: 'again'
-            }
-          ]
-        ]
-      }
+              callback_data: 'again',
+            },
+          ],
+        ],
+      },
     });
   } catch (error) {
     bot.sendMessage(msg.chat.id, 'کد پزشک وجود ندارد');
