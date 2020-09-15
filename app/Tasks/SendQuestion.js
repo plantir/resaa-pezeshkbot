@@ -21,7 +21,7 @@ const _ = use('lodash');
 
 class SendQuestion extends Task {
   static get schedule() {
-    return '0 * * * * *';
+    return '30 * * * * *';
   }
 
   async handle() {
@@ -29,14 +29,14 @@ class SendQuestion extends Task {
       let questions = await Question.query()
         .where({ is_deleted: 0 })
         .doesntHave('answer')
-        .orWhereDoesntHave('answer', builder =>
-          builder.where(builder => builder.where({ is_expired: 0 }))
+        .orWhereDoesntHave('answer', (builder) =>
+          builder.where((builder) => builder.where({ is_expired: 0 }))
         )
         .fetch();
       let doctors = await Doctor.query()
         .where({ is_deleted: false })
-        .whereDoesntHave('answer', builder =>
-          builder.where(builder =>
+        .whereDoesntHave('answer', (builder) =>
+          builder.where((builder) =>
             builder.where({ is_expired: 0 }).whereNull('answer')
           )
         )
@@ -53,12 +53,12 @@ class SendQuestion extends Task {
         try {
           let message = await bot.sendMessage(
             doctor.chat_id,
-            `سوال پرسیده شده توسط کاربران ربات:\n${question.text} \n\n#question_${question.id}`
+            `با سلام کاربری سوال زیر را پرسیده است شما می توانید با ریپلای کردن همین پیام سوال وی را پاسخ دهید:\n${question.text} \n\n#question_${question.id}`
           );
           await DoctorAnswer.create({
             question_id: question.id,
             doctor_id: doctor.id,
-            message_id: message.message_id
+            message_id: message.message_id,
           });
         } catch (error) {
           Logger.error(error);

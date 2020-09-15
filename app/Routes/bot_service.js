@@ -5,6 +5,8 @@ const Route = use('BaseRoute');
 Route.group(() => {
   Route.post('/send-test', 'BotServiceController.sendTest');
   Route.post('/send-test-result', 'BotServiceController.sendTestResult');
+  Route.post('/seeTests', 'BotServiceController.seeTests');
+  Route.post('/seeTestResults', 'BotServiceController.seeTestResults');
   Route.get('/tests', 'BotServiceController.tests');
   Route.get('/test-results', 'BotServiceController.testResults');
 })

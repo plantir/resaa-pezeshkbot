@@ -7,38 +7,38 @@ const User = use('App/Models/User');
 /** @type {import('@adonisjs/framework/src/Logger')} */
 const Logger = use('Logger');
 
-bot.onText(_enum.regex_state.specialities, async msg => {
+bot.onText(_enum.regex_state.specialities, async (msg) => {
   try {
     let user = await bot.getUser(msg);
     user.state = _enum.state.specialities;
     await User.update_redis(user);
-    let message = `لطفا تخصص خود را از لیست انتخاب کنید`;
+    let message = `لطفا ابتدا مشخص کنید سوال شما مربوط به کدام یک از تخصص های زیر می باشد\nاگر نمی دانید سوالتان به کدام تخصص مربوط می شود می توانید از پزشکان عمومی سوال بپرسید.  `;
     let options = {
       reply_markup: {
         keyboard: [],
-        resize_keyboard: true
-      }
+        resize_keyboard: true,
+      },
     };
     let specialities = await Speciality.get();
     specialities.forEach((item, index) => {
-      let text = `${item.title}`;
-      if (index % 2 === 0) {
-        options.reply_markup.keyboard.push([
-          {
-            text
-          }
-        ]);
-      } else {
-        let i = Math.ceil(index / 2) - 1;
-        options.reply_markup.keyboard[i].push({
-          text
-        });
-      }
+      let text = `${item.title} (${item.description})`;
+      options.reply_markup.keyboard.push([
+        {
+          text,
+        },
+      ]);
+      // if (index % 2 === 0) {
+      // } else {
+      //   let i = Math.ceil(index / 2) - 1;
+      //   options.reply_markup.keyboard[i].push({
+      //     text,
+      //   });
+      // }
     });
     options.reply_markup.keyboard.push([
       {
-        text: 'بازگشت به خانه'
-      }
+        text: 'بازگشت به خانه',
+      },
     ]);
 
     bot.sendMessage(msg.chat.id, message, options);

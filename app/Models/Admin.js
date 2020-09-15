@@ -8,6 +8,9 @@ class Admin extends Model {
     super.boot();
     this.addHook('beforeSave', 'AdminHook.beforeSave');
   }
+  roles() {
+    return this.belongsToMany('App/Models/Role').pivotTable('admin_roles');
+  }
 }
 
 module.exports = Admin;
