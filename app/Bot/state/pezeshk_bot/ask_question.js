@@ -113,7 +113,7 @@ bot.on('callback_query', async (callback) => {
       .where({ text: user.question.text })
       .where({ user_id: user.id })
       .first();
-    let is_memeber = await bot.getChatMember(CHANNEL_ID, '680250490');
+    let is_memeber = await bot.getChatMember(CHANNEL_ID, callback.from.id);
     if (is_memeber.status == 'left') {
       return bot.sendMessage(
         callback.from.id,
