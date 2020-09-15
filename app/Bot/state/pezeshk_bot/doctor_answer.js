@@ -24,7 +24,10 @@ const Logger = use('Logger');
 const SITE_URL = Env.getOrFail('SITE_URL');
 
 const PEZESHK_BOT_TOKEN = Env.getOrFail('PEZESHK_BOT_TOKEN');
-bot.on('message', async msg => {
+
+/** @type {import('fs')} */
+const fs = use('fs');
+bot.on('message', async (msg) => {
   if (!msg.reply_to_message) {
     return;
   }
@@ -41,14 +44,14 @@ bot.on('message', async msg => {
     }
     let doctor_answer = await DoctorAnswer.query()
       .where({ message_id: msg.reply_to_message.message_id })
-      .with('question', builder => builder.with('user'))
+      .with('question', (builder) => builder.with('user'))
       .with('doctor')
       .first();
     let doctor_answer_json = doctor_answer.toJSON();
     if (msg.voice) {
       let { result } = await request.get({
         url: `https://api.telegram.org/bot${PEZESHK_BOT_TOKEN}/getFile?file_id=${msg.voice.file_id}`,
-        json: true
+        json: true,
       });
       msg.voice.file_path = `https://api.telegram.org/file/bot${PEZESHK_BOT_TOKEN}/${result.file_path}`;
       doctor_answer.answer = msg.voice.file_path;
@@ -56,12 +59,12 @@ bot.on('message', async msg => {
       doctor_answer.answer = msg.text;
     }
     let message = `سوال پرسیده شده توسط شما : \n${doctor_answer_json.question.text}\n\n پاسخ پزشک:\n${msg.text}`;
-    let doctor_image = `${SITE_URL}${doctor_answer_json.doctor.image}`;
-    await bot.sendPhoto(
-      doctor_answer_json.question.user.chat_id,
-      doctor_image,
-      { caption: message }
+    let image = fs.createReadStream(
+      doctor_answer_json.doctor.image.replace('/api/download', './tmp/uploads')
     );
+    await bot.sendPhoto(doctor_answer_json.question.user.chat_id, image, {
+      caption: message,
+    });
     bot.sendMessage(
       msg.chat.id,
       'پاسخ شما با موفقیت برای بیمار ارسال شد، سپاس',
@@ -70,10 +73,10 @@ bot.on('message', async msg => {
           inline_keyboard: [
             [
               { text: 'برای امروز کافیه', callback_data: 'enough' },
-              { text: 'سوال بعدی', callback_data: 'next_question' }
-            ]
-          ]
-        }
+              { text: 'سوال بعدی', callback_data: 'next_question' },
+            ],
+          ],
+        },
       }
     );
     await doctor_answer.save();
@@ -83,7 +86,7 @@ bot.on('message', async msg => {
   }
 });
 
-bot.on('callback_query', async callback => {
+bot.on('callback_query', async (callback) => {
   if (callback.data == 'enough') {
     return bot.sendMessage(
       callback.from.id,
@@ -95,7 +98,9 @@ bot.on('callback_query', async callback => {
     let no_answer_question = await DoctorAnswer.query()
       .where({ is_expired: 0 })
       .whereNull('answer')
-      .whereHas('doctor', builder => builder.where({ chat_id: doctor.chat_id }))
+      .whereHas('doctor', (builder) =>
+        builder.where({ chat_id: doctor.chat_id })
+      )
       .first();
 
     if (no_answer_question) {
@@ -103,15 +108,15 @@ bot.on('callback_query', async callback => {
         doctor.chat_id,
         'شما به این سوال هنوز پاسخ نداده اید',
         {
-          reply_to_message_id: no_answer_question.message_id
+          reply_to_message_id: no_answer_question.message_id,
         }
       );
     }
     let question = await Question.query()
       .where({ speciality_id: doctor.speciality_id })
-      .whereDoesntHave('answer', builder => {
+      .whereDoesntHave('answer', (builder) => {
         builder
-          .where(builder =>
+          .where((builder) =>
             builder.where({ is_expired: 0 }).whereNull('answer')
           )
           .orWhereNotNull('answer');
@@ -130,7 +135,7 @@ bot.on('callback_query', async callback => {
     await DoctorAnswer.create({
       question_id: question.id,
       doctor_id: doctor.id,
-      message_id: message.message_id
+      message_id: message.message_id,
     });
   }
 });

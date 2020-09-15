@@ -32,7 +32,7 @@ module.exports = {
     model: 'App/Models/Admin',
     scheme: 'session',
     uid: 'email',
-    password: 'password'
+    password: 'password',
   },
 
   /*
@@ -53,7 +53,7 @@ module.exports = {
     model: 'App/Models/Admin',
     scheme: 'basic',
     uid: 'email',
-    password: 'password'
+    password: 'password',
   },
 
   /*
@@ -72,8 +72,9 @@ module.exports = {
     uid: 'username',
     password: 'password',
     options: {
-      secret: Env.get('APP_KEY')
-    }
+      expiresIn: '30m',
+      secret: Env.get('APP_KEY'),
+    },
   },
 
   /*
@@ -89,6 +90,6 @@ module.exports = {
     model: 'App/Models/Admin',
     scheme: 'api',
     uid: 'email',
-    password: 'password'
-  }
+    password: 'password',
+  },
 };

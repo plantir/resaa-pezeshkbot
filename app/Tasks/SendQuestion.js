@@ -21,7 +21,7 @@ const _ = use('lodash');
 
 class SendQuestion extends Task {
   static get schedule() {
-    return '0 * * * * *';
+    return '30 * * * * *';
   }
 
   async handle() {
@@ -53,7 +53,7 @@ class SendQuestion extends Task {
         try {
           let message = await bot.sendMessage(
             doctor.chat_id,
-            `با سلام کاربری سوال زیر را پرسیده است شما می توانید با ریپلای کردن همین پیام سوال وی را پاسخ دهید.:\n${question.text} \n\n#question_${question.id}`
+            `با سلام کاربری سوال زیر را پرسیده است شما می توانید با ریپلای کردن همین پیام سوال وی را پاسخ دهید:\n${question.text} \n\n#question_${question.id}`
           );
           await DoctorAnswer.create({
             question_id: question.id,
