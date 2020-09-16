@@ -29,7 +29,9 @@ class Message {
         });
       } else if (data.schedule.video) {
         let video = fs.createReadStream(
-          data.schedule.video.replace('/api/download', './tmp/uploads')
+          data.schedule.video.replace('/api/download', './tmp/uploads', {
+            caption: data.schedule.text || '',
+          })
         );
         await bot.sendVideo(data.user.chat_id, video, {
           caption: data.schedule.text || '',
