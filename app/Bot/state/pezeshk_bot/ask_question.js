@@ -50,7 +50,7 @@ bot.on('message', async (msg) => {
       {
         reply_markup: {
           keyboard: [
-            [{ text: 'دعوت از دوست' }],
+            [{ text: '📩 دعوت از دوست' }],
             [{ text: '🏠 بازگشت به خانه' }],
           ],
           resize_keyboard: true,
