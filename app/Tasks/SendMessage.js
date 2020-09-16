@@ -8,17 +8,13 @@ const moment = use('moment');
 const Logger = use('Logger');
 class SendMessage extends Task {
   static get schedule() {
-    return '0 * * * * *';
+    return '10 * * * * *';
   }
 
   async handle() {
     try {
-      let start_date = moment()
-        .second(0)
-        .format('YYYY-MM-DD HH:mm:ss');
-      let end_date = moment()
-        .second(59)
-        .format('YYYY-MM-DD HH:mm:ss');
+      let start_date = moment().second(0).format('YYYY-MM-DD HH:mm:ss');
+      let end_date = moment().second(59).format('YYYY-MM-DD HH:mm:ss');
       let scheduleList = await ScheduleMessage.query()
         .where({ is_deleted: 0 })
         .where({ is_send: 0 })

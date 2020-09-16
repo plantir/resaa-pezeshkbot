@@ -11,7 +11,7 @@ class Quiz extends Model {
   }
 
   static get allowField() {
-    return ['title', 'question', 'answers', 'image'];
+    return ['title', 'question', 'answers', 'image', 'send_time'];
   }
   static get jsonFields() {
     return ['answers'];

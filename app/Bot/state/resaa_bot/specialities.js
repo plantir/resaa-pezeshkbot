@@ -7,7 +7,7 @@ const User = use('App/Models/User');
 /** @type {import('@adonisjs/framework/src/Logger')} */
 const Logger = use('Logger');
 
-bot.onText(_enum.regex_state.specialities, async msg => {
+bot.onText(_enum.regex_state.specialities, async (msg) => {
   try {
     let user = await bot.getUser(msg);
     user.state = _enum.state.specialities;
@@ -16,8 +16,8 @@ bot.onText(_enum.regex_state.specialities, async msg => {
     let options = {
       reply_markup: {
         keyboard: [],
-        resize_keyboard: true
-      }
+        resize_keyboard: true,
+      },
     };
     let specialities = await Speciality.get();
     specialities.forEach((item, index) => {
@@ -25,20 +25,20 @@ bot.onText(_enum.regex_state.specialities, async msg => {
       if (index % 2 === 0) {
         options.reply_markup.keyboard.push([
           {
-            text
-          }
+            text,
+          },
         ]);
       } else {
         let i = Math.ceil(index / 2) - 1;
         options.reply_markup.keyboard[i].push({
-          text
+          text,
         });
       }
     });
     options.reply_markup.keyboard.push([
       {
-        text: 'بازگشت به خانه'
-      }
+        text: '🏠 بازگشت به خانه',
+      },
     ]);
 
     bot.sendMessage(msg.chat.id, message, options);

@@ -55,7 +55,7 @@ class AddImage {
     ]);
     options.reply_markup.keyboard.push([
       {
-        text: `بازگشت به خانه`,
+        text: `🏠 بازگشت به خانه`,
       },
     ]);
     return bot.sendMessage(msg.chat.id, message, options);

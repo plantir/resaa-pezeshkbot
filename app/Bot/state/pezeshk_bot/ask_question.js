@@ -19,7 +19,7 @@ const CHANNEL_ID = Env.getOrFail('CHANNEL_ID');
 const CHANNEL_URL = Env.getOrFail('CHANNEL_URL');
 bot.on('message', async (msg) => {
   let user = await bot.getUser(msg);
-  if (msg.text == 'بازگشت به خانه') {
+  if (msg.text == '🏠 بازگشت به خانه') {
     return;
   }
   if (user.state != _enum.state.specialities) {
@@ -49,7 +49,10 @@ bot.on('message', async (msg) => {
       `کاربر عزیز شما فقط 1 سوال می توانید بپرسید و  برای پرسش 1 سوال دیگر می توانید 3 نفر از دوستان خود را از قسمت (دعوت دوست) دعوت کنید و یا در مسابقه  Quiz Of Resaa شرکت کنید و در صورت دادن پاسخ درست به 3 سوال می توانید سوال پزشکی جدید خود را مطرح کنید.\n\n ${CHANNEL_URL}`,
       {
         reply_markup: {
-          keyboard: [[{ text: 'دعوت از دوست' }], [{ text: 'بازگشت به خانه' }]],
+          keyboard: [
+            [{ text: '📩 دعوت از دوست' }],
+            [{ text: '🏠 بازگشت به خانه' }],
+          ],
           resize_keyboard: true,
         },
       }
@@ -64,7 +67,7 @@ bot.on('message', async (msg) => {
     speciality.title
   } را انتخاب کردید \n شما می توانید ${
     original_user.question_count || 0
-  } سوال بپرسید\n پرسش خود را بنویسید و ارسال کنید`;
+  } سوال بپرسید\n پرسش خود را بنویسید و ارسال کنید\n(توجه داشته باشید پرسش خود را در قالب یک پیام نوشته و سپس ارسال کنید.)`;
 
   let options = {
     reply_markup: {
@@ -75,7 +78,7 @@ bot.on('message', async (msg) => {
 
   options.reply_markup.keyboard.push([
     {
-      text: 'بازگشت به خانه',
+      text: '🏠 بازگشت به خانه',
     },
   ]);
   bot.sendMessage(msg.chat.id, message, options);
@@ -83,7 +86,7 @@ bot.on('message', async (msg) => {
 
 bot.on('message', async (msg) => {
   let user = await bot.getUser(msg);
-  if (msg.text == 'بازگشت به خانه') {
+  if (msg.text == '🏠 بازگشت به خانه') {
     return;
   }
   if (user.state != _enum.state.ask_question) {
@@ -113,7 +116,7 @@ bot.on('callback_query', async (callback) => {
       .where({ text: user.question.text })
       .where({ user_id: user.id })
       .first();
-    let is_memeber = await bot.getChatMember(CHANNEL_ID, '680250490');
+    let is_memeber = await bot.getChatMember(CHANNEL_ID, callback.from.id);
     if (is_memeber.status == 'left') {
       return bot.sendMessage(
         callback.from.id,
@@ -125,22 +128,16 @@ bot.on('callback_query', async (callback) => {
         }
       );
     }
-
+    let message = `پرسش شما در صف قرار گرفته است و برای پزشکان تخصص مرتبط ارسال میشود این کار ممکن است تا ۷۲ ساعت زمان ببرد\nبرای مکالمه بهتر و بدون معطلی می توانید به صورت تلفنی از طریق سامانه رسا مستقیما با پزشکان صحبت کرده و مشاوره بگیرید.\nhttps://resaa.net`;
     if (question) {
-      return bot.sendMessage(
-        callback.from.id,
-        'پرسش شما در صف قرار گرفته است و برای پزشکان تخصص مرتبط ارسال میشود این کار ممکن است تا ۷۲ ساعت زمان ببرد'
-      );
+      return bot.sendMessage(callback.from.id, message);
     }
     await Question.create({
       text: user.question.text,
       speciality_id: user.question.speciality.id,
       user_id: user.id,
     });
-    await bot.sendMessage(
-      callback.from.id,
-      'پرسش شما با موفقیت ثبت و در صف قرار گرفت و برای پزشکان تخصص مرتبط ارسال میشود این کار ممکن است تا ۷۲ ساعت زمان ببرد'
-    );
+    await bot.sendMessage(callback.from.id, message);
   } else if (callback.data == 'change_text') {
     bot.sendMessage(callback.from.id, `پرسش خود را بنویسید و ارسال کنید`);
   }

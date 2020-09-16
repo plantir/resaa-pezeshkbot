@@ -15,7 +15,9 @@ const Env = use('Env');
 const BASE_API = Env.getOrFail('RESAA_API');
 
 const Bull = use('Rocketseat/Bull');
+
 const Message_JOB = use('App/Jobs/SendMessage');
+
 const ScheduleMessage = use('App/Models/ScheduleMessage');
 
 class User extends Model {
@@ -65,7 +67,7 @@ class User extends Model {
         chat_id: msg.chat.id,
         bot_source,
         refer_by: caller_user ? caller_user.id : null,
-        question_count: 1
+        question_count: 1,
       });
     }
     await Redis.set(`${bot_source}_user_${msg.chat.id}`, JSON.stringify(user));
@@ -85,7 +87,7 @@ class User extends Model {
     for (let user of users.toJSON()) {
       Bull.add(Message_JOB.key, {
         user,
-        schedule
+        schedule,
       });
       // kue.dispatch(
       //   Message_JOB.key,
@@ -98,24 +100,22 @@ class User extends Model {
       //   }
       // );
     }
-    setTimeout(async () => {
-      let success_count = await Redis.get(`schedule_${schedule.id}_success`);
-      let fail_count = await Redis.get(`schedule_${schedule.id}_error`);
-      await ScheduleMessage.query()
-        .where({ id: schedule.id })
-        .update({
-          success_count,
-          fail_count
-        });
-      await Redis.del(`schedule_${schedule.id}_success`);
-      await Redis.del(`schedule_${schedule.id}_error`);
-    }, 300000);
+    // setTimeout(async () => {
+    //   let success_count = await Redis.get(`schedule_${schedule.id}_success`);
+    //   let fail_count = await Redis.get(`schedule_${schedule.id}_error`);
+    //   await ScheduleMessage.query().where({ id: schedule.id }).update({
+    //     success_count,
+    //     fail_count,
+    //   });
+    //   await Redis.del(`schedule_${schedule.id}_success`);
+    //   await Redis.del(`schedule_${schedule.id}_error`);
+    // }, 300000);
   }
   register(phoneNumber) {
     return new Promise(async (resolve, reject) => {
       try {
         await axios.post(`${BASE_API}/rubika/Patients/Registration`, {
-          phoneNumber
+          phoneNumber,
         });
         this.phone = phoneNumber;
         this.save();
