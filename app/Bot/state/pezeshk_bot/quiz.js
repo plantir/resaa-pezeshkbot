@@ -22,7 +22,7 @@ bot.on('callback_query', async (callback) => {
   if (quiz_answer) {
     return bot.sendMessage(
       callback.from.id,
-      'شما قبلا به این کویز پاسخ داده اید'
+      '🚫 شما قبلا به این کویز پاسخ داده اید'
     );
   }
   let is_correct = callback.data.includes('correct');
@@ -31,8 +31,8 @@ bot.on('callback_query', async (callback) => {
     quiz_id,
     is_correct,
   });
-  let msg = ` جواب شما به کویز شماره ${quiz_id} ${
-    is_correct ? 'درست' : 'غلط'
+  let msg = `جواب شما به کویز شماره ${quiz_id} ${
+    is_correct ? '✅ درست' : '❌ غلط'
   } بود  \n`;
   let correct_count = await QuizAnswer.query()
     .where({
@@ -41,10 +41,10 @@ bot.on('callback_query', async (callback) => {
     })
     .getCount();
   let need_more = correct_count % CORRECT_ANSWER_COUNT;
-  if (need_more == 0) {
+  if (is_correct && need_more == 0) {
     msg += `تعداد پاسخ های صحیح شما به حد نصاب رسیده است و اکنون میتوانید ۱ سوال رایگان دیگر از پزشکان رسا بپرسید`;
   } else {
-    msg += `شما باید به ${need_more} کوییز دیگه پاسخ صحیح بدهید`;
+    msg += `شما باید به ${need_more} کوییز دیگر پاسخ صحیح بدهید`;
   }
   await bot.sendMessage(callback.from.id, msg);
 });

@@ -19,7 +19,7 @@ const CHANNEL_ID = Env.getOrFail('CHANNEL_ID');
 const CHANNEL_URL = Env.getOrFail('CHANNEL_URL');
 bot.on('message', async (msg) => {
   let user = await bot.getUser(msg);
-  if (msg.text == 'بازگشت به خانه') {
+  if (msg.text.includes('بازگشت به خانه')) {
     return;
   }
   if (user.state != _enum.state.specialities) {

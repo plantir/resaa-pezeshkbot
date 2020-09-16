@@ -37,7 +37,7 @@ bot.onText(_enum.regex_state.specialities, async (msg) => {
     });
     options.reply_markup.keyboard.push([
       {
-        text: 'بازگشت به خانه',
+        text: '🏠 بازگشت به خانه',
       },
     ]);
 
