@@ -257,7 +257,7 @@ class Doctor extends Model {
     ]);
     options.reply_markup.keyboard.push([
       {
-        text: 'بازگشت به خانه',
+        text: '🏠 بازگشت به خانه',
       },
     ]);
 

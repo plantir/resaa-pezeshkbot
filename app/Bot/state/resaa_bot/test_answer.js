@@ -38,7 +38,7 @@ bot.onText(/ارسال جواب آزمایش/, async (msg) => {
     ]);
     options.reply_markup.keyboard.push([
       {
-        text: `بازگشت به خانه`,
+        text: `🏠 بازگشت به خانه`,
       },
     ]);
 
@@ -58,7 +58,7 @@ bot.onText(/ارسال جواب آزمایش/, async (msg) => {
     ]);
     options.reply_markup.keyboard.push([
       {
-        text: `بازگشت به خانه`,
+        text: `🏠 بازگشت به خانه`,
       },
     ]);
 
@@ -74,7 +74,7 @@ bot.onText(/ارسال جواب آزمایش/, async (msg) => {
   ]);
   options.reply_markup.keyboard.push([
     {
-      text: `بازگشت به خانه`,
+      text: `🏠 بازگشت به خانه`,
     },
   ]);
   bot.sendMessage(msg.chat.id, message, options);
@@ -96,7 +96,7 @@ bot.onText(/حذف تمامی فایل ها و ارسال مجدد/, async (msg)
   };
   options.reply_markup.keyboard.push([
     {
-      text: `بازگشت به خانه`,
+      text: `🏠 بازگشت به خانه`,
     },
   ]);
 
@@ -147,7 +147,7 @@ bot.on('photo', async (msg) => {
   // ]);
   // options.reply_markup.keyboard.push([
   //   {
-  //     text: `بازگشت به خانه`,
+  //     text: `🏠 بازگشت به خانه`,
   //   },
   // ]);
   // return bot.sendMessage(msg.chat.id, message, options);
@@ -176,7 +176,7 @@ bot.onText(/اتمام|تلاش مجدد/, async (msg) => {
     message = `جواب آزمایش شما با موفقیت برای دکتر ${doctor.firstName} ${doctor.lastName} ارسال شد\n کد پیگیری جواب آزمایش شما \n#${tracking_code}`;
     options.reply_markup.keyboard.push([
       {
-        text: `بازگشت به خانه`,
+        text: `🏠 بازگشت به خانه`,
       },
     ]);
     TestAnswer.confirm(doctor.subscriberNumber, tracking_code, user);
@@ -189,7 +189,7 @@ bot.onText(/اتمام|تلاش مجدد/, async (msg) => {
     ]);
     options.reply_markup.keyboard.push([
       {
-        text: `بازگشت به خانه`,
+        text: `🏠 بازگشت به خانه`,
       },
     ]);
   }
@@ -216,7 +216,7 @@ bot.onText(/اتمام|تلاش مجدد/, async (msg) => {
   //     message = `جواب آزمایش شما با موفقیت برای دکتر ${doctor.firstName} ${doctor.lastName} ارسال شد\n کد پیگیری جواب آزمایش شما ${tracking_code}`;
   //     options.reply_markup.keyboard.push([
   //       {
-  //         text: `بازگشت به خانه`
+  //         text: `🏠 بازگشت به خانه`
   //       }
   //     ]);
   //   } catch (error) {
@@ -228,7 +228,7 @@ bot.onText(/اتمام|تلاش مجدد/, async (msg) => {
   //     ]);
   //     options.reply_markup.keyboard.push([
   //       {
-  //         text: `بازگشت به خانه`
+  //         text: `🏠 بازگشت به خانه`
   //       }
   //     ]);
   //   }
