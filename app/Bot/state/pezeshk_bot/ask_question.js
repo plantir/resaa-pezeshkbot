@@ -19,7 +19,7 @@ const CHANNEL_ID = Env.getOrFail('CHANNEL_ID');
 const CHANNEL_URL = Env.getOrFail('CHANNEL_URL');
 bot.on('message', async (msg) => {
   let user = await bot.getUser(msg);
-  if (msg.text.includes('بازگشت به خانه')) {
+  if (msg.text == '🏠 بازگشت به خانه') {
     return;
   }
   if (user.state != _enum.state.specialities) {
@@ -49,7 +49,10 @@ bot.on('message', async (msg) => {
       `کاربر عزیز شما فقط 1 سوال می توانید بپرسید و  برای پرسش 1 سوال دیگر می توانید 3 نفر از دوستان خود را از قسمت (دعوت دوست) دعوت کنید و یا در مسابقه  Quiz Of Resaa شرکت کنید و در صورت دادن پاسخ درست به 3 سوال می توانید سوال پزشکی جدید خود را مطرح کنید.\n\n ${CHANNEL_URL}`,
       {
         reply_markup: {
-          keyboard: [[{ text: 'دعوت از دوست' }], [{ text: 'بازگشت به خانه' }]],
+          keyboard: [
+            [{ text: '📩 دعوت از دوست' }],
+            [{ text: '🏠 بازگشت به خانه' }],
+          ],
           resize_keyboard: true,
         },
       }
@@ -75,7 +78,7 @@ bot.on('message', async (msg) => {
 
   options.reply_markup.keyboard.push([
     {
-      text: 'بازگشت به خانه',
+      text: '🏠 بازگشت به خانه',
     },
   ]);
   bot.sendMessage(msg.chat.id, message, options);
@@ -83,7 +86,7 @@ bot.on('message', async (msg) => {
 
 bot.on('message', async (msg) => {
   let user = await bot.getUser(msg);
-  if (msg.text == 'بازگشت به خانه') {
+  if (msg.text == '🏠 بازگشت به خانه') {
     return;
   }
   if (user.state != _enum.state.ask_question) {

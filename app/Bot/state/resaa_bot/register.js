@@ -4,7 +4,7 @@ const Doctor = use('App/Models/Doctor');
 /** @type {import('node-telegram-bot-api')} */
 const bot = use('ResaaBot');
 
-bot.on('message', async msg => {
+bot.on('message', async (msg) => {
   if (!msg.contact) {
     return;
   }
@@ -14,8 +14,8 @@ bot.on('message', async msg => {
   let options = {
     reply_markup: {
       keyboard: [],
-      resize_keyboard: true
-    }
+      resize_keyboard: true,
+    },
   };
   let phone = msg.contact.phone_number.replace(/(\+98|98)/, '0');
 
@@ -32,8 +32,8 @@ bot.on('message', async msg => {
   if (!doctor) {
     options.reply_markup.keyboard.push([
       {
-        text: 'بازگشت به خانه'
-      }
+        text: '🏠 بازگشت به خانه',
+      },
     ]);
     return bot.sendMessage(msg.chat.id, 'لطفا انتخاب کنید', options, false);
   }

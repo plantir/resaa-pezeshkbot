@@ -32,7 +32,7 @@ bot.on('callback_query', async (callback) => {
     is_correct,
   });
   let msg = `جواب شما به کویز شماره ${quiz_id} ${
-    is_correct ? '✅ درست' : '❌ غلط'
+    is_correct ? '✅ درست' : '❌ اشتباه '
   } بود  \n`;
   let correct_count = await QuizAnswer.query()
     .where({

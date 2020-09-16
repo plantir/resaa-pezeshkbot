@@ -29,7 +29,9 @@ class Message {
         });
       } else if (data.schedule.video) {
         let video = fs.createReadStream(
-          data.schedule.video.replace('/api/download', './tmp/uploads')
+          data.schedule.video.replace('/api/download', './tmp/uploads', {
+            caption: data.schedule.text || '',
+          })
         );
         await bot.sendVideo(data.user.chat_id, video, {
           caption: data.schedule.text || '',
@@ -37,14 +39,17 @@ class Message {
       } else {
         await bot.sendMessage(data.user.chat_id, data.schedule.text);
       }
-      await ScheduleMessage.query()
-        .where({ id: data.schedule.id })
-        .increment('success_count', 1);
+      if (!data.is_test) {
+        await ScheduleMessage.query()
+          .where({ id: data.schedule.id })
+          .increment('success_count', 1);
+      }
     } catch (error) {
-      await ScheduleMessage.query()
-        .where({ id: data.schedule.id })
-        .increment('fail_count', 1);
-      throw new Error(error);
+      if (!data.is_test) {
+        await ScheduleMessage.query()
+          .where({ id: data.schedule.id })
+          .increment('fail_count', 1);
+      }
     }
   }
 
