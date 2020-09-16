@@ -2,13 +2,13 @@ const Doctor = use('App/Models/Doctor');
 const bot = use('ResaaBot');
 const _enum = require('./enum');
 const resaa_url = 'https://resaa.net';
-bot.onText(/تماس با دکتر *.*/, async msg => {
+bot.onText(/تماس با دکتر *.*/, async (msg) => {
   let user = await bot.getUser(msg);
   let message = '';
   let options = {
     reply_markup: {
-      inline_keyboard: []
-    }
+      inline_keyboard: [],
+    },
   };
   if (user.state != _enum.state.doctor_detail) {
     return;
@@ -19,14 +19,14 @@ bot.onText(/تماس با دکتر *.*/, async msg => {
       [
         {
           text: `ثبت نام`,
-          request_contact: true
-        }
+          request_contact: true,
+        },
       ],
       [
         {
-          text: 'بازگشت به خانه'
-        }
-      ]
+          text: '🏠 بازگشت به خانه',
+        },
+      ],
     ];
 
     return bot.sendMessage(msg.chat.id, message, options);
@@ -37,7 +37,7 @@ bot.onText(/تماس با دکتر *.*/, async msg => {
   let {
     costPerMinute,
     duration,
-    isFreeFirstCall
+    isFreeFirstCall,
   } = await Doctor.get_time_price(doctor.subscriberNumber, user.phone);
   if (isFreeFirstCall) {
     try {
@@ -56,8 +56,8 @@ bot.onText(/تماس با دکتر *.*/, async msg => {
     options.reply_markup.inline_keyboard.push([
       {
         text: `${item.period} دقیقه ${item.amount} تومان`,
-        url: `${resaa_url}/charge?mobile=${user.phone}&chat_id=${msg.chat.id}`
-      }
+        url: `${resaa_url}/charge?mobile=${user.phone}&chat_id=${msg.chat.id}`,
+      },
     ]);
   }
   await bot.sendMessage(msg.chat.id, message, options);
@@ -72,17 +72,17 @@ bot.onText(/تماس با دکتر *.*/, async msg => {
         keyboard: [
           [
             {
-              text: 'بازگشت به خانه'
-            }
+              text: '🏠 بازگشت به خانه',
+            },
           ],
           [
             {
-              text: 'بازگشت'
-            }
-          ]
+              text: 'بازگشت',
+            },
+          ],
         ],
-        resize_keyboard: true
-      }
+        resize_keyboard: true,
+      },
     },
     false
   );
@@ -115,7 +115,7 @@ function calc_amount(costPerMinute, minutes) {
     }
     amount_list.push({
       period: min,
-      amount
+      amount,
     });
   }
   return amount_list;

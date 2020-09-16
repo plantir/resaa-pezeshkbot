@@ -8,7 +8,7 @@
     "start": "node server.js",
     "test": "node ace test",
     "release": "git push origin master && git push origin develop",
-    "release:tfs": "git push tfs master && git push tfs develop"
+    "release:dist": "git push dist master && git push dist develop"
   },
   "keywords": [
     "adonisjs",

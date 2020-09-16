@@ -12,7 +12,7 @@ class ScheduleMessage extends Model {
     return ['text'];
   }
   static get allowField() {
-    return ['title', 'text', 'send_time'];
+    return ['title', 'text', 'image', 'video', 'send_time'];
   }
   static get dates() {
     return super.dates.concat(['send_time']);
