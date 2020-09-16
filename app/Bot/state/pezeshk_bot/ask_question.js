@@ -64,7 +64,7 @@ bot.on('message', async (msg) => {
     speciality.title
   } را انتخاب کردید \n شما می توانید ${
     original_user.question_count || 0
-  } سوال بپرسید\n پرسش خود را بنویسید و ارسال کنید`;
+  } سوال بپرسید\n پرسش خود را بنویسید و ارسال کنید\n(توجه داشته باشید پرسش خود را در قالب یک پیام نوشته و سپس ارسال کنید.)`;
 
   let options = {
     reply_markup: {
@@ -125,22 +125,16 @@ bot.on('callback_query', async (callback) => {
         }
       );
     }
-
+    let message = `پرسش شما در صف قرار گرفته است و برای پزشکان تخصص مرتبط ارسال میشود این کار ممکن است تا ۷۲ ساعت زمان ببرد\nبرای مکالمه بهتر و بدون معطلی می توانید به صورت تلفنی از طریق سامانه رسا مستقیما با پزشکان صحبت کرده و مشاوره بگیرید.\nhttps://resaa.net`;
     if (question) {
-      return bot.sendMessage(
-        callback.from.id,
-        'پرسش شما در صف قرار گرفته است و برای پزشکان تخصص مرتبط ارسال میشود این کار ممکن است تا ۷۲ ساعت زمان ببرد'
-      );
+      return bot.sendMessage(callback.from.id, message);
     }
     await Question.create({
       text: user.question.text,
       speciality_id: user.question.speciality.id,
       user_id: user.id,
     });
-    await bot.sendMessage(
-      callback.from.id,
-      'پرسش شما با موفقیت ثبت و در صف قرار گرفت و برای پزشکان تخصص مرتبط ارسال میشود این کار ممکن است تا ۷۲ ساعت زمان ببرد'
-    );
+    await bot.sendMessage(callback.from.id, message);
   } else if (callback.data == 'change_text') {
     bot.sendMessage(callback.from.id, `پرسش خود را بنویسید و ارسال کنید`);
   }

@@ -25,6 +25,8 @@ const SITE_URL = Env.getOrFail('SITE_URL');
 
 const PEZESHK_BOT_TOKEN = Env.getOrFail('PEZESHK_BOT_TOKEN');
 
+const axios = use('axios');
+
 /** @type {import('fs')} */
 const fs = use('fs');
 bot.on('message', async (msg) => {
@@ -45,26 +47,38 @@ bot.on('message', async (msg) => {
     let doctor_answer = await DoctorAnswer.query()
       .where({ message_id: msg.reply_to_message.message_id })
       .with('question', (builder) => builder.with('user'))
-      .with('doctor')
+      .with('doctor', (builder) => builder.with('speciality'))
       .first();
     let doctor_answer_json = doctor_answer.toJSON();
-    if (msg.voice) {
-      let { result } = await request.get({
-        url: `https://api.telegram.org/bot${PEZESHK_BOT_TOKEN}/getFile?file_id=${msg.voice.file_id}`,
-        json: true,
-      });
-      msg.voice.file_path = `https://api.telegram.org/file/bot${PEZESHK_BOT_TOKEN}/${result.file_path}`;
-      doctor_answer.answer = msg.voice.file_path;
-    } else {
-      doctor_answer.answer = msg.text;
-    }
-    let message = `سوال پرسیده شده توسط شما : \n${doctor_answer_json.question.text}\n\n پاسخ پزشک:\n${msg.text}`;
+    let caption = `سوال شما توسط دکتر ${doctor_answer_json.doctor.first_name} ${doctor_answer_json.doctor.last_name} متخصص ${doctor_answer_json.doctor.speciality.title} پاسخ داده شد. در صورت تمایل می توانید با مراجعه به پروفایل ایشان در سامانه رسا به آدرس زیر مراجعه کرده و به صورت تلفنی از ایشان مشاوره بگیرید.\n\nhttps://resaa.net/doctors/${doctor_answer_json.doctor.subscriber_number}\n\nپرسش شما و پاسخ پزشک در پیام زیر.`;
     let image = fs.createReadStream(
       doctor_answer_json.doctor.image.replace('/api/download', './tmp/uploads')
     );
     await bot.sendPhoto(doctor_answer_json.question.user.chat_id, image, {
-      caption: message,
+      caption: caption,
     });
+    let message = `سوال پرسیده شده توسط شما : \n${doctor_answer_json.question.text}`;
+    await bot.sendMessage(doctor_answer_json.question.user.chat_id, message);
+    if (msg.voice) {
+      let { data } = await axios.get(
+        `https://api.telegram.org/bot${PEZESHK_BOT_TOKEN}/getFile?file_id=${msg.voice.file_id}`
+      );
+      msg.voice.file_path = `https://api.telegram.org/file/bot${PEZESHK_BOT_TOKEN}/${data.result.file_path}`;
+      doctor_answer.answer = msg.voice.file_path;
+      const { data: voice } = await axios.get(msg.voice.file_path, {
+        responseType: 'stream',
+      });
+      await bot.sendVoice(doctor_answer_json.question.user.chat_id, voice, {
+        caption: 'پاسخ پزشک',
+      });
+    } else {
+      doctor_answer.answer = msg.text;
+      await bot.sendMessage(
+        doctor_answer_json.question.user.chat_id,
+        ` پاسخ پزشک:\n${msg.text}`
+      );
+    }
+
     bot.sendMessage(
       msg.chat.id,
       'پاسخ شما با موفقیت برای بیمار ارسال شد، سپاس',
