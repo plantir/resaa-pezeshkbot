@@ -50,7 +50,17 @@ bot.on('message', async (msg) => {
       .with('doctor', (builder) => builder.with('speciality'))
       .first();
     let doctor_answer_json = doctor_answer.toJSON();
-    let caption = `سوال شما توسط دکتر ${doctor_answer_json.doctor.first_name} ${doctor_answer_json.doctor.last_name} متخصص ${doctor_answer_json.doctor.speciality.title} پاسخ داده شد. در صورت تمایل می توانید با مراجعه به پروفایل ایشان در سامانه رسا به آدرس زیر مراجعه کرده و به صورت تلفنی از ایشان مشاوره بگیرید.\n\nhttps://resaa.net/doctors/${doctor_answer_json.doctor.subscriber_number}\n\nپرسش شما و پاسخ پزشک در پیام زیر.`;
+    let caption = `سوال شما توسط دکتر ${doctor_answer_json.doctor.first_name} ${
+      doctor_answer_json.doctor.last_name
+    } متخصص ${
+      doctor_answer_json.doctor.speciality.title
+    } پاسخ داده شد. در صورت تمایل می توانید با مراجعه به پروفایل ایشان در سامانه رسا به آدرس زیر مراجعه کرده و به صورت تلفنی از ایشان مشاوره بگیرید.${
+      doctor_answer_json.doctor.description
+        ? '\n\n' + doctor_answer_json.doctor.description
+        : ''
+    } \n\nhttps://resaa.net/doctors/${
+      doctor_answer_json.doctor.subscriber_number
+    }\n\nپرسش شما و پاسخ پزشک در پیام زیر.`;
     let image = fs.createReadStream(
       doctor_answer_json.doctor.image.replace('/api/download', './tmp/uploads')
     );
