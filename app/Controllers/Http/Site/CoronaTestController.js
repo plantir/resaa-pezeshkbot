@@ -8,11 +8,13 @@ class CoronaTestController {
   async callback({ request, response }) {
     let { chargeRequestId, request_id } = request.post();
     let coronaTest = await CoronaTest.find(request_id);
-    try {
-      await coronaTest.checkChargeRequest(chargeRequestId);
-      await coronaTest.confirmPayment();
-    } catch (error) {
-      console.log(error);
+    if (coronaTest.payment_status !== 'paid') {
+      try {
+        await coronaTest.checkChargeRequest(chargeRequestId);
+        await coronaTest.confirmPayment();
+      } catch (error) {
+        console.log(error);
+      }
     }
     response.json(coronaTest);
   }
