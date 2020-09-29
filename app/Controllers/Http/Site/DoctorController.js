@@ -10,16 +10,18 @@ const MomentRange = use('moment-range');
 const moment = MomentRange.extendMoment(Moment);
 /** @type {import('lodash')} */
 const _ = use('lodash');
+const Env = use('Env');
+const BASE_API = Env.getOrFail('RESAA_API');
 class DoctorController {
   async query() {
     let { data } = await axios.get(
-      'https://webapi.resaa.net/categories/8/RelatedDoctors?limit=15'
+      '${BASE_API}/categories/8/RelatedDoctors?limit=15'
     );
     return data.result.relatedDoctors;
   }
   async show({ request, params: { id } }) {
     let { data } = await axios.get(
-      `https://webapi.resaa.net/doctors/${id}/profile`
+      `${BASE_API}/doctors/${id}/profile`
     );
     let doctor = data.result.doctor;
     let extra_field = await Doctor.findBy({ subscriber_number: id });
@@ -38,7 +40,7 @@ class DoctorController {
   async timeTable({ request, params: { id } }) {
     let days = {};
     const { data } = await axios.get(
-      `https://webapi.resaa.net/Doctors/${id}/TimeTable`,
+      `${BASE_API}/Doctors/${id}/TimeTable`,
       {
         params: {
           clientTimeZoneOffset: -270,
