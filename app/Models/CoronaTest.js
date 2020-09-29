@@ -17,11 +17,22 @@ class CoronaTest extends Model {
     super.boot();
     this.addTrait('ConvertToJson');
   }
-  static get jsonFields() {
-    return ['symptoms'];
+
+  static listOption(qs) {
+    qs.withArray = [
+      { city: (builder) => builder.setVisible(['id', 'name']) },
+    ].concat(qs.withArray || []);
+    return super.listOption(qs);
   }
+
+  static get jsonFields() {
+    return ['symptoms', 'selected_test'];
+  }
+
   static get allowField() {
     return [
+      'selected_test',
+      'city_id',
       'charge_id',
       'doctor_id',
       'amount',
@@ -39,6 +50,10 @@ class CoronaTest extends Model {
       'payment_status',
       'description',
     ];
+  }
+
+  city() {
+    return this.belongsTo('App/Models/City');
   }
 
   async checkChargeRequest(chargeRequestId) {
@@ -66,6 +81,7 @@ class CoronaTest extends Model {
       await this.save();
     });
   }
+
   confirmPayment() {
     return new Promise(async (resolve, reject) => {
       try {
