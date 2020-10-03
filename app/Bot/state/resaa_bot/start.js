@@ -1,12 +1,15 @@
 const User = use('App/Models/User');
+
+/** @type {import ('node-telegram-bot-api')} */
 const bot = use('ResaaBot');
+
 const { regex_state } = require('./enum');
+
 const start_video =
   process.env.NODE_ENV === 'development'
     ? 'BAADBAAD0wUAAtRquVDOyHp6nv1negI'
     : 'BAADBAAD_QQAAnSf6FGNx82JyiDeDQI';
-
-bot.onText(regex_state.start, async msg => {
+bot.onText(regex_state.start, async (msg) => {
   let user = await bot.getOrCreateUser(msg);
   user.state = 0;
   user.history = [];
@@ -19,32 +22,32 @@ bot.onText(regex_state.start, async msg => {
   let options = {
     reply_markup: {
       keyboard: [],
-      resize_keyboard: true
-    }
+      resize_keyboard: true,
+    },
   };
   if (user.phone) {
     options.reply_markup.keyboard.push([
       {
-        text: 'شارژ اعتبار رسا'
-      }
+        text: 'شارژ اعتبار رسا',
+      },
     ]);
   }
   options.reply_markup.keyboard.push(
     ...[
       [
         {
-          text: 'سوال پزشکی دارم'
+          text: 'سوال پزشکی دارم',
         },
         {
-          text: 'پرسش از پزشک خودم'
-        }
-      ]
+          text: 'پرسش از پزشک خودم',
+        },
+      ],
     ]
   );
   options.reply_markup.keyboard.push([
     {
-      text: 'تماس با پشتیبانی'
-    }
+      text: 'تماس با پشتیبانی',
+    },
   ]);
   options.caption = message;
   await bot.sendVideo(msg.chat.id, start_video, options);

@@ -11,3 +11,4 @@ require('./back');
 // require('./payment_return');
 require('./test_answer');
 // require('./prevent_replay');
+require('./errorHandling')

@@ -10,5 +10,5 @@ ENV PORT 3333
 ENV HOST 0.0.0.0
 RUN yarn
 RUN node ace migration:run --force
-RUN yarn start
-EXPOSE 3333
+# RUN yarn start
+# EXPOSE 3333
