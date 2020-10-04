@@ -86,7 +86,7 @@ class CoronaTest extends Model {
     return new Promise(async (resolve, reject) => {
       try {
         let { data } = await axios.post(
-          `${BASE_API}/Doctors/${this.selected_test.doctorId}/DiagnosticDocumentsService/Invoice?patientPhoneNumber=${this.phoneNumber}`,
+          `${BASE_API}/Doctors/${this.toJSON().selected_test.doctorId}/DiagnosticDocumentsService/Invoice?patientPhoneNumber=${this.phoneNumber}`,
           {
             requestsCount: 1,
             referenceNumber: this.id,
