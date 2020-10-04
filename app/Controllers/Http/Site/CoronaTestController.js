@@ -16,7 +16,8 @@ class CoronaTestController {
         console.log(error);
       }
     }
-    response.json(coronaTest.toJSON());
+    coronaTest = coronaTest.toJSON()
+    return coronaTest
   }
   async tracking({ request }) {
     let { nationalCode, mobile } = request.get();
