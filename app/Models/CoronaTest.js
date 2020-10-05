@@ -64,6 +64,7 @@ class CoronaTest extends Model {
           data: { result },
         } = await axios.get(`${BASE_API}/Charge/${chargeRequestId}/Receipt`);
         this.trackingNumber = result.chargeReceipt.trackingNumber;
+        await this.save();
         if (result.chargeReceipt.currentBalance < this.amount) {
           Logger.error('currentBalance', { result, test_id: this.id });
           reject(result);
@@ -78,7 +79,6 @@ class CoronaTest extends Model {
         Logger.error('chargeFail', { error, test_id: this.id });
         reject(error);
       }
-      await this.save();
     });
   }
 
