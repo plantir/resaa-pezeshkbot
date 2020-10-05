@@ -19,7 +19,7 @@ bot.onText(_enum.regex_state.specialities, async (msg) => {
         resize_keyboard: true,
       },
     };
-    let specialities = await Speciality.get();
+    let specialities = await Speciality.get({ has_doctor: false });
     specialities.forEach((item, index) => {
       let text = `${item.title}`;
       if (index % 2 === 0) {
