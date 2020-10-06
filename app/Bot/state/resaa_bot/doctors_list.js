@@ -13,11 +13,16 @@ bot.on('message', async (msg) => {
   if (!speciality) {
     return;
   }
+  let doctors;
+  try {
+    doctors = await Doctor.search({
+      specialtyId: speciality.id,
+    });
+  } catch (error) {
+    console.log(error);
+  }
   user.state = _enum.state.select_doctor;
   await User.update_redis(user);
-  let doctors = await Doctor.search({
-    specialtyId: speciality.id,
-  });
   let message = `لیست پزشکان متخصص ${msg.text}`;
   let options = {
     reply_markup: {
