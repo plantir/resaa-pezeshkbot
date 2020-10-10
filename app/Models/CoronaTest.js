@@ -64,6 +64,7 @@ class CoronaTest extends Model {
           data: { result },
         } = await axios.get(`${BASE_API}/Charge/${chargeRequestId}/Receipt`);
         this.trackingNumber = result.chargeReceipt.trackingNumber;
+        await this.save();
         if (result.chargeReceipt.currentBalance < this.amount) {
           Logger.error('currentBalance', { result, test_id: this.id });
           reject(result);
@@ -78,15 +79,15 @@ class CoronaTest extends Model {
         Logger.error('chargeFail', { error, test_id: this.id });
         reject(error);
       }
-      await this.save();
     });
   }
 
   confirmPayment() {
     return new Promise(async (resolve, reject) => {
       try {
+        let doctor_id = this.selected_test.doctorId || this.doctorId;
         let { data } = await axios.post(
-          `${BASE_API}/Doctors/${this.toJSON().selected_test.doctorId}/DiagnosticDocumentsService/Invoice?patientPhoneNumber=${this.phoneNumber}`,
+          `${BASE_API}/Doctors/${doctor_id}/DiagnosticDocumentsService/Invoice?patientPhoneNumber=${this.phoneNumber}`,
           {
             requestsCount: 1,
             referenceNumber: this.id,

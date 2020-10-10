@@ -2,22 +2,22 @@
 
 class ConvertToJson {
   register(Model) {
-    Model.addHook('beforeSave', modelInstance => {
+    Model.addHook('beforeSave', (modelInstance) => {
       return this.convertToString(Model, modelInstance);
     });
-    Model.addHook('afterSave', modelInstance => {
+    Model.addHook('afterSave', (modelInstance) => {
       return this.convertToJson(Model, modelInstance);
     });
-    Model.addHook('afterFind', modelInstance => {
+    Model.addHook('afterFind', (modelInstance) => {
       return this.convertToJson(Model, modelInstance);
     });
-    Model.addHook('afterFetch', modelInstanceArray => {
+    Model.addHook('afterFetch', (modelInstanceArray) => {
       for (let modelInstance of modelInstanceArray) {
         this.convertToJson(Model, modelInstance);
       }
       return modelInstanceArray;
     });
-    Model.addHook('afterPaginate', modelInstanceArray => {
+    Model.addHook('afterPaginate', (modelInstanceArray) => {
       for (let modelInstance of modelInstanceArray) {
         this.convertToJson(Model, modelInstance);
       }
@@ -30,6 +30,9 @@ class ConvertToJson {
     if (json_fields) {
       for (const field of json_fields) {
         if (modelInstance[field]) {
+          if (typeof modelInstance[field] == 'string') {
+            continue;
+          }
           modelInstance[field] = JSON.stringify(modelInstance[field]);
         }
       }
