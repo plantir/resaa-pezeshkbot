@@ -22,7 +22,7 @@ class CoronaOrderController {
   async paymentRequest({ response, params: { id } }) {
     let order = await CoronaOrder.find(id);
     let transaction = await order.transaction().fetch();
-    let res = await axios.post(
+    let { data } = await axios.post(
       'https://sep.shaparak.ir/MobilePG/MobilePayment',
       {
         Action: 'Token',
@@ -32,13 +32,13 @@ class CoronaOrderController {
         RedirectUrl: Env.get('BANK_RETURN_URL'),
       }
     );
-    if (res.status == 1) {
+    if (data.status == 1) {
       return response.status(200).json({
-        token: res.token,
+        token: data.token,
         address: 'https://sep.shaparak.ir/MobilePG/MobilePayment',
       });
     } else {
-      response.status(400).json(res.data);
+      response.status(400).json(data);
     }
   }
   async callback({ request, response }) {
