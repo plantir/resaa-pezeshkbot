@@ -5,8 +5,8 @@ const Env = use('Env');
 class CoronaOrderController {
   async request({ request }) {
     let data = request.only(CoronaOrder.allowField);
-    data.prepay_amount = +data.selected_test.prepay_amount;
-    data.total_amount = +data.selected_test.total_amount;
+    data.prepay_amount = +data.selected_test.prepay_amount * +data.count;
+    data.total_amount = +data.selected_test.total_amount * +data.count;
     data.payable_amount = data.total_amount - data.prepay_amount;
     if (data.discount && data.discount.amount) {
       data.payable_amount -= +data.discount.amount;
