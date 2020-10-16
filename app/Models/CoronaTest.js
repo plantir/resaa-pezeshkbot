@@ -13,8 +13,16 @@ class CoronaTest extends Model {
       'city_id',
       'prepay_amount',
       'total_amount',
+      'discount_roles',
       'description',
     ];
+  }
+  static get jsonFields() {
+    return ['discount_roles'];
+  }
+  static boot() {
+    super.boot();
+    this.addTrait('ConvertToJson');
   }
   static listOption(qs) {
     qs.withArray = ['city'].concat(qs.withArray || []);

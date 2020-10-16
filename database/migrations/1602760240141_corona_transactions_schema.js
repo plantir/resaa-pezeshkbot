@@ -12,6 +12,8 @@ class CoronaTransactionsSchema extends Schema {
       table.json('bank_response');
       table.enum('status', ['unpaid', 'paid', 'returned']).defaultTo('unpaid');
       table.string('tracking_code');
+      table.text('description')
+      table.string('receipt')
       table.boolean('is_deleted').defaultTo(false);
       table.timestamps();
     });

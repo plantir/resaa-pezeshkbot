@@ -14,6 +14,8 @@ class CoronaOrdersSchema extends Schema {
       table.integer('total_amount');
       table.integer('prepay_amount');
       table.json('discount');
+      table.json('selected_test');
+      table.integer('count');
       table
         .integer('city_id')
         .unsigned()

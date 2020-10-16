@@ -18,6 +18,7 @@ class CoronaTestsSchema extends Schema {
       table.integer('prepay_amount');
       table.string('color');
       table.text('description');
+      table.json('discount_roles');
       table.boolean('is_deleted').defaultTo(false);
       table.timestamps();
     });
