@@ -37,6 +37,7 @@ class PaymentController {
       );
     }
     transaction.bank_response = bank_response;
+    transaction.tracking_code = bank_response.RRN
     if (bank_response.RefNum) {
       let res = await this.gw.VerifyTransaction(bank_response.RefNum);
       if (res[0].result.$value > 0) {
