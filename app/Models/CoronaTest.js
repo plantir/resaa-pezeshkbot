@@ -29,7 +29,7 @@ class CoronaTest extends Model {
     return super.listOption(qs);
   }
   city() {
-    return this.belongsTo('App/Models/CoronaCity');
+    return this.belongsTo('App/Models/CoronaCity','city_id');
   }
 }
 

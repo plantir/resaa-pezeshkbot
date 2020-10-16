@@ -1,6 +1,5 @@
 'use strict';
 const CoronaOrder = use('App/Models/CoronaOrder');
-const CoronaTransaction = use('App/Models/CoronaTransaction');
 const axios = require('axios');
 const Env = use('Env');
 class CoronaOrderController {
