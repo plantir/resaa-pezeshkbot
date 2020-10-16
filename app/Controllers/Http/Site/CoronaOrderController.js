@@ -33,10 +33,10 @@ class CoronaOrderController {
       }
     );
     if (res.status == 1) {
-      return {
+      return response.status(200).json({
         token: res.token,
         address: 'https://sep.shaparak.ir/MobilePG/MobilePayment',
-      };
+      });
     } else {
       response.status(400).json(res.data);
     }
