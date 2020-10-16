@@ -13,6 +13,8 @@ class CoronaOrdersSchema extends Schema {
       table.string('user_address');
       table.integer('total_amount');
       table.integer('prepay_amount');
+      table.integer('role_discount_amount');
+      table.integer('payable_amount');
       table.json('discount');
       table.json('selected_test');
       table.integer('count');

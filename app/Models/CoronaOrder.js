@@ -16,6 +16,8 @@ class CoronaOrder extends Model {
       'status',
       'prepay_amount',
       'total_amount',
+      'role_discount_amount',
+      'payable_amount',
       'discount',
       'count',
       'selected_test',
@@ -40,11 +42,7 @@ class CoronaOrder extends Model {
   }
 
   transaction() {
-    return this.hasOne(
-      'App/Models/CoronaTransaction',
-      'id',
-      'order_id',
-    );
+    return this.hasOne('App/Models/CoronaTransaction', 'id', 'order_id');
   }
 
   test() {

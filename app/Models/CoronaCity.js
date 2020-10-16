@@ -3,10 +3,10 @@
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('BaseModel');
 
-class City extends Model {
+class CoronaCity extends Model {
   static get allowField() {
     return ['name', 'sort_order'];
   }
 }
 
-module.exports = City;
+module.exports = CoronaCity;
