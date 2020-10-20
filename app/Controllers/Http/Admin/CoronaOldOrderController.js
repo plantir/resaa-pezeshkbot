@@ -10,11 +10,9 @@ class CoronaOldOrderController extends Resource {
     this.Model = use('App/Models/CoronaOldOrder');
   }
 
-  async exportExcel({ response }) {
-    let orders = await this.Model.query()
-      .where({ payment_status: 'paid' })
-      .where({ is_deleted: false })
-      .fetch();
+  async exportExcel({ response,request }) {
+    let { filters } = request.get();
+    let orders = await this.Model.listOption({ filters, perPage: 10000 });
     var workbook = new Excel.Workbook();
     var worksheet = workbook.addWorksheet('corona_test');
     worksheet.columns = [
@@ -38,7 +36,7 @@ class CoronaOldOrderController extends Resource {
         }[order.doctor_id],
         amount: order.amount,
         date: moment(order.created_at).format('jYYYY/jMM/jDD'),
-        time: moment(order.created_at).format('HH:MM'),
+        time: moment(order.created_at).format('HH:mm'),
       });
     }
     var fileName = `لیست سفارشات.xlsx`;

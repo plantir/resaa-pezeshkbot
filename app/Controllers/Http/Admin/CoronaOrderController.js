@@ -11,7 +11,6 @@ class CoronaOldOrderController extends Resource {
 
   async exportExcel({ response, request }) {
     let { filters } = request.get();
-
     let orders = await this.Model.listOption({ filters, perPage: 10000 });
     var workbook = new Excel.Workbook();
     var worksheet = workbook.addWorksheet('corona_test');
