@@ -9,20 +9,25 @@ class CoronaOldOrderController extends Resource {
     this.Model = use('App/Models/CoronaOrder');
   }
 
-  async exportExcel({ response }) {
-    let orders = await this.Model.query()
-      .with('transaction')
-      .whereHas('transaction', (builder) => builder.where({ status: 'paid' }))
-      .where({ is_deleted: false })
-      .fetch();
+  async exportExcel({ response, request }) {
+    let { filters } = request.get();
+
+    let orders = await this.Model.listOption({ filters, perPage: 10000 });
     var workbook = new Excel.Workbook();
     var worksheet = workbook.addWorksheet('corona_test');
     worksheet.columns = [
       { header: 'id', key: 'id', width: 15 },
       { header: 'نام', key: 'name', width: 15 },
       { header: 'موبایل', key: 'mobile', width: 12 },
+      { header: 'کد ملی', key: 'nationalcode', width: 12 },
       { header: 'تست', key: 'test_type', width: 12 },
-      { header: 'مبلغ', key: 'amount', width: 11 },
+      { header: 'تعداد', key: 'count', width: 12 },
+      { header: 'مبلغ کل', key: 'total_amount', width: 11 },
+      { header: 'مبلغ پیش پرداخت', key: 'prepay_amount', width: 11 },
+      { header: 'تخفیف روی تعداد', key: 'role_discount_amount', width: 11 },
+      { header: 'کد تخفیف', key: 'discount_amount', width: 11 },
+      { header: 'باقی مانده', key: 'payable_amount', width: 11 },
+      { header: 'وضعیت پرداخت', key: 'transaciton_status', width: 11 },
       { header: 'تاریخ', key: 'date', width: 11 },
       { header: 'زمان', key: 'time', width: 11 },
     ];
@@ -31,10 +36,17 @@ class CoronaOldOrderController extends Resource {
         id: order.id,
         name: order.user_fullname,
         mobile: order.user_mobile,
-        test_type: order.test.name,
-        amount: order.total_amount,
+        nationalcode: order.user_nationalcode,
+        test_type: order.selected_test.name,
+        count: order.count,
+        total_amount: order.total_amount,
+        prepay_amount: order.prepay_amount,
+        role_discount_amount: order.role_discount_amount,
+        discount_amount: order.discount_amount,
+        payable_amount: order.payable_amount,
+        transaciton_status: order.$relations.transaction.status,
         date: moment(order.created_at).format('jYYYY/jMM/jDD'),
-        time: moment(order.created_at).format('HH:MM'),
+        time: moment(order.created_at).format('HH:mm'),
       });
     }
     fs.mkdirSync('tmp/report/', { recursive: true });
