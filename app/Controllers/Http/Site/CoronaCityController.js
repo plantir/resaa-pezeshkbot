@@ -3,7 +3,10 @@ const City = use('App/Models/CoronaCity');
 const CoronaTest = use('App/Models/CoronaTest');
 class CoronaCityController {
   async index() {
-    return City.query().with('tests').where({ is_deleted: false }).fetch();
+    return City.query()
+      .with('tests', (builder) => builder.where({ is_deleted: false }))
+      .where({ is_deleted: false })
+      .fetch();
   }
 
   async tests({ params: { city_id } }) {
