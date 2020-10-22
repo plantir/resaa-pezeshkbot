@@ -4,6 +4,7 @@ const CoronaTest = use('App/Models/CoronaTest');
 const CoronaDiscount = use('App/Models/CoronaDiscount');
 const axios = require('axios');
 const Env = use('Env');
+const moment = use('moment');
 class CoronaOrderController {
   async request({ request }) {
     let data = request.only(CoronaOrder.allowField);
@@ -35,11 +36,16 @@ class CoronaOrderController {
   async paymentRequest({ response, params: { id } }) {
     let order = await CoronaOrder.find(id);
     let transaction = await order.transaction().fetch();
+    let created_at = moment().format('YYYY-MM-DD HH:mm:ss');
+    transaction.created_at = created_at;
+    order.created_at = created_at;
+    await transaction.save();
+    await order.save();
     let { data } = await axios.post(
       'https://sep.shaparak.ir/MobilePG/MobilePayment',
       {
         Action: 'Token',
-        Amount: +transaction.amount*10,
+        Amount: +transaction.amount * 10,
         TerminalId: Env.get('SAMAN_TERMINAL_ID'),
         ResNum: transaction.id,
         RedirectUrl: Env.get('BANK_RETURN_URL'),

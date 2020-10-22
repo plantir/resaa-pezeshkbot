@@ -22,6 +22,8 @@ class CoronaOrder extends Model {
       'count',
       'selected_test',
       'description',
+      'is_checked'
+
     ];
   }
   static get jsonFields() {

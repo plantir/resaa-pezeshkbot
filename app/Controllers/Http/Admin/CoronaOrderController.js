@@ -73,5 +73,12 @@ class CoronaOldOrderController extends Resource {
     options.filters = JSON.stringify(options.filters);
     return this.Model.listOption(options);
   }
+
+  async changeIsChecked({ request, params: { id } }) {
+    let order = await this.Model.find(id);
+    let { is_checked } = request.post();
+    order.is_checked = is_checked;
+    return order.save();
+  }
 }
 module.exports = CoronaOldOrderController;

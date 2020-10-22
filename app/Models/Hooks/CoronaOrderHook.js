@@ -3,9 +3,9 @@
 const CoronaOrderHook = (exports = module.exports = {});
 
 CoronaOrderHook.afterCreate = async (modelInstance) => {
-  let transaction = await modelInstance.transaction().create({
+  await modelInstance.transaction().create({
     amount: modelInstance.prepay_amount,
   });
-  modelInstance.transaction_id = transaction.id;
-  transaction.save();
+  // modelInstance.transaction_id = transaction.id;
+  // transaction.save();
 };
