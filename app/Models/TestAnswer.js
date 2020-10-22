@@ -22,6 +22,9 @@ class TestAnswer extends Model {
     this.addHook('beforeCreate', 'TestAnswerHook.beforeCreate');
     this.addTrait('ConvertToJson');
   }
+  static get allowField(){
+    return ['description']
+  }
   static get hidden() {
     return ['doctor_answer'];
   }

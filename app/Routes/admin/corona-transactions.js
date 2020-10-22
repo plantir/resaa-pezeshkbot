@@ -3,10 +3,8 @@ const Route = use('BaseRoute');
 
 // route for doctors
 Route.group(() => {
-  Route.get('flow', 'CoronaTestController.flow');
-  Route.get('exportExcel', 'CoronaTestController.exportExcel');
-  Route.customResource('', 'CoronaTestController');
+  Route.customResource('', 'CoronaTransactionController');
 })
   .namespace('Admin')
-  .prefix('admin/corona_test')
+  .prefix('admin/corona-transactions')
   .middleware(['auth', 'role:administrator,corona_admin']);

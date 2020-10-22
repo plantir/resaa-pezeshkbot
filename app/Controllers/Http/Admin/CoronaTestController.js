@@ -1,72 +1,35 @@
 'use strict';
+
 const Resource = use('Resource');
-const Excel = use('exceljs');
-const moment = require('moment-jalaali');
-const fs = use('fs');
-const Env = use('Env');
+
 class CoronaTestController extends Resource {
   constructor() {
     super();
     this.Model = use('App/Models/CoronaTest');
   }
 
-  async exportExcel({ response }) {
-    let orders = await this.Model.query()
-      .where({ payment_status: 'paid' })
-      .where({ is_deleted: false })
-      .fetch();
-    var workbook = new Excel.Workbook();
-    var worksheet = workbook.addWorksheet('corona_test');
-    worksheet.columns = [
-      { header: 'id', key: 'id', width: 15 },
-      { header: 'نام', key: 'name', width: 15 },
-      { header: 'موبایل', key: 'mobile', width: 12 },
-      { header: 'تست', key: 'test_type', width: 12 },
-      { header: 'مبلغ', key: 'amount', width: 11 },
-      { header: 'تاریخ', key: 'date', width: 11 },
-      { header: 'زمان', key: 'time', width: 11 },
-    ];
-    for (let order of orders.rows) {
-      worksheet.addRow({
-        id: order.id,
-        name: order.name,
-        mobile: order.mobile,
-        test_type: {
-          2304: 'تست AntyBody',
-          2305: 'تست PCR',
-          2306: 'PCR & AntyBody',
-        }[order.doctor_id],
-        amount: order.amount,
-        date: moment(order.created_at).format('jYYYY/jMM/jDD'),
-        time: moment(order.created_at).format('HH:MM'),
-      });
+  async store({ response, request }) {
+    let data = request.only(this.Model.allowField || []);
+    if (data.discount_roles) {
+      data.discount_roles = data.discount_roles.filter(
+        (item) => item.count && item.discount
+      );
     }
-    var fileName = `لیست سفارشات.xlsx`;
-    fs.mkdirSync('tmp/report/', { recursive: true });
-    response.header(
-      'Content-Type',
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-    );
-    response.header(
-      'Content-Disposition',
-      'attachment; filename=' + 'Report.xlsx'
-    );
-    return workbook.xlsx.write(response.response);
-    return { file: `${Env.get('APP_URL')}/admin/report/${fileName}` };
+    let item = await this.Model.create(data);
+    response.status(201).send(item);
   }
-
-  async flow({ request }) {
-    let options = request.get();
-    if (options.filters) {
-      options.filters = JSON.parse(options.filters);
-    } else {
-      options.filters = [];
+  async update({ response, request, params: { id } }) {
+    let data = request.only(this.Model.allowField || []);
+    if (data.discount_roles) {
+      data.discount_roles = data.discount_roles.filter(
+        (item) => item.count && item.discount
+      );
     }
-    options.filters.push('payment_status:paid');
-    options.filters.push('status:canceled:<>');
-    options.filters.push('status:test_result_posted:<>');
-    options.filters = JSON.stringify(options.filters);
-    return this.Model.listOption(options);
+    let item = await this.Model.find(id);
+    item.merge(data);
+    await item.save();
+    response.status(200).send(item);
   }
 }
+
 module.exports = CoronaTestController;

@@ -23,6 +23,7 @@ const providers = [
   'vrwebdesign-adonis/BaseModel/providers/BaseModelProvider',
   'vrwebdesign-adonis/BaseRoute/providers/BaseRouteProvider',
   'vrwebdesign-adonis/Helper/providers/HelperProvider',
+  'vrwebdesign-adonis/Providers/sms',
   '@rocketseat/adonis-bull/providers/Bull',
   // 'vrwebdesign-adonis/Providers/kue/providers/KueProvider',
   // 'vrwebdesign-adonis/Providers/sms',
