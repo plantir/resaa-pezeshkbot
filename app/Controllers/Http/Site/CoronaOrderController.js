@@ -74,15 +74,21 @@ class CoronaOrderController {
     let { nationalCode, mobile } = request.get();
     return CoronaOrder.query()
       .where({
-        mobile,
-        nationalCode,
+        user_mobile: mobile,
+        user_nationalcode: nationalCode,
       })
+      .with('transaction', (builder) =>
+        builder.setVisible(['status', 'tracking_code'])
+      )
       .setVisible([
+        'id',
         'created_at',
+        'selected_test',
         'status',
-        'payment_status',
-        'amount',
-        'doctor_id',
+        'count',
+        'total_amount',
+        'prepay_amount',
+        'payable_amount',
       ])
       .where({ is_deleted: false })
       .fetch();
