@@ -4,7 +4,7 @@ const VERIFY_URL = 'https://verify.sep.ir/payments/referencepayment.asmx?WSDL';
 const CoronaTransaction = use('App/Models/CoronaTransaction');
 const Logger = use('Logger');
 const Env = use('Env');
-class SamanGetwat {
+class SamanGetway {
   constructor(MID) {
     this.MID = MID;
   }
@@ -23,7 +23,7 @@ class SamanGetwat {
 
 class PaymentController {
   constructor() {
-    this.gw = new SamanGetwat(Env.get('SAMAN_TERMINAL_ID'));
+    this.gw = new SamanGetway(Env.get('SAMAN_TERMINAL_ID'));
   }
   async callback({ request, response }) {
     let bank_response = request.post();
