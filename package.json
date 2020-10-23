@@ -9,7 +9,7 @@
     "test": "node ace test",
     "release": "git push origin master && git push origin develop",
     "release:dist": "git push dist master && git push dist develop",
-    "release:tfs": "git push tfs master && git push tfs develop"
+    "release:tfs": "git push tfs develop"
   },
   "keywords": [
     "adonisjs",
@@ -44,6 +44,7 @@
     "node-telegram-bot-api": "^0.40.0",
     "request": "^2.88.0",
     "sharp": "^0.26.1",
+    "soap": "^0.33.0",
     "vrwebdesign-adonis": "^1.x"
   },
   "devDependencies": {},

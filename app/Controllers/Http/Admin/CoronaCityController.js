@@ -3,7 +3,7 @@ const Resource = use('Resource');
 class CoronaCityController extends Resource {
   constructor() {
     super();
-    this.Model = use('App/Models/City');
+    this.Model = use('App/Models/CoronaCity');
   }
 }
 
