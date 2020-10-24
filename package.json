@@ -7,10 +7,9 @@
   "scripts": {
     "start": "node server.js",
     "test": "node ace test",
-    "release": "git push origin master && git push origin develop",
-    "release:dist": "git push dist master && git push dist develop",
-    "release:tfs": "git push tfs develop",
-    "release:all": "yarn release && yarn release:dist && yarn release:tfs"
+    "release": "yarn release:origin && yarn release:dist",
+    "release:origin": "git push origin master && git push origin develop",
+    "release:dist": "git push tfs develop && git push tfs master"
   },
   "keywords": [
     "adonisjs",
