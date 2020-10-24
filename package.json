@@ -9,7 +9,8 @@
     "test": "node ace test",
     "release": "git push origin master && git push origin develop",
     "release:dist": "git push dist master && git push dist develop",
-    "release:tfs": "git push tfs develop"
+    "release:tfs": "git push tfs develop",
+    "release:all": "yarn release && yarn release:dist && yarn release:tfs"
   },
   "keywords": [
     "adonisjs",
