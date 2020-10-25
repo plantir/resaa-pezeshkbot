@@ -1,18 +1,5 @@
-const axios = require('axios');
+let digits = 8;
+let token = Math.random().toString().slice(2,digits+2);
 
-async function boot() {
-  try {
-    let res = await axios.post('https://sep.shaparak.ir/MobilePG/MobilePayment', {
-      Action: 'Token',
-      Amount: 10000,
-      TerminalId: 11679641,
-      ResNum: 1,
-      RedirectUrl: 'https://resaa.net/callback',
-    });
-    console.log(res);
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-boot();
+console.log(token);
+// return token;
