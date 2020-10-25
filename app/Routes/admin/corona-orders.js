@@ -8,7 +8,11 @@ Route.group(() => {
   Route.get('flow', 'CoronaOrderController.flow');
   Route.get('exportExcel', 'CoronaOrderController.exportExcel');
   Route.customResource('', 'CoronaOrderController');
-  Route.patch(':id/change-is-checked','CoronaOrderController.changeIsChecked')
+  Route.patch(':id/change-is-called', 'CoronaOrderController.changeIsCalled');
+  Route.patch(
+    ':id/change-is-negotiated',
+    'CoronaOrderController.changeIsNegotiated'
+  );
 })
   .namespace('Admin')
   .prefix('admin/corona-orders')

@@ -74,10 +74,17 @@ class CoronaOldOrderController extends Resource {
     return this.Model.listOption(options);
   }
 
-  async changeIsChecked({ request, params: { id } }) {
+  async changeIsCalled({ request, params: { id } }) {
     let order = await this.Model.find(id);
-    let { is_checked } = request.post();
-    order.is_checked = is_checked;
+    let { is_called } = request.post();
+    order.is_called = is_called;
+    return order.save();
+  }
+
+  async changeIsNegotiated({ request, params: { id } }) {
+    let order = await this.Model.find(id);
+    let { is_negotiated } = request.post();
+    order.is_negotiated = is_negotiated;
     return order.save();
   }
 }
