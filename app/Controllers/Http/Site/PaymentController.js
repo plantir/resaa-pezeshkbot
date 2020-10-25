@@ -29,7 +29,7 @@ class PaymentController {
   async callback({ request, response }) {
     let bank_response = request.post();
     Logger.info('bankResponse', bank_response);
-    let order = await CoronaOrder.where({ guid: bank_response.ResNum }).first();
+    let order = await CoronaOrder.query().where({ guid: bank_response.ResNum }).first();
     let transaction = await order.transaction().fetch();
 
     if (!order) {
