@@ -51,7 +51,7 @@ class PaymentController {
     response.redirect(
       `${Env.get(
         'RESAA_SITE'
-      )}/corona-test/callback?chargeRequestId=${encodeURIComponent(
+      )}/corona-test/callback?requestId=${encodeURIComponent(
         bank_response.ResNum
       )}`
     );
