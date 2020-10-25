@@ -32,6 +32,7 @@ class CoronaOrder extends Model {
   static boot() {
     super.boot();
     this.addTrait('ConvertToJson');
+    this.addHook('beforeCreate', 'CoronaOrderHook.beforeCreate');
     this.addHook('afterCreate', 'CoronaOrderHook.afterCreate');
   }
   static listOption(qs) {
