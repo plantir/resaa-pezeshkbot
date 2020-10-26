@@ -5,6 +5,7 @@ Route.group(() => {
   Route.post(':id/paymentRequest', 'CoronaOrderController.paymentRequest');
   Route.post('callback', 'CoronaOrderController.callback');
   Route.get('tracking', 'CoronaOrderController.tracking');
+  Route.get(':guid', 'CoronaOrderController.show');
 })
   .prefix('corona-orders')
   .namespace('Site');

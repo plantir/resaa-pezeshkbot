@@ -47,7 +47,7 @@ class CoronaOrderController {
         Action: 'Token',
         Amount: +transaction.amount * 10,
         TerminalId: Env.get('SAMAN_TERMINAL_ID'),
-        ResNum: transaction.id,
+        ResNum: order.guid,
         RedirectUrl: Env.get('BANK_RETURN_URL'),
       }
     );
@@ -61,13 +61,24 @@ class CoronaOrderController {
     }
   }
   async callback({ request, response }) {
-    let { chargeRequestId } = request.post();
+    let { requestId } = request.post();
     let corona_order = await CoronaOrder.query()
-      .whereHas('transaction', (builder) =>
-        builder.where({ id: chargeRequestId })
-      )
+      .where({ guid: requestId })
+      .with('transaction')
+      .with('city')
+      .setVisible([
+        'guid',
+        'user_fullname',
+        'selected_test',
+        'created_at',
+        'total_amount',
+        'prepay_amount',
+        'role_discount_amount',
+        'discount',
+        'payable_amount',
+      ])
       .first();
-    await corona_order.loadMany(['transaction', 'city']);
+    // await corona_order.loadMany(['transaction', 'city']);
     return corona_order;
   }
   async tracking({ request }) {
@@ -92,6 +103,28 @@ class CoronaOrderController {
       ])
       .where({ is_deleted: false })
       .fetch();
+  }
+
+  async show({ params: { guid } }) {
+    return CoronaOrder.query()
+      .with('city', (builder) => builder.with('tests'))
+      .setVisible([
+        'guid',
+        'user_fullname',
+        'user_mobile',
+        'user_nationalcode',
+        'user_address',
+        'count',
+        'selected_test',
+        'created_at',
+        'total_amount',
+        'prepay_amount',
+        'role_discount_amount',
+        'discount',
+        'payable_amount',
+      ])
+      .where({ guid })
+      .firstOrFail();
   }
 }
 

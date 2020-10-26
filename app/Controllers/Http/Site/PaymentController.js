@@ -2,6 +2,7 @@
 const soap = require('soap');
 const VERIFY_URL = 'https://verify.sep.ir/payments/referencepayment.asmx?WSDL';
 const CoronaTransaction = use('App/Models/CoronaTransaction');
+const CoronaOrder = use('App/Models/CoronaOrder');
 const Logger = use('Logger');
 const Env = use('Env');
 class SamanGetway {
@@ -28,8 +29,10 @@ class PaymentController {
   async callback({ request, response }) {
     let bank_response = request.post();
     Logger.info('bankResponse', bank_response);
-    let transaction = await CoronaTransaction.find(bank_response.ResNum);
-    if (!transaction) {
+    let order = await CoronaOrder.query().where({ guid: bank_response.ResNum }).first();
+    let transaction = await order.transaction().fetch();
+
+    if (!order) {
       response.redirect(
         `${Env.get('SITE_URL')}/bank-return?ResNum=${encodeURIComponent(
           data.ResNum
@@ -37,7 +40,7 @@ class PaymentController {
       );
     }
     transaction.bank_response = bank_response;
-    transaction.tracking_code = bank_response.RRN
+    transaction.tracking_code = bank_response.RRN;
     if (bank_response.RefNum) {
       let res = await this.gw.VerifyTransaction(bank_response.RefNum);
       if (res[0].result.$value > 0) {
@@ -48,7 +51,7 @@ class PaymentController {
     response.redirect(
       `${Env.get(
         'RESAA_SITE'
-      )}/corona-test/callback?chargeRequestId=${encodeURIComponent(
+      )}/corona-test/callback?requestId=${encodeURIComponent(
         bank_response.ResNum
       )}`
     );
