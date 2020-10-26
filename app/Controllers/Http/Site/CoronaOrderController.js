@@ -104,6 +104,28 @@ class CoronaOrderController {
       .where({ is_deleted: false })
       .fetch();
   }
+
+  async show({ params: { guid } }) {
+    return CoronaOrder.query()
+      .with('city', (builder) => builder.with('tests'))
+      .setVisible([
+        'guid',
+        'user_fullname',
+        'user_mobile',
+        'user_nationalcode',
+        'user_address',
+        'count',
+        'selected_test',
+        'created_at',
+        'total_amount',
+        'prepay_amount',
+        'role_discount_amount',
+        'discount',
+        'payable_amount',
+      ])
+      .where({ guid })
+      .firstOrFail();
+  }
 }
 
 module.exports = CoronaOrderController;
