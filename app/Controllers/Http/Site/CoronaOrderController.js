@@ -34,7 +34,7 @@ class CoronaOrderController {
   }
 
   async paymentRequest({ response, params: { guid } }) {
-    let order = await CoronaOrder.query().where({ guid }).firstOrFail(id);
+    let order = await CoronaOrder.query().where({ guid }).firstOrFail();
     let transaction = await order.transaction().fetch();
     let created_at = moment().format('YYYY-MM-DD HH:mm:ss');
     transaction.created_at = created_at;
