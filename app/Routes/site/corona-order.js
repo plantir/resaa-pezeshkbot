@@ -2,7 +2,7 @@
 const Route = use('BaseRoute');
 Route.group(() => {
   Route.post('', 'CoronaOrderController.request');
-  Route.post(':id/paymentRequest', 'CoronaOrderController.paymentRequest');
+  Route.post(':guid/paymentRequest', 'CoronaOrderController.paymentRequest');
   Route.post('callback', 'CoronaOrderController.callback');
   Route.get('tracking', 'CoronaOrderController.tracking');
   Route.get(':guid', 'CoronaOrderController.show');
