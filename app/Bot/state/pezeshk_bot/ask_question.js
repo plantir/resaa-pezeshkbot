@@ -26,6 +26,7 @@ bot.on('message', async (msg) => {
     return;
   }
   let title = msg.text.split('(')[0].trim();
+  // if(title.)
   let speciality = await Speciality.findBy({ title });
   if (!speciality) {
     return bot.sendMessage(msg.chat.id, 'لطفا تخصص خود را از لیست انتخاب کنید');

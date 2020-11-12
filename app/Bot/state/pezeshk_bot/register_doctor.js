@@ -57,7 +57,10 @@ bot.on('callback_query', async ({ data, from }) => {
     let doctor_id = data.split(':')[1];
     let resaa_doctor = await Doctor.get(doctor_id);
 
-    let doctor = await Doctor.findBy({ chat_id: from.id });
+    let doctor = await Doctor.query()
+      .where({ is_deleted: false })
+      .where({ chat_id: from.id })
+      .first();
     if (!doctor) {
       doctor = new Doctor();
     }

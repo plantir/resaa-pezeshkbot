@@ -13,7 +13,7 @@ class Speciality extends Model {
   static get allowField() {
     return ['title', 'description'];
   }
-  static async get({ has_doctor = true }) {
+  static async get({ has_doctor } = { has_doctor: true }) {
     let redis_name = has_doctor ? 'specialities_has_doctor' : 'specialities';
     let cached_specialities = await Redis.get(redis_name);
     if (cached_specialities) {
@@ -28,7 +28,7 @@ class Speciality extends Model {
       console.log(error);
     }
   }
-  static reCache({ has_doctor }) {
+  static reCache({ has_doctor } = { has_doctor: true }) {
     return new Promise(async (resolve, reject) => {
       try {
         let query = this.query();
