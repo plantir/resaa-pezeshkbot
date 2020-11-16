@@ -33,7 +33,7 @@ class Speciality extends Model {
       try {
         let query = this.query();
         if (has_doctor) {
-          query = query.has('doctors');
+          query = query.whereHas('doctors',builder => builder.where({is_deleted:false}));
         }
         const specialities = await query.fetch();
         let redis_name = has_doctor
