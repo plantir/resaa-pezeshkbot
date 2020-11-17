@@ -128,7 +128,7 @@ module.exports = {
     |
     */
     //'/admin/test_answer/:id/reply'
-    processManually: ['/upload'],
+    processManually: ['/upload','/admin/crawled-doctors/import'],
 
     /*
     |--------------------------------------------------------------------------

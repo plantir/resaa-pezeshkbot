@@ -10,8 +10,7 @@ const Logger = use('Logger');
 bot.onText(_enum.regex_state.specialities, async (msg) => {
   try {
     let user = await bot.getUser(msg);
-    user.state = _enum.state.specialities;
-    await User.update_redis(user);
+
     let message = `لطفا ابتدا مشخص کنید سوال شما مربوط به کدام یک از تخصص های زیر می باشد\nاگر نمی دانید سوالتان به کدام تخصص مربوط می شود می توانید از پزشکان عمومی سوال بپرسید.  `;
     let options = {
       reply_markup: {
@@ -40,8 +39,9 @@ bot.onText(_enum.regex_state.specialities, async (msg) => {
         text: '🏠 بازگشت به خانه',
       },
     ]);
-
-    bot.sendMessage(msg.chat.id, message, options);
+    await bot.sendMessage(msg.chat.id, message, options);
+    user.state = _enum.state.specialities;
+    await User.update_redis(user);
   } catch (error) {
     Logger.error(error);
   }

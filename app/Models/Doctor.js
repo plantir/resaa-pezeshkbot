@@ -17,7 +17,7 @@ const User = use('App/Models/User');
 class Doctor extends Model {
   static boot() {
     super.boot();
-    this.addHook('afterCreate', 'DoctorHook.afterCreate');
+    this.addHook('afterSave', 'DoctorHook.afterSave');
   }
   static get fields() {}
   static get allowField() {

@@ -11,7 +11,7 @@ bot.onText(/mychatid/, async (msg) => {
   bot.sendMessage(msg.chat.id, msg.chat.id);
 });
 bot.onText(/شروع|بازگشت به خانه|start/i, async (msg) => {
-  let doctor = await Doctor.findBy({ chat_id: msg.chat.id });
+  let doctor = await Doctor.query().where({is_deleted:false}).where({ chat_id: msg.chat.id }).first();
   if (doctor) {
     let message = `به رسا خوش آمدید`;
     /** @type {import ('node-telegram-bot-api').SendMessageOptions} */

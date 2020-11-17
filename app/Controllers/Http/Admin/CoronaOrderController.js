@@ -29,6 +29,7 @@ class CoronaOldOrderController extends Resource {
       { header: 'وضعیت پرداخت', key: 'transaciton_status', width: 11 },
       { header: 'تاریخ', key: 'date', width: 11 },
       { header: 'زمان', key: 'time', width: 11 },
+      { header: 'توضیحات', key: 'description', width: 11 },
     ];
     for (let order of orders.rows) {
       worksheet.addRow({
@@ -46,6 +47,7 @@ class CoronaOldOrderController extends Resource {
         transaciton_status: order.$relations.transaction.status,
         date: moment(order.created_at).format('jYYYY/jMM/jDD'),
         time: moment(order.created_at).format('HH:mm'),
+        description: order.description,
       });
     }
     fs.mkdirSync('tmp/report/', { recursive: true });
