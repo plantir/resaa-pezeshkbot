@@ -22,8 +22,9 @@ class CoronaOrder extends Model {
       'count',
       'selected_test',
       'description',
-      'is_checked'
-
+      'is_checked',
+      'sampler_id',
+      'labratory_id',
     ];
   }
   static get jsonFields() {
@@ -36,7 +37,7 @@ class CoronaOrder extends Model {
     this.addHook('afterCreate', 'CoronaOrderHook.afterCreate');
   }
   static listOption(qs) {
-    qs.withArray = ['city', 'test', 'transaction']; //.concat(qs.withArray || []);
+    qs.withArray = ['city', 'test', 'transaction', 'labratory', 'sampler']; //.concat(qs.withArray || []);
     return super.listOption(qs);
   }
 
@@ -50,6 +51,12 @@ class CoronaOrder extends Model {
 
   test() {
     return this.belongsTo('App/Models/CoronaTest', 'test_id');
+  }
+  labratory() {
+    return this.belongsTo('App/Models/CoronaLabratory','labratory_id');
+  }
+  sampler() {
+    return this.belongsTo('App/Models/CoronaSampler','sampler_id');
   }
 }
 
