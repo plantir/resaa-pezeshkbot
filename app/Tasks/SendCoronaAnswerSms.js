@@ -11,7 +11,7 @@ const SMS_Job = use('App/Jobs/Sms');
 const moment = use('moment');
 class SendReminderSm extends Task {
   static get schedule() {
-    return '10 * * * * *';
+    return '10 0 * * * *';
   }
 
   async handle() {
@@ -52,15 +52,15 @@ class SendReminderSm extends Task {
           .whereHas('transaction', (builder) =>
             builder.where({ status: 'paid' })
           );
-        // if (hours == 30) {
-        //   query = query.whereHas('city', (builder) =>
-        //     builder.where('name', 'like', '%فوری%')
-        //   );
-        // } else {
-        //   query = query.whereDoesntHave('city', (builder) =>
-        //     builder.where('name', 'like', '%فوری%')
-        //   );
-        // }
+        if (hours == 30) {
+          query = query.whereHas('city', (builder) =>
+            builder.where('name', 'like', '%فوری%')
+          );
+        } else {
+          query = query.whereDoesntHave('city', (builder) =>
+            builder.where('name', 'like', '%فوری%')
+          );
+        }
         let orders = await query.fetch();
         orders = orders.toJSON();
         resolve(orders);
