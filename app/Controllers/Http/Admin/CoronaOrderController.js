@@ -3,6 +3,8 @@ const Resource = use('Resource');
 const Excel = use('exceljs');
 const moment = require('moment-jalaali');
 const fs = use('fs');
+/** @type {import('lodash')} */
+const _ = use('lodash');
 class CoronaOldOrderController extends Resource {
   constructor() {
     super();
@@ -54,8 +56,10 @@ class CoronaOldOrderController extends Resource {
         description: order.description,
         city: order.$relations.city.name,
         tracking_code: order.$relations.transaction.tracking_code,
-        sampler: order.$relations.sampler?order.$relations.sampler.name:'',
-        labratory: order.$relations.labratory?order.$relations.labratory.name:'',
+        sampler: order.$relations.sampler ? order.$relations.sampler.name : '',
+        labratory: order.$relations.labratory
+          ? order.$relations.labratory.name
+          : '',
       });
     }
     fs.mkdirSync('tmp/report/', { recursive: true });
@@ -96,6 +100,12 @@ class CoronaOldOrderController extends Resource {
     let { is_negotiated } = request.post();
     order.is_negotiated = is_negotiated;
     return order.save();
+  }
+
+  async getCount({ request }) {
+    let { filters } = request.get();
+    let orders = await this.Model.listOption({ filters, perPage: 10000 });
+    return _.sumBy(orders.rows, 'count');
   }
 }
 module.exports = CoronaOldOrderController;
