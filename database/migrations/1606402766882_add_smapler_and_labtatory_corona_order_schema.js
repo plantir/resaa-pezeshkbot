@@ -10,12 +10,14 @@ class AddSmaplerAndLabtatoryCoronaOrderSchema extends Schema {
         .integer('labratory_id')
         .unsigned()
         .references('id')
-        .inTable('corona_labratories');
+        .inTable('corona_labratories')
+        .after('city_id');
       table
         .integer('sampler_id')
         .unsigned()
         .references('id')
-        .inTable('corona_samplers');
+        .inTable('corona_samplers')
+        .after('city_id');
       // alter table
     });
   }

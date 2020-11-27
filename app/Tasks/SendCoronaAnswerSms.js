@@ -1,6 +1,6 @@
 'use strict';
 
-const { rearg } = require('lodash');
+const { rearg, reject } = require('lodash');
 
 const Task = use('Task');
 const CoronaRetarget = use('App/Models/CoronaRetarget');
@@ -16,16 +16,20 @@ class SendReminderSm extends Task {
 
   async handle() {
     try {
-      this.send_retarget();
+      await this.send_retarget(30);
+      await this.send_retarget(54);
     } catch (error) {
       console.log(error);
     }
   }
-  async send_retarget() {
-    let orders = await this.get_orders(54);
-    for (let order of orders) {
-      this.send_patient_sms(order);
-    }
+  async send_retarget(hours) {
+    return new Promise(async (resolve, reject) => {
+      let orders = await this.get_orders(hours);
+      for (let order of orders) {
+        this.send_patient_sms(order);
+      }
+      resolve(true);
+    });
   }
 
   get_orders(hours = 54) {
@@ -41,14 +45,23 @@ class SendReminderSm extends Task {
           .minute(59)
           .second(59)
           .format('YYYY-MM-DD HH:mm:ss');
-        let orders = await CoronaOrder.query()
+        let query = CoronaOrder.query()
           .whereBetween('created_at', [start_time, end_time])
           .where({ is_deleted: false })
           .where('status', '<>', 'canceled')
           .whereHas('transaction', (builder) =>
             builder.where({ status: 'paid' })
-          )
-          .fetch();
+          );
+        if (hours == 30) {
+          query = query.whereHas('city', (builder) =>
+            builder.where('name', 'like', '%فوری%')
+          );
+        } else {
+          query = query.whereDoesntHave('city', (builder) =>
+            builder.where('name', 'like', '%فوری%')
+          );
+        }
+        let orders = await query.fetch();
         orders = orders.toJSON();
         resolve(orders);
       } catch (error) {
