@@ -21,6 +21,8 @@ class CoronaOrder extends Model {
       'discount',
       'count',
       'selected_test',
+      'is_forced',
+      'selected_services',
       'description',
       'is_checked',
       'sampler_id',
@@ -28,7 +30,7 @@ class CoronaOrder extends Model {
     ];
   }
   static get jsonFields() {
-    return ['discount', 'selected_test'];
+    return ['discount', 'selected_test', 'selected_services'];
   }
   static boot() {
     super.boot();
@@ -53,10 +55,10 @@ class CoronaOrder extends Model {
     return this.belongsTo('App/Models/CoronaTest', 'test_id');
   }
   labratory() {
-    return this.belongsTo('App/Models/CoronaLabratory','labratory_id');
+    return this.belongsTo('App/Models/CoronaLabratory', 'labratory_id');
   }
   sampler() {
-    return this.belongsTo('App/Models/CoronaSampler','sampler_id');
+    return this.belongsTo('App/Models/CoronaSampler', 'sampler_id');
   }
 }
 

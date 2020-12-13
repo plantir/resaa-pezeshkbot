@@ -15,10 +15,11 @@ class CoronaTest extends Model {
       'total_amount',
       'discount_roles',
       'description',
+      'force_option',
     ];
   }
   static get jsonFields() {
-    return ['discount_roles'];
+    return ['discount_roles', 'force_option'];
   }
   static boot() {
     super.boot();
@@ -29,7 +30,7 @@ class CoronaTest extends Model {
     return super.listOption(qs);
   }
   city() {
-    return this.belongsTo('App/Models/CoronaCity','city_id');
+    return this.belongsTo('App/Models/CoronaCity', 'city_id');
   }
 }
 
