@@ -2,6 +2,7 @@
 const CoronaOrder = use('App/Models/CoronaOrder');
 const CoronaTest = use('App/Models/CoronaTest');
 const CoronaDiscount = use('App/Models/CoronaDiscount');
+const CoronaService = use('App/Models/CoronaService');
 const axios = require('axios');
 const Env = use('Env');
 const moment = use('moment');
@@ -9,25 +10,52 @@ class CoronaOrderController {
   async request({ request }) {
     let data = request.only(CoronaOrder.allowField);
     let selected_test = await CoronaTest.findOrFail(data.selected_test.id);
-    data.prepay_amount = +selected_test.prepay_amount * +data.count;
-    data.total_amount = +selected_test.total_amount * +data.count;
-    data.payable_amount = data.total_amount - data.prepay_amount;
-    if (data.discount && data.discount.amount) {
-      let discount = await CoronaDiscount.findBy({ code: data.discount.code });
-      if (discount) {
-        data.prepay_amount -= +discount.amount;
-      }
+    data.city_id = selected_test.city_id;
+    data.prepay_amount = +selected_test.prepay_amount;
+    data.total_amount = +selected_test.total_amount;
+    if (
+      data.is_fast &&
+      selected_test.fast_option &&
+      selected_test.fast_option.available
+    ) {
+      data.prepay_amount += +selected_test.fast_option.prepay_amount;
+      data.total_amount += +selected_test.fast_option.total_amount;
     }
-    if (data.role_discount_amount) {
+
+    if (selected_test.discount_roles) {
       let matchDiscount = selected_test.discount_roles
         .filter((item) => +data.count >= +item.count)
         .sort((a, b) => {
           return +b.count - +a.count;
         });
       if (matchDiscount && matchDiscount.length) {
-        data.payable_amount -= +data.count * +matchDiscount[0].discount;
+        data.role_discount_amount = +matchDiscount[0].discount;
+        data.total_amount -= data.role_discount_amount;
       }
     }
+    if (data.selected_services) {
+      data.selected_services = await Promise.all(
+        data.selected_services.map(async (id) => {
+          let service = await CoronaService.query()
+            .where({ id })
+            .where({ is_deleted: false })
+            .first();
+          if (service) {
+            data.total_amount += service.price;
+          }
+          return service.toJSON();
+        })
+      );
+    }
+    data.total_amount *= data.count;
+    data.prepay_amount *= data.count;
+    if (data.discount && data.discount.amount) {
+      let discount = await CoronaDiscount.findBy({ code: data.discount.code });
+      if (discount) {
+        data.prepay_amount -= +discount.amount;
+      }
+    }
+    data.payable_amount = data.total_amount - data.prepay_amount;
     let order = await CoronaOrder.create(data);
     await order.load('city');
     return order;
@@ -116,15 +144,22 @@ class CoronaOrderController {
         'user_address',
         'count',
         'selected_test',
+        'selected_services',
         'created_at',
         'total_amount',
         'prepay_amount',
         'role_discount_amount',
+        'is_fast',
         'discount',
         'payable_amount',
       ])
       .where({ guid })
       .firstOrFail();
+  }
+  async verify({ params: { guid } }) {
+    let test = await CoronaOrder.query().where({ guid }).firstOrFail();
+    test.is_verified = true;
+    return test.save();
   }
 }
 

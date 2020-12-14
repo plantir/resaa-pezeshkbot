@@ -1,22 +1,22 @@
-'use strict';
+'use strict'
 
 /** @type {import('@adonisjs/lucid/src/Schema')} */
-const Schema = use('Schema');
+const Schema = use('Schema')
 
-class AddIsForceToOrderSchema extends Schema {
+class AddIsVerifiedSchema extends Schema {
   up() {
     this.table('corona_orders', (table) => {
       // alter table
-      table.boolean('is_fast').defaultTo('false').after('selected_test');
+      table.boolean('is_verified').defaultTo('false').after('is_fast');
     });
   }
 
   down() {
     this.table('corona_orders', (table) => {
       // reverse alternations
-      table.dropColumn('is_fast');
+      table.dropColumn('is_verified');
     });
   }
 }
 
-module.exports = AddIsForceToOrderSchema;
+module.exports = AddIsVerifiedSchema

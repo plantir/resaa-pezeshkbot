@@ -11,15 +11,16 @@ class CoronaTest extends Model {
       'sort_order',
       'description',
       'city_id',
+      'result_time',
       'prepay_amount',
       'total_amount',
       'discount_roles',
       'description',
-      'force_option',
+      'fast_option',
     ];
   }
   static get jsonFields() {
-    return ['discount_roles', 'force_option'];
+    return ['discount_roles', 'fast_option'];
   }
   static boot() {
     super.boot();

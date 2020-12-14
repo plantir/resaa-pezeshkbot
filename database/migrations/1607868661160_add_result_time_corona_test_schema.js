@@ -3,20 +3,20 @@
 /** @type {import('@adonisjs/lucid/src/Schema')} */
 const Schema = use('Schema');
 
-class AddDescTestSchema extends Schema {
+class AddResultTimeCoronaTestSchema extends Schema {
   up() {
     this.table('corona_tests', (table) => {
-      table.json('fast_option').after('description');
       // alter table
+      table.integer('result_time').unsigned().after('color');
     });
   }
 
   down() {
     this.table('corona_tests', (table) => {
-      table.dropColumn('fast_option');
       // reverse alternations
+      table.dropColumn('result_time');
     });
   }
 }
 
-module.exports = AddDescTestSchema;
+module.exports = AddResultTimeCoronaTestSchema;
