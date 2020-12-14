@@ -75,6 +75,11 @@ class BotServiceController {
       throw new Error(error);
     }
   }
+
+  async patients({ response, request }) {
+    let data = await User.listOption(request.get() || null);
+    response.send(data);
+  }
 }
 
 module.exports = BotServiceController;

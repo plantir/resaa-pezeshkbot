@@ -30,6 +30,13 @@ class SendReminderSm extends Task {
   async send_retarget(retarget) {
     let orders = await this.get_orders(retarget.minute);
     for (let order of orders) {
+      let prevent_sent = await CoronaOrder.query()
+        .where({ is_deleted: false })
+        .where('created_at', '>', order.created_at)
+        .first();
+      if (prevent_sent) {
+        continue;
+      }
       this.send_patient_sms(order, retarget.discount);
     }
   }
