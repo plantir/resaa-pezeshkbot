@@ -53,13 +53,9 @@ class SendReminderSm extends Task {
             builder.where({ status: 'paid' })
           );
         if (hours == 30) {
-          query = query.whereHas('city', (builder) =>
-            builder.where('name', 'like', '%فوری%')
-          );
+          query = query.where({ is_faset: true });
         } else {
-          query = query.whereDoesntHave('city', (builder) =>
-            builder.where('name', 'like', '%فوری%')
-          );
+          query = query.where({ is_faset: false });
         }
         let orders = await query.fetch();
         orders = orders.toJSON();
