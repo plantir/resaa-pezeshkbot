@@ -10,10 +10,11 @@ class CoronaOrderController {
   async request({ request }) {
     let data = request.only(CoronaOrder.allowField);
     let selected_test = await CoronaTest.findOrFail(data.test_id);
-    data.selected_test = selected_test.toJSON()
+    data.selected_test = selected_test.toJSON();
     data.city_id = selected_test.city_id;
     data.prepay_amount = +selected_test.prepay_amount;
     data.total_amount = +selected_test.total_amount;
+    data.total_amount += +selected_test.shipment_amount;
     if (
       data.is_fast &&
       selected_test.fast_option &&
@@ -36,15 +37,15 @@ class CoronaOrderController {
     }
     if (data.selected_services) {
       data.selected_services = await Promise.all(
-        data.selected_services.map(async (id) => {
-          let service = await CoronaService.query()
-            .where({ id })
-            .where({ is_deleted: false })
-            .first();
+        data.selected_services.map(async (title) => {
+          let service = selected_test.services.find(
+            (service) => service.title == title
+          );
           if (service) {
-            data.total_amount += service.price;
+            data.total_amount += service.total_amount;
+            data.prepay_amount += service.prepay_amount;
           }
-          return service.toJSON();
+          return service;
         })
       );
     }

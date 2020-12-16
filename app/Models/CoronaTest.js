@@ -14,13 +14,15 @@ class CoronaTest extends Model {
       'result_time',
       'prepay_amount',
       'total_amount',
+      'shipment_amount',
       'discount_roles',
+      'services',
       'description',
       'fast_option',
     ];
   }
   static get jsonFields() {
-    return ['discount_roles', 'fast_option'];
+    return ['discount_roles', 'fast_option', 'services'];
   }
   static boot() {
     super.boot();
