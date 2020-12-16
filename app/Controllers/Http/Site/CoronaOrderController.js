@@ -9,7 +9,8 @@ const moment = use('moment');
 class CoronaOrderController {
   async request({ request }) {
     let data = request.only(CoronaOrder.allowField);
-    let selected_test = await CoronaTest.findOrFail(data.selected_test.id);
+    let selected_test = await CoronaTest.findOrFail(data.test_id);
+    data.selected_test = selected_test.toJSON()
     data.city_id = selected_test.city_id;
     data.prepay_amount = +selected_test.prepay_amount;
     data.total_amount = +selected_test.total_amount;
