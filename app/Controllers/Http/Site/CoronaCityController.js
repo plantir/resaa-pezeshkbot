@@ -4,6 +4,7 @@ const CoronaTest = use('App/Models/CoronaTest');
 class CoronaCityController {
   async index() {
     return City.query()
+      .has('tests', (builder) => builder.where({ is_deleted: false }))
       .with('tests', (builder) =>
         builder.where({ is_deleted: false }).orderBy('sort_order', 'Desc')
       )
