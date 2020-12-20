@@ -24,6 +24,9 @@ class CoronaOldOrderController extends Resource {
       { header: 'تاریخ', key: 'date', width: 11 },
       { header: 'زمان', key: 'time', width: 11 },
       { header: 'توضیحات', key: 'description', width: 11 },
+      { header: 'کدپیگیری', key: 'trackingNumber', width: 11 },
+      { header: 'کد درخواست شارژ', key: 'chargeRequestId', width: 11 },
+      { header: 'کد درخواست پرداخت', key: 'paymentRequestId', width: 11 },
     ];
     for (let order of orders.rows) {
       worksheet.addRow({
@@ -39,6 +42,9 @@ class CoronaOldOrderController extends Resource {
         date: moment(order.created_at).format('jYYYY/jMM/jDD'),
         time: moment(order.created_at).format('HH:mm'),
         description: order.description,
+        trackingNumber: order.trackingNumber,
+        chargeRequestId: order.chargeRequestId,
+        paymentRequestId: order.paymentRequestId,
       });
     }
     var fileName = `لیست سفارشات.xlsx`;

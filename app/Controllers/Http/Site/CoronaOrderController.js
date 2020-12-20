@@ -55,6 +55,7 @@ class CoronaOrderController {
       let discount = await CoronaDiscount.findBy({ code: data.discount.code });
       if (discount) {
         data.prepay_amount -= +discount.amount;
+        data.total_amount -= +discount.amount;
       }
     }
     data.payable_amount = data.total_amount - data.prepay_amount;
