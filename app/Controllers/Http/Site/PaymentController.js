@@ -1,7 +1,7 @@
 'use strict';
 const soap = require('soap');
 const VERIFY_URL = 'https://verify.sep.ir/payments/referencepayment.asmx?WSDL';
-const CoronaTransaction = use('App/Models/CoronaTransaction');
+const Transaction = use('App/Models/Transaction');
 const CoronaOrder = use('App/Models/CoronaOrder');
 const Logger = use('Logger');
 const Env = use('Env');

@@ -3,9 +3,8 @@ const Route = use('BaseRoute');
 
 // route for doctors
 Route.group(() => {
-  Route.get('getSetting', 'CoronaRetargetController.getSetting');
-  Route.put('changeSetting', 'CoronaRetargetController.changeSetting');
+  Route.customResource('', 'CoronaTestController');
 })
-  .namespace('Admin')
-  .prefix('admin/corona-retarget')
+  .namespace('Admin/Corona')
+  .prefix('admin/corona-tests')
   .middleware(['auth', 'role:administrator,corona_admin']);

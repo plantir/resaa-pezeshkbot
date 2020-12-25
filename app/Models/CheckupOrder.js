@@ -3,7 +3,7 @@
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('BaseModel');
 
-class CoronaOrder extends Model {
+class CheckupOrder extends Model {
   static get allowField() {
     return [
       'city_id',
@@ -21,24 +21,27 @@ class CoronaOrder extends Model {
       'discount',
       'count',
       'selected_test',
-      'is_fast',
       'is_verified',
       'selected_services',
       'description',
-      'is_checked',
       'sampler_id',
       'labratory_id',
+      'result_time_min',
+      'result_time_max'
     ];
   }
+
   static get jsonFields() {
     return ['discount', 'selected_test', 'selected_services'];
   }
+
   static boot() {
     super.boot();
     this.addTrait('ConvertToJson');
-    this.addHook('beforeCreate', 'CoronaOrderHook.beforeCreate');
-    this.addHook('afterCreate', 'CoronaOrderHook.afterCreate');
+    this.addHook('beforeCreate', 'CheckupOrderHook.beforeCreate');
+    this.addHook('afterCreate', 'CheckupOrderHook.afterCreate');
   }
+
   static listOption(qs) {
     qs.withArray = ['city', 'test', 'transaction', 'labratory', 'sampler']; //.concat(qs.withArray || []);
     return super.listOption(qs);
@@ -53,7 +56,7 @@ class CoronaOrder extends Model {
   }
 
   test() {
-    return this.belongsTo('App/Models/CoronaTest', 'test_id');
+    return this.belongsTo('App/Models/CheckupTest', 'test_id');
   }
 
   labratory() {
@@ -65,4 +68,4 @@ class CoronaOrder extends Model {
   }
 }
 
-module.exports = CoronaOrder;
+module.exports = CheckupOrder;

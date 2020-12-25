@@ -3,10 +3,10 @@
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('BaseModel');
 
-class CoronaLabratory extends Model {
+class Labratory extends Model {
   static get allowField() {
     return ['name'];
   }
 }
 
-module.exports = CoronaLabratory;
+module.exports = Labratory;

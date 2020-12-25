@@ -7,6 +7,7 @@ class CheckupLandingSchema extends Schema {
   up() {
     this.create('checkup_landings', (table) => {
       table.increments();
+      table.string('slug').unique();
       table.string('title');
       table.text('description');
       table.string('image');

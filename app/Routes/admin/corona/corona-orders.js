@@ -1,5 +1,3 @@
-const CoronaOldOrderController = require('../../Controllers/Http/Admin/CoronaOrderController');
-
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('BaseRoute');
 
@@ -15,6 +13,6 @@ Route.group(() => {
     'CoronaOrderController.changeIsNegotiated'
   );
 })
-  .namespace('Admin')
+  .namespace('Admin/Corona')
   .prefix('admin/corona-orders')
   .middleware(['auth', 'role:administrator,corona_admin']);

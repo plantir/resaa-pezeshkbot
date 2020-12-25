@@ -7,6 +7,6 @@ Route.group(() => {
   Route.get('exportExcel', 'CoronaOldOrderController.exportExcel');
   Route.customResource('', 'CoronaOldOrderController');
 })
-  .namespace('Admin')
+  .namespace('Admin/Corona')
   .prefix('admin/corona-old-orders')
   .middleware(['auth', 'role:administrator,corona_admin']);

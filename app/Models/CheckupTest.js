@@ -3,7 +3,7 @@
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('BaseModel');
 
-class CoronaTest extends Model {
+class CheckupTest extends Model {
   static get allowField() {
     return [
       'name',
@@ -11,18 +11,17 @@ class CoronaTest extends Model {
       'sort_order',
       'description',
       'city_id',
-      'result_time',
+      'landing_id',
       'prepay_amount',
       'total_amount',
-      'shipment_amount',
       'discount_roles',
       'services',
       'description',
-      'fast_option',
+      'image',
     ];
   }
   static get jsonFields() {
-    return ['discount_roles', 'fast_option', 'services'];
+    return ['discount_roles', 'description', 'services'];
   }
   static boot() {
     super.boot();
@@ -37,4 +36,4 @@ class CoronaTest extends Model {
   }
 }
 
-module.exports = CoronaTest;
+module.exports = CheckupTest;

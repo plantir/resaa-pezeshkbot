@@ -5,14 +5,14 @@
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
 /**
- * Resourceful controller for interacting with samplers
+ * Resourceful controller for interacting with labratories
  */
 const Resource = use('Resource');
-class CoronaSamplerController extends Resource {
+class LabratoryController extends Resource {
   constructor() {
     super();
-    this.Model = use('App/Models/CoronaSampler');
+    this.Model = use('App/Models/Labratory');
   }
 }
 
-module.exports = CoronaSamplerController;
+module.exports = LabratoryController;

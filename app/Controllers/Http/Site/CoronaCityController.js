@@ -1,7 +1,7 @@
 'use strict';
-const City = use('App/Models/CoronaCity');
+const City = use('App/Models/City');
 const CoronaTest = use('App/Models/CoronaTest');
-class CoronaCityController {
+class CityController {
   async index() {
     return City.query()
       .has('tests', (builder) => builder.where({ is_deleted: false }))
@@ -22,4 +22,4 @@ class CoronaCityController {
   }
 }
 
-module.exports = CoronaCityController;
+module.exports = CityController;

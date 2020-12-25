@@ -3,8 +3,8 @@ const Route = use('BaseRoute');
 
 // route for doctors
 Route.group(() => {
-  Route.customResource('', 'CoronaCityController');
+  Route.customResource('', 'LabratoryController');
 })
   .namespace('Admin')
-  .prefix('admin/corona_cities')
-  .middleware(['auth', 'role:administrator,corona_admin']);
+  .prefix('admin/labratories')
+  .middleware(['auth', 'role:administrator,corona_admin,experiment_admin']);

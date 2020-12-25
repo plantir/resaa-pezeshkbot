@@ -3,8 +3,8 @@ const Route = use('BaseRoute');
 
 // route for doctors
 Route.group(() => {
-  Route.customResource('', 'CheckupLandingController');
+  Route.customResource('', 'CheckupDiscountController');
 })
-  .namespace('Admin')
-  .prefix('admin/checkup-landings')
+  .namespace('Admin/Checkup')
+  .prefix('admin/checkup-discounts')
   .middleware(['auth', 'role:administrator,experiment_admin']);

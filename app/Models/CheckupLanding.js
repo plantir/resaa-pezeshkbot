@@ -11,6 +11,7 @@ class CheckupLanding extends Model {
 
   static get allowField() {
     return [
+      'slug',
       'title',
       'description',
       'image',

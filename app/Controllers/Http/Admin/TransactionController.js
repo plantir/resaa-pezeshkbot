@@ -4,15 +4,12 @@
 /** @typedef {import('@adonisjs/framework/src/Response')} Response */
 /** @typedef {import('@adonisjs/framework/src/View')} View */
 
-/**
- * Resourceful controller for interacting with labratories
- */
 const Resource = use('Resource');
-class CoronaLabratoryController extends Resource {
+class TransactionController extends Resource {
   constructor() {
     super();
-    this.Model = use('App/Models/CoronaLabratory');
+    this.Model = use('App/Models/Transaction');
   }
 }
 
-module.exports = CoronaLabratoryController;
+module.exports = TransactionController;

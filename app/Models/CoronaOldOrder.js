@@ -56,7 +56,7 @@ class CoronaOldOrder extends Model {
   }
 
   city() {
-    return this.belongsTo('App/Models/City');
+    return this.belongsTo('App/Models/CoronaOldCity');
   }
 
   async checkChargeRequest(chargeRequestId) {
