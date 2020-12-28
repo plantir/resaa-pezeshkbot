@@ -18,6 +18,8 @@ class CheckupTest extends Model {
       'services',
       'description',
       'image',
+      'result_time_min',
+      'result_time_max',
     ];
   }
   static get jsonFields() {

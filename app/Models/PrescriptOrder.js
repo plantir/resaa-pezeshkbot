@@ -3,68 +3,67 @@
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('BaseModel');
 
-class CheckupOrder extends Model {
+class PrescriptOrder extends Model {
   static get allowField() {
     return [
       'city_id',
-      'test_id',
+      'images',
       'transaction_id',
       'user_mobile',
       'user_fullname',
       'user_nationalcode',
       'user_address',
       'status',
-      'prepay_amount',
-      'total_amount',
-      'role_discount_amount',
+      'amount',
+      'amount_with_insurance',
+      'shipment_amount',
       'payable_amount',
-      'discount',
-      'count',
-      'selected_test',
+      'prepay_amount',
       'is_verified',
-      'selected_services',
+      'necessary_preparation',
       'description',
+      'insurance_id',
       'sampler_id',
       'labratory_id',
-
+      'result_time_min',
+      'result_time_max',
     ];
   }
 
   static get jsonFields() {
-    return ['discount', 'selected_test', 'selected_services'];
+    return ['images'];
   }
 
   static boot() {
     super.boot();
     this.addTrait('ConvertToJson');
     this.addHook('beforeCreate', 'CheckupOrderHook.beforeCreate');
-    this.addHook('afterCreate', 'CheckupOrderHook.afterCreate');
   }
 
   static listOption(qs) {
-    qs.withArray = ['city', 'test', 'transaction', 'labratory', 'sampler']; //.concat(qs.withArray || []);
+    qs.withArray = ['city', 'insurance', 'transaction', 'labratory', 'sampler'];
     return super.listOption(qs);
   }
 
   city() {
-    return this.belongsTo('App/Models/City', 'city_id');
+    return this.belongsTo('App/Models/City');
   }
 
   transaction() {
     return this.belongsTo('App/Models/Transaction');
   }
 
-  test() {
-    return this.belongsTo('App/Models/CheckupTest', 'test_id');
+  insurance() {
+    return this.belongsTo('App/Models/Insurance');
   }
 
   labratory() {
-    return this.belongsTo('App/Models/Labratory', 'labratory_id');
+    return this.belongsTo('App/Models/Labratory');
   }
 
   sampler() {
-    return this.belongsTo('App/Models/Sampler', 'sampler_id');
+    return this.belongsTo('App/Models/Sampler');
   }
 }
 
-module.exports = CheckupOrder;
+module.exports = PrescriptOrder;

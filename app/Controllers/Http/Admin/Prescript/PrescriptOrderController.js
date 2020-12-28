@@ -5,10 +5,10 @@ const moment = require('moment-jalaali');
 const fs = use('fs');
 /** @type {import('lodash')} */
 const _ = use('lodash');
-class CheckupOrderController extends Resource {
+class PrescriptOrderController extends Resource {
   constructor() {
     super();
-    this.Model = use('App/Models/CheckupOrder');
+    this.Model = use('App/Models/PrescriptOrder');
   }
 
   async exportExcel({ response, request }) {
@@ -16,20 +16,17 @@ class CheckupOrderController extends Resource {
       let { filters } = request.get();
       let orders = await this.Model.listOption({ filters, perPage: 10000 });
       var workbook = new Excel.Workbook();
-      var worksheet = workbook.addWorksheet('checkup_orders');
+      var worksheet = workbook.addWorksheet('prescript_orders');
       worksheet.columns = [
         { header: 'id', key: 'id', width: 15 },
         { header: 'نام', key: 'name', width: 15 },
         { header: 'موبایل', key: 'mobile', width: 12 },
         { header: 'کد ملی', key: 'nationalcode', width: 12 },
         { header: 'شهر', key: 'city', width: 11 },
-        { header: 'تست', key: 'test_type', width: 12 },
-        { header: 'تعداد', key: 'count', width: 12 },
-        { header: 'مبلغ کل', key: 'total_amount', width: 11 },
+        { header: 'مبلغ کل', key: 'amount', width: 11 },
+        { header: 'مبلغ با بیمه', key: 'amount_with_insurance', width: 11 },
+        { header: 'مبلغ ایاب و ذهاب', key: 'shipment_amount', width: 11 },
         { header: 'مبلغ پیش پرداخت', key: 'prepay_amount', width: 11 },
-        { header: 'تخفیف روی تعداد', key: 'role_discount_amount', width: 11 },
-        { header: 'کد تخفیف', key: 'discount_amount', width: 11 },
-        { header: 'باقی مانده', key: 'payable_amount', width: 11 },
         { header: 'وضعیت پرداخت', key: 'transaciton_status', width: 11 },
         { header: 'تاریخ', key: 'date', width: 11 },
         { header: 'زمان', key: 'time', width: 11 },
@@ -44,19 +41,21 @@ class CheckupOrderController extends Resource {
           name: order.user_fullname,
           mobile: order.user_mobile,
           nationalcode: order.user_nationalcode,
-          test_type: order.selected_test.name,
-          count: order.count,
-          total_amount: order.total_amount,
+          amount: order.amount,
+          amount_with_insurance: order.amount_with_insurance,
           prepay_amount: order.prepay_amount,
-          role_discount_amount: order.role_discount_amount,
-          discount_amount: order.discount_amount,
+          shipment_amount: order.shipment_amount,
           payable_amount: order.payable_amount,
-          transaciton_status: order.$relations.transaction.status,
+          transaciton_status: order.$relations.transaction
+            ? order.$relations.transaction.status
+            : '',
           date: moment(order.created_at).format('jYYYY/jMM/jDD'),
           time: moment(order.created_at).format('HH:mm'),
           description: order.description,
           city: order.$relations.city.name,
-          tracking_code: order.$relations.transaction.tracking_code,
+          tracking_code: order.$relations.transaction
+            ? order.$relations.transaction.tracking_code
+            : '',
           sampler: order.$relations.sampler
             ? order.$relations.sampler.name
             : '',
@@ -72,7 +71,7 @@ class CheckupOrderController extends Resource {
       );
       response.header(
         'Content-Disposition',
-        'attachment; filename=' + 'CheckupReport.xlsx'
+        'attachment; filename=' + 'PrescriptReport.xlsx'
       );
       return workbook.xlsx.write(response.response);
     } catch (error) {
@@ -115,4 +114,4 @@ class CheckupOrderController extends Resource {
     return _.sumBy(orders.rows, 'count');
   }
 }
-module.exports = CheckupOrderController;
+module.exports = PrescriptOrderController;
