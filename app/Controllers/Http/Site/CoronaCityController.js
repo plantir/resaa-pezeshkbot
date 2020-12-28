@@ -6,9 +6,9 @@ class CityController {
     return City.query()
       .has('tests', (builder) => builder.where({ is_deleted: false }))
       .with('tests', (builder) =>
-        builder.where({ is_deleted: false }).orderBy('sort_order', 'Desc')
+        builder.where({ is_deleted: false }).orderBy('sort_order', 'ASC')
       )
-      .orderBy('sort_order', 'Desc')
+      .orderBy('sort_order', 'ASC')
       .where({ is_deleted: false })
       .fetch();
   }
@@ -17,7 +17,7 @@ class CityController {
     return CoronaTest.query()
       .where({ city_id })
       .where({ is_deleted: false })
-      .orderBy('sort_order', 'DESC')
+      .orderBy('sort_order', 'ASC')
       .fetch();
   }
 }
