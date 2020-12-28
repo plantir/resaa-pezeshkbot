@@ -1,19 +1,16 @@
 'use strict';
-const Transaction = use("App/Models/Transaction")
 const CoronaOrderHook = (exports = module.exports = {});
 CoronaOrderHook.beforeCreate = async (modelInstance) => {
   modelInstance.guid = await generate_guid();
   return modelInstance;
 };
-CoronaOrderHook.afterCreate = async (modelInstance) => {
-  console.log('object');
-  let transaction = await Transaction.create({
-    amount: modelInstance.prepay_amount,
-    order_id:modelInstance.id
-  });
-  modelInstance.transaction_id = transaction.id;
-  await modelInstance.save();
-};
+// CoronaOrderHook.afterSave = async (modelInstance) => {
+//   let transaction = await modelInstance.transaction().create({
+//     amount: modelInstance.prepay_amount,
+//   });
+//   modelInstance.transaction_id = transaction.id;
+//   await modelInstance.save();
+// };
 
 async function generate_guid() {
   var dt = new Date().getTime();

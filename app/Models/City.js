@@ -4,15 +4,11 @@
 const Model = use('BaseModel');
 
 class City extends Model {
-  static boot() {
-    super.boot();
-    this.addTrait('ConvertToJson');
-  }
-  static get jsonFields() {
-    return ['testsItems'];
-  }
   static get allowField() {
-    return ['name', 'testsItems'];
+    return ['name', 'sort_order'];
+  }
+  tests(){
+    return this.hasMany('App/Models/CoronaTest','id','city_id')
   }
 }
 
