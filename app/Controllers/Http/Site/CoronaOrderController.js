@@ -136,6 +136,7 @@ class CoronaOrderController {
   }
 
   async show({ params: { guid } }) {
+    throw new Error('not found')
     return CoronaOrder.query()
       .with('city', (builder) => builder.with('tests'))
       .setVisible([

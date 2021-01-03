@@ -10,6 +10,9 @@ class City extends Model {
   tests(){
     return this.hasMany('App/Models/CoronaTest','id','city_id')
   }
+  checkups(){
+    return this.hasMany('App/Models/CheckupTest','id','city_id')
+  }
 }
 
 module.exports = City;

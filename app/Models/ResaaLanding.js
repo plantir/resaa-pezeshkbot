@@ -9,16 +9,21 @@ class ResaaLanding extends Model {
     this.addTrait('ConvertToJson');
   }
   static get jsonFields() {
-    return ['faqs', 'reviews'];
+    return ['faqs', 'reviews', 'meta'];
   }
   static get allowField() {
     return [
       'name',
+      'meta',
       'first_ford_title',
       'first_ford_description',
       'faqs',
       'reviews',
     ];
+  }
+
+  getMeta(item){
+    return item || []
   }
 }
 

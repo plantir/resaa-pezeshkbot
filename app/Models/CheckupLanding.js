@@ -15,6 +15,7 @@ class CheckupLanding extends Model {
       'title',
       'description',
       'image',
+      'color',
       'faq',
       'components',
       'conditions',
@@ -25,6 +26,10 @@ class CheckupLanding extends Model {
 
   static get jsonFields() {
     return ['faq', 'conditions'];
+  }
+
+  getMeta(item) {
+    return item || [];
   }
 }
 

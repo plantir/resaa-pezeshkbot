@@ -36,6 +36,9 @@ class CheckupTest extends Model {
   city() {
     return this.belongsTo('App/Models/City', 'city_id');
   }
+  landing() {
+    return this.belongsTo('App/Models/CheckupLanding', 'landing_id');
+  }
 }
 
 module.exports = CheckupTest;
