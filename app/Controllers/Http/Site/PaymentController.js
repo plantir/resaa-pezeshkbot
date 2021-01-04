@@ -1,8 +1,9 @@
 'use strict';
 const soap = require('soap');
 const VERIFY_URL = 'https://verify.sep.ir/payments/referencepayment.asmx?WSDL';
-const Transaction = use('App/Models/Transaction');
 const CoronaOrder = use('App/Models/CoronaOrder');
+const CheckupOrder = use('App/Models/CheckupOrder');
+const PrescriptOrder = use('App/Models/PrescriptOrder');
 const Logger = use('Logger');
 const Env = use('Env');
 class SamanGetway {
@@ -29,9 +30,7 @@ class PaymentController {
   async callback({ request, response }) {
     let bank_response = request.post();
     Logger.info('bankResponse', bank_response);
-    let order = await CoronaOrder.query().where({ guid: bank_response.ResNum }).first();
-    let transaction = await order.transaction().fetch();
-
+    let { order, callbackUrl } = await this._getOrder(bank_response.ResNum);
     if (!order) {
       response.redirect(
         `${Env.get('SITE_URL')}/bank-return?ResNum=${encodeURIComponent(
@@ -39,6 +38,7 @@ class PaymentController {
         )}`
       );
     }
+    let transaction = await order.transaction().fetch();
     transaction.bank_response = bank_response;
     transaction.tracking_code = bank_response.RRN;
     if (bank_response.RefNum) {
@@ -51,10 +51,27 @@ class PaymentController {
     response.redirect(
       `${Env.get(
         'RESAA_SITE'
-      )}/corona-test/callback?requestId=${encodeURIComponent(
+      )}/${callbackUrl}/callback?requestId=${encodeURIComponent(
         bank_response.ResNum
       )}`
     );
+  }
+
+  _getOrder(guid) {
+    return new Promise(async (resolve, reject) => {
+      let order = await CoronaOrder.query().where({ guid }).first();
+      if (order) {
+        return resolve({ order, callbackUrl: 'corona-test' });
+      }
+      order = await CheckupOrder.query().where({ guid }).first();
+      if (order) {
+        return resolve({ order, callbackUrl: 'test-at-home/prescription' });
+      }
+      order = await PrescriptOrder.query().where({ guid }).first();
+      if (order) {
+        return resolve({ order, callbackUrl: 'test-at-home/checkup' });
+      }
+    });
   }
 }
 
