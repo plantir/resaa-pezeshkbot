@@ -7,7 +7,7 @@ Route.group(() => {
   Route.post('order', 'PrescriptingController.createOrder');
   Route.get('orders/:guid', 'PrescriptingController.showOrder');
   Route.post('orders/callback', 'PrescriptingController.callback');
-  Route.post('orders/:guid/paymentRequest', 'CheckupOrderController.paymentRequest');
+  Route.post('orders/:guid/paymentRequest', 'PrescriptingController.paymentRequest');
 })
   .prefix('prescripting')
   .namespace('Site');

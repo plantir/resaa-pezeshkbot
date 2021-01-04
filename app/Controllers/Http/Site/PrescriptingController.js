@@ -4,6 +4,8 @@ const City = use('App/Models/City');
 const PrescriptTest = use('App/Models/PrescriptTest');
 const PrescriptOrder = use('App/Models/PrescriptOrder');
 const Transaction = use('App/Models/Transaction');
+const axios = require('axios');
+const Env = use('Env');
 class PrescriptingController {
   async insurances() {
     return Insurance.query()
