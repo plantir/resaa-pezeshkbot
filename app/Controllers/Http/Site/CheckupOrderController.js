@@ -1,19 +1,19 @@
 'use strict';
-const CoronaOrder = use('App/Models/CoronaOrder');
-const CoronaTest = use('App/Models/CoronaTest');
-const CoronaDiscount = use('App/Models/CoronaDiscount');
+const CheckupOrder = use('App/Models/CheckupOrder');
+const CheckupTest = use('App/Models/CheckupTest');
+const CheckupDiscount = use('App/Models/CheckupDiscount');
 const axios = require('axios');
 const Env = use('Env');
 const moment = use('moment');
-class CoronaOrderController {
+class CheckupOrderController {
   async request({ request }) {
-    let data = request.only(CoronaOrder.allowField);
-    let selected_test = await CoronaTest.findOrFail(data.test_id);
+    let data = request.only(CheckupOrder.allowField);
+    let selected_test = await CheckupTest.findOrFail(data.test_id);
     data.selected_test = selected_test.toJSON();
     data.city_id = selected_test.city_id;
     data.prepay_amount = +selected_test.prepay_amount;
     data.total_amount = +selected_test.total_amount;
-    data.total_amount += +selected_test.shipment_amount;
+    // data.total_amount += +selected_test.shipment_amount;
     if (
       data.is_fast &&
       selected_test.fast_option &&
@@ -51,20 +51,20 @@ class CoronaOrderController {
     data.total_amount *= data.count;
     data.prepay_amount *= data.count;
     if (data.discount && data.discount.amount) {
-      let discount = await CoronaDiscount.findBy({ code: data.discount.code });
+      let discount = await CheckupDiscount.findBy({ code: data.discount.code });
       if (discount) {
         data.prepay_amount -= +discount.amount;
         data.total_amount -= +discount.amount;
       }
     }
     data.payable_amount = data.total_amount - data.prepay_amount;
-    let order = await CoronaOrder.create(data);
+    let order = await CheckupOrder.create(data);
     await order.load('city');
     return order;
   }
 
   async paymentRequest({ response, params: { guid } }) {
-    let order = await CoronaOrder.query().where({ guid }).firstOrFail();
+    let order = await CheckupOrder.query().where({ guid }).firstOrFail();
     let transaction = await order.transaction().fetch();
     let created_at = moment().format('YYYY-MM-DD HH:mm:ss');
     transaction.created_at = created_at;
@@ -92,7 +92,7 @@ class CoronaOrderController {
   }
   async callback({ request, response }) {
     let { requestId } = request.post();
-    let corona_order = await CoronaOrder.query()
+    let corona_order = await CheckupOrder.query()
       .where({ guid: requestId })
       .with('transaction')
       .with('city')
@@ -113,7 +113,7 @@ class CoronaOrderController {
   }
   async tracking({ request }) {
     let { nationalCode, mobile } = request.get();
-    return CoronaOrder.query()
+    return CheckupOrder.query()
       .where({
         user_mobile: mobile,
         user_nationalcode: nationalCode,
@@ -136,7 +136,7 @@ class CoronaOrderController {
   }
 
   async show({ params: { guid } }) {
-    return CoronaOrder.query()
+    return CheckupOrder.query()
       .with('city', (builder) => builder.with('tests'))
       .setVisible([
         'guid',
@@ -159,10 +159,10 @@ class CoronaOrderController {
       .firstOrFail();
   }
   async verify({ params: { guid } }) {
-    let test = await CoronaOrder.query().where({ guid }).firstOrFail();
+    let test = await CheckupOrder.query().where({ guid }).firstOrFail();
     test.is_verified = true;
     return test.save();
   }
 }
 
-module.exports = CoronaOrderController;
+module.exports = CheckupOrderController;
