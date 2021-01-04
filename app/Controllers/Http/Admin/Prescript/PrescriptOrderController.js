@@ -113,5 +113,11 @@ class PrescriptOrderController extends Resource {
     let orders = await this.Model.listOption({ filters, perPage: 10000 });
     return _.sumBy(orders.rows, 'count');
   }
+
+  async SendSms({ params: { id }, request }) {
+    let order = await this.Model.find(id);
+    await order.sendInvoice();
+    return true;
+  }
 }
 module.exports = PrescriptOrderController;

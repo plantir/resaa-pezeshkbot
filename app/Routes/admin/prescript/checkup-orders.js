@@ -15,6 +15,7 @@ Route.group(() => {
     ':id/change-is-negotiated',
     'PrescriptOrderController.changeIsNegotiated'
   );
+  Route.post(':id/sendSms', 'PrescriptOrderController.SendSms');
 })
   .namespace('Admin/Prescript')
   .prefix('admin/prescript-orders')

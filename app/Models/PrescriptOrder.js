@@ -2,7 +2,9 @@
 
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Model = use('BaseModel');
-
+const Bull = use('Rocketseat/Bull');
+const SMS_Job = use('App/Jobs/Sms');
+const Env = use('Env');
 class PrescriptOrder extends Model {
   static get allowField() {
     return [
@@ -43,6 +45,19 @@ class PrescriptOrder extends Model {
   static listOption(qs) {
     qs.withArray = ['city', 'insurance', 'transaction', 'labratory', 'sampler'];
     return super.listOption(qs);
+  }
+
+  sendInvoice() {
+    let url = `${Env.get('RESAA_SITE')}/test-at-home/prescription/invoice/${
+      this.guid
+    }`;
+    Bull.add(SMS_Job.key, {
+      template: 'sms.prescript_invoice',
+      to: this.user_mobile,
+      data: {
+        url: url,
+      },
+    });
   }
 
   city() {
