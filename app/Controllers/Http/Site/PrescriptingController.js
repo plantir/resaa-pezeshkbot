@@ -35,6 +35,7 @@ class PrescriptingController {
     let data = request.only([
       'user_mobile',
       'user_address',
+      'user_fullname',
       'images',
       'city_id',
       'insurance_id',
