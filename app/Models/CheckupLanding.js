@@ -19,8 +19,7 @@ class CheckupLanding extends Model {
       'faq',
       'components',
       'conditions',
-      'seo_title',
-      'seo_description',
+      'meta',
     ];
   }
 
