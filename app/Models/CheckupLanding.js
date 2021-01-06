@@ -31,6 +31,15 @@ class CheckupLanding extends Model {
   getMeta(item) {
     return item || [];
   }
+
+  cities() {
+    return this.manyThrough(
+      'App/Models/CheckupTest',
+      'city',
+      'id',
+      'landing_id'
+    );
+  }
 }
 
 module.exports = CheckupLanding;
