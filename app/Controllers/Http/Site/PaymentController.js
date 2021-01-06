@@ -65,11 +65,11 @@ class PaymentController {
       }
       order = await CheckupOrder.query().where({ guid }).first();
       if (order) {
-        return resolve({ order, callbackUrl: 'test-at-home/prescription' });
+        return resolve({ order, callbackUrl: 'test-at-home/checkup' });
       }
       order = await PrescriptOrder.query().where({ guid }).first();
       if (order) {
-        return resolve({ order, callbackUrl: 'test-at-home/checkup' });
+        return resolve({ order, callbackUrl: 'test-at-home/prescription' });
       }
     });
   }
