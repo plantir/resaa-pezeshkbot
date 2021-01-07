@@ -33,7 +33,7 @@ class CoronaTest extends Model {
     return super.listOption(qs);
   }
   city() {
-    return this.belongsTo('App/Models/CoronaCity', 'city_id');
+    return this.belongsTo('App/Models/City', 'city_id');
   }
 }
 

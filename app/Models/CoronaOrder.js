@@ -45,21 +45,23 @@ class CoronaOrder extends Model {
   }
 
   city() {
-    return this.belongsTo('App/Models/CoronaCity', 'city_id');
+    return this.belongsTo('App/Models/City', 'city_id');
   }
 
   transaction() {
-    return this.hasOne('App/Models/CoronaTransaction', 'id', 'order_id');
+    return this.belongsTo('App/Models/Transaction');
   }
 
   test() {
     return this.belongsTo('App/Models/CoronaTest', 'test_id');
   }
+
   labratory() {
-    return this.belongsTo('App/Models/CoronaLabratory', 'labratory_id');
+    return this.belongsTo('App/Models/Labratory', 'labratory_id');
   }
+
   sampler() {
-    return this.belongsTo('App/Models/CoronaSampler', 'sampler_id');
+    return this.belongsTo('App/Models/Sampler', 'sampler_id');
   }
 }
 

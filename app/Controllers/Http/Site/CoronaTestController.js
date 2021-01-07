@@ -10,8 +10,10 @@ class CoronaTestController {
       .where({ is_deleted: false })
       .with('city')
       .firstOrFail();
-    test.services = test.services && test.services.filter(item => item.prepay_amount && item.total_amount)
-    return test
+    test.services =
+      test.services &&
+      test.services.filter((item) => item.prepay_amount && item.total_amount);
+    return test;
   }
 }
 

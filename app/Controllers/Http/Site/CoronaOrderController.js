@@ -2,7 +2,6 @@
 const CoronaOrder = use('App/Models/CoronaOrder');
 const CoronaTest = use('App/Models/CoronaTest');
 const CoronaDiscount = use('App/Models/CoronaDiscount');
-const CoronaService = use('App/Models/CoronaService');
 const axios = require('axios');
 const Env = use('Env');
 const moment = use('moment');
