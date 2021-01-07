@@ -24,7 +24,7 @@ class CheckupLanding extends Model {
   }
 
   static get jsonFields() {
-    return ['faq', 'conditions'];
+    return ['faq', 'conditions','meta'];
   }
 
   getMeta(item) {
