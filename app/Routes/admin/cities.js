@@ -7,4 +7,4 @@ Route.group(() => {
 })
   .namespace('Admin')
   .prefix('admin/cities')
-  .middleware(['auth', 'role:administrator']);
+  .middleware(['auth', 'role:administrator,corona_admin,experiment_admin']);
