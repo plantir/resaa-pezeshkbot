@@ -12,6 +12,23 @@ Route.group(() => {
     ':id/change-is-negotiated',
     'CoronaOrderController.changeIsNegotiated'
   );
+  Route.get('fix/orders', async () => {
+    // return 'hello'
+    const Database = use('Database');
+    let orders = await Database.table('corona_orders');
+    for (const order of orders) {
+      let transaction = await Database.table('transactions')
+        .where({
+          order_id: order.id,
+        })
+        .first();
+      if (transaction) {
+        await Database.table('corona_orders')
+          .where({ id: order.id })
+          .update({ transaction_id: transaction.id });
+      }
+    }
+  });
 })
   .namespace('Admin/Corona')
   .prefix('admin/corona-orders')
