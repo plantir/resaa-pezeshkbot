@@ -24,20 +24,15 @@ class CheckupLanding extends Model {
   }
 
   static get jsonFields() {
-    return ['faq', 'conditions','meta'];
+    return ['faq', 'conditions', 'meta'];
   }
 
   getMeta(item) {
     return item || [];
   }
 
-  cities() {
-    return this.manyThrough(
-      'App/Models/CheckupTest',
-      'city',
-      'id',
-      'landing_id'
-    );
+  checkups() {
+    return this.hasMany('App/Models/CheckupTest','id','landing_id');
   }
 }
 

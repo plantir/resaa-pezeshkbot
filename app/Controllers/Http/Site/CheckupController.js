@@ -28,7 +28,15 @@ class CheckupController {
 
   async landing({ params: { slug } }) {
     let landing = await CheckupLanding.findByOrFail({ slug });
-    await landing.load('cities', (builder) => builder.distinct('city_id').with('checkups'));
+    // let checkups =
+    await landing.load('checkups', (builder) => builder.with('city'));
+    landing = landing.toJSON();
+    landing.cities = [];
+    for (let checkup of landing.checkups) {
+      let item = { ...checkup.city, total_amount: checkup.total_amount };
+      landing.cities.push(item);
+    }
+    // await landing.load('cities', (builder) => builder.distinct('city_id').with('checkups'));
     return landing;
   }
 }
