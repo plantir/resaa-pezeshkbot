@@ -20,11 +20,20 @@ class AdminController {
     item.is_active = is_active;
     return item.save();
   }
+
   async changeRole({ request, params: { id } }) {
     let { roles } = request.post();
     let item = await this.Model.findOrFail(id);
     await item.roles().detach();
     await item.roles().attach(roles);
+    return item;
+  }
+
+  async changePassword({ request, params: { id } }) {
+    let { password } = request.post();
+    let item = await this.Model.findOrFail(id);
+    item.password = password;
+    await item.save();
     return item;
   }
 
