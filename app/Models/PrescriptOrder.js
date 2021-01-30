@@ -29,6 +29,9 @@ class PrescriptOrder extends Model {
       'labratory_id',
       'result_time_min',
       'result_time_max',
+      'admin_note',
+      'sample_type',
+      'sample_time',
     ];
   }
 
@@ -39,7 +42,8 @@ class PrescriptOrder extends Model {
   static boot() {
     super.boot();
     this.addTrait('ConvertToJson');
-    this.addHook('beforeCreate', 'CheckupOrderHook.beforeCreate');
+    this.addHook('beforeCreate', 'PrescriptOrderHook.beforeCreate');
+    this.addHook('afterCreate', 'PrescriptOrderHook.afterCreate');
   }
 
   static listOption(qs) {

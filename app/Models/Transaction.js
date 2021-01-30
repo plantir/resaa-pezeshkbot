@@ -12,6 +12,7 @@ class Transaction extends Model {
   }
   static boot() {
     super.boot();
+    this.addHook('afterSave', 'TransactionHook.afterSave');
     this.addTrait('ConvertToJson');
   }
 }

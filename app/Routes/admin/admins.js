@@ -8,6 +8,7 @@ Route.group(() => {
   Route.delete(':id', 'AdminController.delete');
   Route.put(':id/changeActive', 'AdminController.changeActive');
   Route.put(':id/changeRole', 'AdminController.changeRole');
+  Route.put(':id/changePassword', 'AdminController.changePassword');
 })
   .namespace('Admin')
   .prefix('admin/Admins')

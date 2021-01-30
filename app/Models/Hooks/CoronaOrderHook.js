@@ -6,7 +6,6 @@ CoronaOrderHook.beforeCreate = async (modelInstance) => {
   return modelInstance;
 };
 CoronaOrderHook.afterCreate = async (modelInstance) => {
-  console.log('object');
   let transaction = await Transaction.create({
     amount: modelInstance.prepay_amount,
     order_id:modelInstance.id

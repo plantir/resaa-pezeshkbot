@@ -3,7 +3,7 @@ const Route = use('BaseRoute');
 
 // route for question
 Route.group(() => {
-  Route.get('', 'QuestionController.index');
+  Route.customResource('', 'QuestionController');
 })
   .namespace('Admin')
   .prefix('admin/questions')
