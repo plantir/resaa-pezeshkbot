@@ -16,13 +16,14 @@ class Sms {
   // This is where the work is done.
   async handle({ data }) {
     let sms = SMS;
-    if(!data.to){
-      return true
+    if (!data.to) {
+      return true;
     }
     return sms.send({
       view: data.template,
       data: data.data,
       to: data.to,
+      is_fast: data.is_fast,
     });
   }
   onCompleted(job, result) {

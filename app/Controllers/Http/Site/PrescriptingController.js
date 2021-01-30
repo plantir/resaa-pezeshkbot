@@ -39,6 +39,7 @@ class PrescriptingController {
       'user_mobile',
       'user_address',
       'user_fullname',
+      'user_nationalcode',
       'images',
       'city_id',
       'insurance_id',
