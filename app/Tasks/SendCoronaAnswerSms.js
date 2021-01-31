@@ -11,7 +11,7 @@ const SMS_Job = use('App/Jobs/Sms');
 const moment = use('moment');
 class SendReminderSm extends Task {
   static get schedule() {
-    return '10 0 * * * *';
+    return '10 0 * * 0 *';
   }
 
   async handle() {
