@@ -3,6 +3,7 @@ const Insurance = use('App/Models/Insurance');
 const City = use('App/Models/City');
 const PrescriptTest = use('App/Models/PrescriptTest');
 const PrescriptOrder = use('App/Models/PrescriptOrder');
+const PrescriptDiscount = use('App/Models/PrescriptDiscount');
 const Transaction = use('App/Models/Transaction');
 const axios = require('axios');
 const Env = use('Env');
@@ -43,7 +44,18 @@ class PrescriptingController {
       'images',
       'city_id',
       'insurance_id',
+      'discount',
     ]);
+    if (data.discount && data.discount.amount) {
+      let discount = await PrescriptDiscount.findBy({
+        code: data.discount.code,
+      });
+      if (discount) {
+        data.discount = discount.toJSON();
+      } else {
+        delete data.discount;
+      }
+    }
     return PrescriptOrder.create(data);
   }
 
@@ -107,6 +119,14 @@ class PrescriptingController {
     } else {
       response.status(400).json(data);
     }
+  }
+
+  async checkDiscount({ request }) {
+    let { code } = request.post();
+    return PrescriptDiscount.query()
+      .where({ is_deleted: false })
+      .where({ code })
+      .firstOrFail();
   }
 }
 
