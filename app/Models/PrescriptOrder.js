@@ -31,12 +31,13 @@ class PrescriptOrder extends Model {
       'result_time_max',
       'admin_note',
       'sample_type',
+      'discount',
       'sample_time',
     ];
   }
 
   static get jsonFields() {
-    return ['images'];
+    return ['images','discount'];
   }
 
   static boot() {
