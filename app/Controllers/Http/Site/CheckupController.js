@@ -1,6 +1,7 @@
 'use strict';
 const City = use('App/Models/City');
 const CheckupTest = use('App/Models/CheckupTest');
+const CheckupDiscount = use('App/Models/CheckupDiscount');
 const CheckupLanding = use('App/Models/CheckupLanding');
 class CheckupController {
   async cities() {
@@ -38,6 +39,14 @@ class CheckupController {
     }
     // await landing.load('cities', (builder) => builder.distinct('city_id').with('checkups'));
     return landing;
+  }
+
+  async checkDiscount({ request }) {
+    let { code } = request.post();
+    return CheckupDiscount.query()
+      .where({ is_deleted: false })
+      .where({ code })
+      .firstOrFail();
   }
 }
 

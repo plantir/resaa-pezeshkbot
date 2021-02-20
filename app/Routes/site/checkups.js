@@ -5,6 +5,7 @@ Route.group(() => {
   Route.get('tests', 'CheckupController.tests');
   Route.get('/landing/:slug', 'CheckupController.landing');
   Route.get(':id', 'CheckupController.show');
+  Route.post('/discount/check', 'CheckupController.checkDiscount');
 })
   .prefix('checkups')
   .namespace('Site');
