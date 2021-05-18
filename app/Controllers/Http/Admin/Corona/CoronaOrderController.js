@@ -96,10 +96,15 @@ class CoronaOldOrderController extends Resource {
               ? order.discount.amount
               : 0
           ) * 10;
-        order.tax_amount =
-          Math.round(
-            (order.selected_test.total_amount * order.count * 9) / 109
-          ) * 10;
+        order.amount_with_discount = Math.round(
+          order.unit_amount * order.count - order.discount_amount
+        );
+        order.tax_amount = Math.round(
+          ((order.amount_with_discount * 9) / 109)
+        );
+        order.amount_with_tax = Math.round(
+          order.amount_with_discount + order.tax_amount
+        );
         let buffer = await this.generatePDF(order);
         buffer_array.push({ buffer, name: `${order.created_at}.pdf` });
       }

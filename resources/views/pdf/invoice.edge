@@ -242,7 +242,7 @@
     </div>
     <div class="date">
       <p>شماره سریال:</p>
-      <p>تاریخ : </p>
+      <p>تاریخ : {{persianDigit(persianDate(order.created_at))}}</p>
     </div>
   </header>
   <div class="table">
@@ -292,10 +292,9 @@
 
       </div>
       <div class="desCash">
-        <span >نشانی کامل : <span style="margin-right: 1em;">استان : تهران</span> <span
-            style="margin-right: 1em;">شهر :
+        <span>نشانی کامل : <span style="margin-right: 1em;">استان : تهران</span> <span style="margin-right: 1em;">شهر :
             تهران</span> </span>
-        <span >
+        <span>
           <p>کد پستی ده رقمی :
 
             <span class="box-wrapper">
@@ -468,9 +467,9 @@
         <td>{{persianDigit(currency(order.unit_amount))}} </td>
         <td>{{persianDigit(currency(order.unit_amount * order.count))}} </td>
         <td>{{persianDigit(currency(order.discount_amount ))}} </td>
-        <td>{{persianDigit(currency(order.unit_amount * order.count - order.discount_amount))}} </td>
+        <td>{{persianDigit(currency(order.amount_with_discount))}} </td>
         <td>{{persianDigit(currency(order.tax_amount))}} </td>
-        <td>{{persianDigit(currency(order.payable_amount))}} </td>
+        <td>{{persianDigit(currency(order.amount_with_tax))}} </td>
       </tr>
     </tbody>
     <tfoot>
@@ -478,9 +477,9 @@
         <td colspan="6" style="text-align: right;">جمع کل </td>
         <td>{{persianDigit(currency(order.unit_amount * order.count))}} </td>
         <td>{{persianDigit(currency(order.discount_amount ))}} </td>
-        <td>{{persianDigit(currency(order.unit_amount * order.count - order.discount_amount))}} </td>
+        <td>{{persianDigit(currency(order.amount_with_discount))}} </td>
         <td>{{persianDigit(currency(order.tax_amount))}} </td>
-        <td>{{persianDigit(currency(order.payable_amount))}} </td>
+        <td>{{persianDigit(currency(order.amount_with_tax))}} </td>
       </tr>
       <tr>
         <td colspan="6" style="text-align: right;"> شرایط و نحوه فروش : <span style="margin-right:10px">نقدی</span><span
