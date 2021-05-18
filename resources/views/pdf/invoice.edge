@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title></title>
+  <style>
+    /*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v7.0.29,
+* Autoprefixer: v9.7.6
+* Browsers: last 4 version
+*/
+
+    @font-face {
+      font-family: IRANSans;
+      font-style: normal;
+      font-weight: bold;
+      src: url('fonts/IranSans/eot/IRANSansWeb.eot');
+      src: url('fonts/IranSans/eot/IRANSansWeb.eot?#iefix') format('embedded-opentype'),
+        /* IE6-8 */
+        url('fonts/IranSans/woff2/IRANSansWeb.woff2') format('woff2'),
+        /* FF39+,Chrome36+, Opera24+*/
+        url('fonts/IranSans/woff/IRANSansWeb.woff') format('woff'),
+        /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
+        url('fonts/IranSans/ttf/IRANSansWeb.ttf') format('truetype');
+    }
+
+    html {
+      zoom: 0.72;
+    }
+
+    body {
+      direction: rtl;
+      font-family: IRANSans;
+      font-size: 12px !important;
+    }
+
+    * {
+      direction: rtl;
+      font-size: 12px !important;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    p {
+      font-weight: bold;
+      font-size: 12px;
+      color: black;
+      margin: 0;
+    }
+
+    .border {
+      border: 1.5px solid #000;
+      border-radius: 8px;
+    }
+
+    .header {
+      width: 100%;
+      position: relative;
+      height: 50px;
+
+    }
+
+    .title {
+      text-align: center;
+    }
+
+    .title p {
+      padding-top: .5em;
+      font-weight: bold;
+      font-size: 1.5em !important;
+    }
+
+    .date {
+      position: absolute;
+      top: 0;
+      left: 12em;
+    }
+
+
+    div.table {
+      float: right;
+      width: 100%;
+      /* border: 1px solid black; */
+
+    }
+
+    caption {
+      width: 100%;
+    }
+
+    .caption {
+      text-align: center;
+      /* border-bottom: 1px solid black; */
+
+    }
+
+    .desCash {
+      /* display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+      justify-content: space-between; */
+      padding: 0.4em 1em;
+      white-space: nowrap;
+    }
+
+    .desCash>* {
+      display: inline-block;
+    }
+
+    .desCash>*+* {
+      margin-right: 8em;
+    }
+
+    .caption2 {
+      border: 1px solid black;
+      border-left: none;
+      border-right: none;
+      text-align: center;
+      padding: 0.5em;
+    }
+
+
+    table {
+      /* border-collapse: collapse; */
+
+    }
+
+    th,
+    td {
+      border: 1px solid black;
+
+    }
+
+    th,
+    td {
+      padding: 8px 15px;
+      text-align: center;
+    }
+
+    table thead tr th:first-child {
+      border-radius: 0 8px 0 0;
+    }
+
+    table thead tr th:last-child {
+      border-radius: 8px 0 0 0;
+    }
+
+    table tfoot tr:last-child td:first-child {
+      border-radius: 0 0 8px 0;
+    }
+
+    table tfoot tr:last-child td:last-child {
+      border-radius: 0 0 0 8px;
+    }
+
+    .signature {
+      width: 100%;
+      height: 100px;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+    }
+
+    .sigmerch {
+      width: 60%;
+      padding-right: 32px;
+      position: relative;
+      padding-top: 40px;
+    }
+
+
+    .sigcash {
+      width: 40%;
+      position: relative;
+      padding-top: 40px;
+    }
+
+    .sigcash img {
+      position: absolute;
+      top: -70px;
+      right: 0;
+      width: 230px;
+    }
+
+    span.box-wrapper {
+      /* display: -webkit-inline-box;
+      display: -ms-inline-flexbox;
+      display: inline-flex;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: reverse;
+      -ms-flex-direction: row-reverse;
+      flex-direction: row-reverse; */
+      direction: ltr;
+      margin-right: 3em;
+      white-space: nowrap;
+      display: inline-table;
+    }
+
+    span.box {
+      /* -webkit-box-flex: 0;
+      -ms-flex: 0 0 10px;
+      flex: 0 0 10px; */
+      width: 14px;
+      height: 18px;
+      display: inline-table;
+      border: 1px solid;
+      text-align: center;
+      font-size: 11px !important;
+    }
+
+    span.checkbox {
+      width: 12px;
+      height: 12px;
+      border: 1px solid;
+      display: inline-block;
+      margin-right: 6px;
+      margin-bottom: -4px;
+    }
+
+    .empty-wrapper {
+      display: -webkit-inline-box;
+      display: -ms-inline-flexbox;
+      display: inline-flex;
+      /* width: 300px; */
+      /* -ms-flex-pack: distribute;
+      justify-content: space-around; */
+    }
+
+  </style>
+</head>
+
+<body>
+  <header class="header">
+    <div class="title">
+      <p>صورت حساب فروش کالا یا خدمات</p>
+    </div>
+    <div class="date">
+      <p>شماره سریال:</p>
+      <p>تاریخ : </p>
+    </div>
+  </header>
+  <div class="table">
+    <div class="border">
+      <caption>
+        <p class="caption">مشخصات فروشنده</p>
+      </caption>
+    </div>
+    <div class="border">
+
+      <div class="desCash">
+        <span>
+          <p>نام شخص حقیقی / حقوقی :شرکت رسالت سلامت ایرانیان </p>
+        </span>
+        <span>
+
+          <p>شماره اقتصادی:
+            <span class="box-wrapper">
+              <span class="box">۴</span>
+              <span class="box">۱</span>
+              <span class="box">۱</span>
+              <span class="box">۶</span>
+              <span class="box">۳</span>
+              <span class="box">۶</span>
+              <span class="box">۸</span>
+              <span class="box">۴</span>
+              <span class="box">۶</span>
+              <span class="box">۴</span>
+              <span class="box">۳</span>
+              <span class="box">۴</span>
+            </span>
+          </p>
+        </span>
+        <span>
+
+          <p> شماره ثبت :
+            <span class="box-wrapper">
+              <span class="box">۵</span>
+              <span class="box">۳</span>
+              <span class="box">۴</span>
+              <span class="box">۶</span>
+              <span class="box">۹</span>
+              <span class="box">۳</span>
+            </span>
+          </p>
+        </span>
+
+      </div>
+      <div class="desCash">
+        <span >نشانی کامل : <span style="margin-right: 1em;">استان : تهران</span> <span
+            style="margin-right: 1em;">شهر :
+            تهران</span> </span>
+        <span >
+          <p>کد پستی ده رقمی :
+
+            <span class="box-wrapper">
+              <span class="box">۱</span>
+              <span class="box">۹</span>
+              <span class="box">۹</span>
+              <span class="box">۸</span>
+              <span class="box">۹</span>
+              <span class="box">۹</span>
+              <span class="box">۴</span>
+              <span class="box">۶</span>
+              <span class="box">۵</span>
+              <span class="box">۴</span>
+            </span>
+
+          </p>
+        </span>
+        <span>
+
+          <p> شناسه ملی :
+
+            <span class="box-wrapper">
+              <span class="box">۱</span>
+              <span class="box">۴</span>
+              <span class="box">۰</span>
+              <span class="box">۰</span>
+              <span class="box">۷</span>
+              <span class="box">۹</span>
+              <span class="box">۸</span>
+              <span class="box">۳</span>
+              <span class="box">۴</span>
+              <span class="box">۵</span>
+              <span class="box">۰</span>
+            </span>
+
+          </p>
+        </span>
+      </div>
+      <div class="desCash">
+        <span>
+          <p>
+            نشانی : تهران، فاطمی، کوچه‌اشراقی، خیابان هیئت، پلاک۱۵، ساختمان گردآفرید، طبقه اول واحد ۲
+          </p>
+        </span>
+        <span style="float: left;">
+          <p style="padding-left: 6em;"> تلفن / فکس : </p>
+        </span>
+      </div>
+    </div>
+
+    <div class="border">
+      <caption>
+        <p class="caption">مشخصات خریدار</p>
+      </caption>
+    </div>
+    <div class="border">
+
+      <div class="desCash">
+        <span>
+          <p>نام شخص حقیقی / حقوقی :{{order.user_fullname}} </p>
+        </span>
+        <span class="empty-wrapper">
+          <span>شماره اقتصادی:</span>
+          <span class="box-wrapper">
+            <span class="box"></span>
+            <span class="box"></span>
+            <span class="box"></span>
+            <span class="box"></span>
+            <span class="box"></span>
+            <span class="box"></span>
+            <span class="box"></span>
+            <span class="box"></span>
+            <span class="box"></span>
+            <span class="box"></span>
+            <span class="box"></span>
+            <span class="box"></span>
+          </span>
+        </span>
+        <span class="empty-wrapper" style="width: 180px;">
+
+          <span> شماره ثبت : </span>
+          <span class="box-wrapper">
+
+            <span class="box"></span>
+            <span class="box"></span>
+            <span class="box"></span>
+            <span class="box"></span>
+            <span class="box"></span>
+            <span class="box"></span>
+          </span>
+        </span>
+
+      </div>
+      <div class="desCash">
+        <p style="width:30%">نشانی کامل : <span style="margin-right: 4em;">استان : {{order.city.name}}</span> <span
+            style="margin-right: 4em;">شهر : {{order.city.name}}
+          </span> </p>
+        <span class="empty-wrapper">
+          <span>کد پستی ده رقمی :</span>
+          <span class="box-wrapper">
+            <span class="box"></span>
+            <span class="box"></span>
+            <span class="box"></span>
+            <span class="box"></span>
+            <span class="box"></span>
+            <span class="box"></span>
+            <span class="box"></span>
+            <span class="box"></span>
+            <span class="box"></span>
+            <span class="box"></span>
+          </span>
+        </span>
+        <span>
+
+          <p> شناسه ملی :
+            <span class="box-wrapper">
+              <span class="box">{{order.user_nationalcode[0]}}</span>
+              <span class="box">{{order.user_nationalcode[1]}}</span>
+              <span class="box">{{order.user_nationalcode[2]}}</span>
+              <span class="box">{{order.user_nationalcode[3]}}</span>
+              <span class="box">{{order.user_nationalcode[4]}}</span>
+              <span class="box">{{order.user_nationalcode[5]}}</span>
+              <span class="box">{{order.user_nationalcode[6]}}</span>
+              <span class="box">{{order.user_nationalcode[7]}}</span>
+              <span class="box">{{order.user_nationalcode[8]}}</span>
+              <span class="box">{{order.user_nationalcode[9]}}</span>
+            </span>
+          </p>
+        </span>
+      </div>
+      <div class="desCash">
+        <span>
+          <p>
+            نشانی : {{order.user_address}}
+          </p>
+        </span>
+        <span style="float: left;">
+          <p style="padding-left: 6em;"> تلفن / فکس : {{order.user_mobile}} </p>
+        </span>
+      </div>
+    </div>
+
+    <div class="border">
+      <caption>
+        <p class="caption">مشخصات کالا یا خدمات</p>
+      </caption>
+    </div>
+  </div>
+  <table style="width:100%;" cellspacing="0" cellpadding="0">
+    <thead>
+      <th>ردیف</th>
+      <th>کد کالا</th>
+      <th>شرح کالا یا خدمات</th>
+      <th>تعداد/مقدار</th>
+      <th>واحد اندازه گیری</th>
+      <th>مبلغ واحد (ریال)</th>
+      <th>مبلغ کل(ریال)</th>
+      <th>مبلغ تخفیف(ریال)</th>
+      <th>مبلغ کل پس از تخفیف(ریال)</th>
+      <th>جمع مالیات و عوارض(ریال)</th>
+      <th>جمع مبلغ کل بعلاوه جمع مالیات و عوارض(ریال)</th>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td></td>
+        <td>{{order.selected_test.name}}</td>
+        <td>{{persianDigit(order.count)}}</td>
+        <td>تست</td>
+        <td>{{persianDigit(currency(order.unit_amount))}} </td>
+        <td>{{persianDigit(currency(order.unit_amount * order.count))}} </td>
+        <td>{{persianDigit(currency(order.discount_amount ))}} </td>
+        <td>{{persianDigit(currency(order.unit_amount * order.count - order.discount_amount))}} </td>
+        <td>{{persianDigit(currency(order.tax_amount))}} </td>
+        <td>{{persianDigit(currency(order.payable_amount))}} </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td colspan="6" style="text-align: right;">جمع کل </td>
+        <td>{{persianDigit(currency(order.unit_amount * order.count))}} </td>
+        <td>{{persianDigit(currency(order.discount_amount ))}} </td>
+        <td>{{persianDigit(currency(order.unit_amount * order.count - order.discount_amount))}} </td>
+        <td>{{persianDigit(currency(order.tax_amount))}} </td>
+        <td>{{persianDigit(currency(order.payable_amount))}} </td>
+      </tr>
+      <tr>
+        <td colspan="6" style="text-align: right;"> شرایط و نحوه فروش : <span style="margin-right:10px">نقدی</span><span
+            class="checkbox"></span> <span style="margin-right:10px">غیر نقدی</span><span class="checkbox"></span>
+        </td>
+        <td colspan="6" style="text-align: right;"> توضیحات: </td>
+
+      </tr>
+      <tr>
+        <td colspan="6" style="text-align: right;height: 80px;"> مهر و امضا فروشنده : </td>
+        <td colspan="6" style="text-align: right;height: 80px;"> مهر و امضا خریدار: </td>
+      </tr>
+    </tfoot>
+  </table>
+  </div>
+</body>
+
+</html>

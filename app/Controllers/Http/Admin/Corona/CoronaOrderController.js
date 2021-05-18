@@ -1,10 +1,16 @@
 'use strict';
 const Resource = use('Resource');
 const Excel = use('exceljs');
+const View = use('View');
+const Helpers = use('Helpers');
+const pdf = use('html-pdf');
 const moment = require('moment-jalaali');
+/** @type {import('fs')} */
 const fs = use('fs');
 /** @type {import('lodash')} */
 const _ = use('lodash');
+const Env = use('Env');
+const archiver = require('archiver');
 class CoronaOldOrderController extends Resource {
   constructor() {
     super();
@@ -74,6 +80,54 @@ class CoronaOldOrderController extends Resource {
     return workbook.xlsx.write(response.response);
   }
 
+  async ExportFactor({ response, request }) {
+    try {
+      let { filters } = request.get();
+      let buffer_array = [];
+      let orders = await this.Model.listOption({ filters, perPage: 10 });
+      orders = orders.toJSON();
+      for (let order of orders.data) {
+        order.unit_amount =
+          Math.round((order.selected_test.total_amount * 100) / 109) * 10;
+        order.discount_amount =
+          Math.round(
+            order.role_discount_amount ||
+              (0 + order.discount && order.discount.amount)
+              ? order.discount.amount
+              : 0
+          ) * 10;
+        order.tax_amount =
+          Math.round(
+            (order.selected_test.total_amount * order.count * 9) / 109
+          ) * 10;
+        let buffer = await this.generatePDF(order);
+        buffer_array.push({ buffer, name: `${order.created_at}.pdf` });
+      }
+      let file = await this.archiveFiles(buffer_array);
+      await response.download(file);
+      // output.pipe(response.response)
+      // let html = View.render('pdf.invoice', { order });
+      // response.safeHeader('Content-type', 'application/pdf');
+      // response.safeHeader(
+      //   'Content-Disposition',
+      //   `attachment; filename=invoice_1.pdf`
+      // );
+      // pdf.create(html).toStream(function (err, stream) {
+      //   stream.pipe(response.response);
+      // });
+      // pdf.create(html).toBuffer(function (err, buffer) {
+      //   const buffer3 = Buffer.from('buff it!');
+      //   // const a =
+      // });
+
+      // finalize the archive (ie we are done appending files but streams have to finish yet)
+      // 'close', 'end' or 'finish' may be fired right after calling this method so register to them beforehand
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
+  }
+
   async flow({ request }) {
     let options = request.get();
     if (options.filters) {
@@ -106,6 +160,78 @@ class CoronaOldOrderController extends Resource {
     let { filters } = request.get();
     let orders = await this.Model.listOption({ filters, perPage: 10000 });
     return _.sumBy(orders.rows, 'count');
+  }
+
+  generatePDF(order) {
+    return new Promise(async (resolve, reject) => {
+      let html = View.render('pdf.invoice', { order });
+      const base = Env.get('APP_URL');
+      const options = {
+        // format: 'A4',
+        // zoom: 0.72,
+        // width: '280mm',
+        // height: '396mm',
+        base: base,
+      };
+      // pdf.create(html, options).toStream(async (err, stream) => {
+      //   if (err) return reject(err);
+      //   resolve(stream);
+      // });
+      pdf.create(html, options).toBuffer(async (err, buffer) => {
+        if (err) return reject(err);
+        resolve(buffer);
+      });
+    });
+  }
+
+  archiveFiles(buffer_array) {
+    return new Promise((resolve, reject) => {
+      let date = new Date().getTime();
+      let name = `./tmp/factor_${date}.zip`;
+      const output = fs.createWriteStream(name);
+      const archive = archiver('zip', {
+        zlib: { level: 9 }, // Sets the compression level.
+      });
+
+      // listen for all archive data to be written
+      // 'close' event is fired only when a file descriptor is involved
+      output.on('close', function () {
+        let file = Helpers.tmpPath(name.replace('./tmp/', ''));
+        resolve(file);
+        console.log(archive.pointer() + ' total bytes');
+        console.log(
+          'archiver has been finalized and the output file descriptor has closed.'
+        );
+      });
+
+      // This event is fired when the data source is drained no matter what was the data source.
+      // It is not part of this library but rather from the NodeJS Stream API.
+      // @see: https://nodejs.org/api/stream.html#stream_event_end
+      output.on('end', function () {
+        console.log('Data has been drained');
+      });
+
+      // good practice to catch warnings (ie stat failures and other non-blocking errors)
+      archive.on('warning', function (err) {
+        if (err.code === 'ENOENT') {
+          // log warning
+        } else {
+          // throw error
+          throw err;
+        }
+      });
+
+      // good practice to catch this error explicitly
+      archive.on('error', function (err) {
+        throw err;
+      });
+      for (let item of buffer_array) {
+        archive.append(item.buffer, { name: item.name });
+      }
+      // pipe archive data to the file
+      archive.pipe(output);
+      archive.finalize();
+    });
   }
 }
 module.exports = CoronaOldOrderController;
