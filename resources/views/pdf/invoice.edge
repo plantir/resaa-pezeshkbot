@@ -412,16 +412,16 @@
 
           <p> شناسه ملی :
             <span class="box-wrapper">
-              <span class="box">{{order.user_nationalcode[0]}}</span>
-              <span class="box">{{order.user_nationalcode[1]}}</span>
-              <span class="box">{{order.user_nationalcode[2]}}</span>
-              <span class="box">{{order.user_nationalcode[3]}}</span>
-              <span class="box">{{order.user_nationalcode[4]}}</span>
-              <span class="box">{{order.user_nationalcode[5]}}</span>
-              <span class="box">{{order.user_nationalcode[6]}}</span>
-              <span class="box">{{order.user_nationalcode[7]}}</span>
-              <span class="box">{{order.user_nationalcode[8]}}</span>
-              <span class="box">{{order.user_nationalcode[9]}}</span>
+              <span class="box">{{persianDigit(order.user_nationalcode[1])}}</span>
+              <span class="box">{{persianDigit(order.user_nationalcode[0])}}</span>
+              <span class="box">{{persianDigit(order.user_nationalcode[2])}}</span>
+              <span class="box">{{persianDigit(order.user_nationalcode[3])}}</span>
+              <span class="box">{{persianDigit(order.user_nationalcode[4])}}</span>
+              <span class="box">{{persianDigit(order.user_nationalcode[5])}}</span>
+              <span class="box">{{persianDigit(order.user_nationalcode[6])}}</span>
+              <span class="box">{{persianDigit(order.user_nationalcode[7])}}</span>
+              <span class="box">{{persianDigit(order.user_nationalcode[8])}}</span>
+              <span class="box">{{persianDigit(order.user_nationalcode[9])}}</span>
             </span>
           </p>
         </span>
@@ -433,7 +433,7 @@
           </p>
         </span>
         <span style="float: left;">
-          <p style="padding-left: 6em;"> تلفن / فکس : {{order.user_mobile}} </p>
+          <p style="padding-left: 6em;"> تلفن / فکس : {{persianDigit(order.user_mobile)}} </p>
         </span>
       </div>
     </div>
