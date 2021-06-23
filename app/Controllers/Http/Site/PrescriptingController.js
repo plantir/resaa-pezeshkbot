@@ -101,20 +101,27 @@ class PrescriptingController {
     order.transaction_id = transaction.id;
     await transaction.save();
     await order.save();
+    let amount = +transaction.amount * 10;
+    let orderId = order.guid;
+    let redirect = Env.get('BANK_RETURN_URL');
+    let ApiKey = Env.get('BISTPAY_API_KEY');
     let { data } = await axios.post(
-      'https://sep.shaparak.ir/MobilePG/MobilePayment',
+      'https://pay.bistpay.com/Gateway/Send',
       {
-        Action: 'Token',
-        Amount: +transaction.amount * 10,
-        TerminalId: Env.get('SAMAN_TERMINAL_ID'),
-        ResNum: order.guid,
-        RedirectUrl: Env.get('BANK_RETURN_URL'),
+        amount,
+        orderId,
+        redirect,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          ApiKey,
+        },
       }
     );
-    if (data.status == 1) {
+    if (data && data.status == 1) {
       return response.status(200).json({
-        token: data.token,
-        address: 'https://sep.shaparak.ir/MobilePG/MobilePayment',
+        address: `https://pay.bistpay.com/13/2/${data.token}`,
       });
     } else {
       response.status(400).json(data);
