@@ -31,31 +31,33 @@ class PaymentController {
   async callback({ request, response }) {
     let bank_response = request.post();
     Logger.info('bankResponse', bank_response);
-    let { order, callbackUrl } = await this._getOrder(bank_response.orderId);
+    let { order, callbackUrl } = await this._getOrder(bank_response.OrderId);
     if (!order) {
       response.redirect(
         `${Env.get('SITE_URL')}/bank-return?ResNum=${encodeURIComponent(
-          bank_response.orderId
+          bank_response.OrderId
         )}`
       );
     }
     let transaction = await order.transaction().fetch();
     transaction.bank_response = bank_response;
-    transaction.tracking_code = bank_response.trackingNumber;
-    if (bank_response.orderId) {
-      let ApiKey = Env.get('BISTPAY_API_KEY')
-      let {data} = await axios.post(
+    transaction.tracking_code = bank_response.TrackingNumber;
+    if (bank_response.OrderId && bank_response.Status == 1) {
+      let ApiKey = Env.get('BISTPAY_API_KEY');
+      let { data } = await axios.post(
         'https://pay.bistpay.com/Gateway/Verify',
         {
-          token:bank_response.token,
-        },{
-          headers:{
-            "Content-Type":"application/json",
-            ApiKey
-          }
+          token: bank_response.Token,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            ApiKey,
+          },
         }
       );
-      if (data && data.status== 1) {
+      console.log(data);
+      if (data && data.status == 1) {
         transaction.status = 'paid';
       }
     }
@@ -64,7 +66,7 @@ class PaymentController {
       `${Env.get(
         'RESAA_SITE'
       )}/${callbackUrl}/callback?requestId=${encodeURIComponent(
-        bank_response.orderId
+        bank_response.OrderId
       )}`
     );
   }
