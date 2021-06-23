@@ -45,7 +45,7 @@ class PaymentController {
     if (bank_response.orderId) {
       let ApiKey = Env.get('BISTPAY_API_KEY')
       let {data} = await axios.post(
-        'https://pay.bistpay.com/Gateway/Send',
+        'https://pay.bistpay.com/Gateway/Verify',
         {
           token:bank_response.token,
         },{
