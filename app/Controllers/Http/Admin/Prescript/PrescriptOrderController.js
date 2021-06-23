@@ -52,7 +52,7 @@ class PrescriptOrderController extends Resource {
           date: moment(order.created_at).format('jYYYY/jMM/jDD'),
           time: moment(order.created_at).format('HH:mm'),
           description: order.description,
-          city: order.$relations.city.name,
+          city: order.$relations.city ? order.$relations.city.name : '-',
           tracking_code: order.$relations.transaction
             ? order.$relations.transaction.tracking_code
             : '',

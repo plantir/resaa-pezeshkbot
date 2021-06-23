@@ -71,25 +71,32 @@ class CoronaOrderController {
     order.created_at = created_at;
     await transaction.save();
     await order.save();
-    let { data } = await axios.post(
-      'https://sep.shaparak.ir/MobilePG/MobilePayment',
+    let amount = +transaction.amount * 10
+    let orderId = order.guid
+    let redirect = Env.get('BANK_RETURN_URL')
+    let ApiKey = Env.get('BISTPAY_API_KEY')
+    let {data} = await axios.post(
+      'https://pay.bistpay.com/Gateway/Send',
       {
-        Action: 'Token',
-        Amount: +transaction.amount * 10,
-        TerminalId: Env.get('SAMAN_TERMINAL_ID'),
-        ResNum: order.guid,
-        RedirectUrl: Env.get('BANK_RETURN_URL'),
+        amount ,
+        orderId,
+        redirect,
+      },{
+        headers:{
+          "Content-Type":"application/json",
+          ApiKey
+        }
       }
     );
-    if (data.status == 1) {
-      return response.status(200).json({
-        token: data.token,
-        address: 'https://sep.shaparak.ir/MobilePG/MobilePayment',
-      });
+    if(data && data.status == 1){
+        return response.status(200).json({
+          address: `https://pay.bistpay.com/13/2/${data.token}`,
+        });
     } else {
       response.status(400).json(data);
     }
   }
+    // if (data.status == 1) {
   async callback({ request, response }) {
     let { requestId } = request.post();
     let corona_order = await CoronaOrder.query()
