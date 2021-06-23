@@ -5,6 +5,7 @@ const Route = use('BaseRoute');
 Route.group(() => {
   Route.get('flow', 'CoronaOrderController.flow');
   Route.get('exportExcel', 'CoronaOrderController.exportExcel');
+  Route.get('ExportFactor', 'CoronaOrderController.ExportFactor');
   Route.get('getCount', 'CoronaOrderController.getCount');
   Route.customResource('', 'CoronaOrderController');
   Route.patch(':id/change-is-called', 'CoronaOrderController.changeIsCalled');
@@ -32,4 +33,4 @@ Route.group(() => {
 })
   .namespace('Admin/Corona')
   .prefix('admin/corona-orders')
-  .middleware(['auth', 'role:administrator,corona_admin']);
+  // .middleware(['auth', 'role:administrator,corona_admin']);
