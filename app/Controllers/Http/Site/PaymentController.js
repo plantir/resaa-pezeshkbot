@@ -6,6 +6,7 @@ const CheckupOrder = use('App/Models/CheckupOrder');
 const PrescriptOrder = use('App/Models/PrescriptOrder');
 const Logger = use('Logger');
 const Env = use('Env');
+const axios = require('axios');
 class SamanGetway {
   constructor(MID) {
     this.MID = MID;
@@ -30,20 +31,31 @@ class PaymentController {
   async callback({ request, response }) {
     let bank_response = request.post();
     Logger.info('bankResponse', bank_response);
-    let { order, callbackUrl } = await this._getOrder(bank_response.ResNum);
+    let { order, callbackUrl } = await this._getOrder(bank_response.orderId);
     if (!order) {
       response.redirect(
         `${Env.get('SITE_URL')}/bank-return?ResNum=${encodeURIComponent(
-          data.ResNum
+          bank_response.orderId
         )}`
       );
     }
     let transaction = await order.transaction().fetch();
     transaction.bank_response = bank_response;
-    transaction.tracking_code = bank_response.RRN;
-    if (bank_response.RefNum) {
-      let res = await this.gw.VerifyTransaction(bank_response.RefNum);
-      if (res[0].result.$value > 0) {
+    transaction.tracking_code = bank_response.trackingNumber;
+    if (bank_response.orderId) {
+      let ApiKey = Env.get('BISTPAY_API_KEY')
+      let {data} = await axios.post(
+        'https://pay.bistpay.com/Gateway/Send',
+        {
+          token:bank_response.token,
+        },{
+          headers:{
+            "Content-Type":"application/json",
+            ApiKey
+          }
+        }
+      );
+      if (data && data.status== 1) {
         transaction.status = 'paid';
       }
     }
@@ -52,7 +64,7 @@ class PaymentController {
       `${Env.get(
         'RESAA_SITE'
       )}/${callbackUrl}/callback?requestId=${encodeURIComponent(
-        bank_response.ResNum
+        bank_response.orderId
       )}`
     );
   }
