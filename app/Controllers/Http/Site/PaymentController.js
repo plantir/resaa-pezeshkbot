@@ -42,7 +42,7 @@ class PaymentController {
     let transaction = await order.transaction().fetch();
     transaction.bank_response = bank_response;
     transaction.tracking_code = bank_response.TrackingNumber;
-    if (bank_response.OrderId && bank_response.Status == 1) {
+    if (order && bank_response.Status == 1) {
       let ApiKey = Env.get('BISTPAY_API_KEY');
       let { data } = await axios.post(
         'https://pay.bistpay.com/Gateway/Verify',
