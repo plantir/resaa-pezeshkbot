@@ -31,7 +31,7 @@ class CoronaOrderController {
         });
       if (matchDiscount && matchDiscount.length) {
         data.role_discount_amount = +matchDiscount[0].discount;
-        data.total_amount -= data.role_discount_amount;
+        data.total_amount -= +data.role_discount_amount;
       }
     }
     if (data.selected_services) {
@@ -41,8 +41,8 @@ class CoronaOrderController {
             (service) => service.title == title
           );
           if (service) {
-            data.total_amount += service.total_amount;
-            data.prepay_amount += service.prepay_amount;
+            data.total_amount += +service.total_amount;
+            data.prepay_amount += +service.prepay_amount;
           }
           return service;
         })
